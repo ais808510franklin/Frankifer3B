@@ -1,0 +1,438 @@
+<html>
+<head>
+<title> Cool Game </title>
+<!-- copy and paste the next 2 lines to setup the sound files, you must modify the loadsoundchrome.js file with your sounds -->
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+<!-- Stop copying here -->
+
+<center>
+	<script type="text/javascript" src="script/processing-1.4.1.js"></script>
+	<script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+int x;
+int y;
+int time;
+int vtravel;
+int htravel;
+int timeAnimate;
+
+boolean air;
+boolean left;
+boolean right;
+boolean up;
+boolean platform;
+
+boolean airlock;
+// if lock == true =======> locked
+// if lock == fals =======> not locked
+
+
+
+
+//v.4//////
+boolean faceX;
+// if faceX == false : right
+// if faceX == true : left
+
+
+PImage mudIdleLL;
+PImage mudIdleRR;
+
+PImage mudWalk1LL;
+PImage mudWalk2LL;
+PImage mudWalk3LL;
+PImage mudWalk4LL;
+
+
+PImage mudWalk1RR;
+PImage mudWalk2RR;
+PImage mudWalk3RR;
+PImage mudWalk4RR;
+
+
+PImage mudFallLL;
+PImage mudFallRR;
+
+//PIMAGE JUMP PIC mudWalk1
+
+
+
+void setup()
+
+{
+	background(0,0,0);
+	size(1000,600);
+	
+	x = 400;
+	y = 300;
+	time = 0;
+	air = true;
+	timeAnimate = 0;
+	
+	
+	mudIdleLL = loadImage("Pictures/mudkips/MudkipIdle.png")
+	mudIdleRR = loadImage("Pictures/mudkips/RRMudkipIdleRR.png")
+	
+	mudWalk1LL = loadImage("Pictures/mudkips/WALK/MudkipWalk1.png")
+	mudWalk2LL = loadImage("Pictures/mudkips/WALK/MudkipWalk2.png")
+	mudWalk3LL = loadImage("Pictures/mudkips/WALK/MudkipWalk3.png")
+	mudWalk4LL = loadImage("Pictures/mudkips/WALK/MudkipWalk4.png")
+	
+	mudWalk1RR = loadImage("Pictures/mudkips/WALK/RRMudkipWalk1RR.png")
+	mudWalk2RR = loadImage("Pictures/mudkips/WALK/RRMudkipWalk2RR.png")
+	mudWalk3RR = loadImage("Pictures/mudkips/WALK/RRMudkipWalk3RR.png")
+	mudWalk4RR = loadImage("Pictures/mudkips/WALK/RRMudkipWalk4RR.png")	
+	
+	mudFallLL = loadImage("Pictures/mudkips/MudkipFallLL.png")
+	mudFallRR = loadImage("Pictures/mudkips/MudkipFallRR.png")
+	
+
+}
+
+
+void draw()
+{
+	background(0,0,0);
+	fill(255,255,255);
+	text(timeAnimate,200,200);
+	fill(200,0,0);
+	rect(0,575,1100,50);
+	rect(100,400,100,10);
+	rect(800,400,100,10);
+
+
+
+	stroke(0,0,0);
+	fill(100,0,0);
+//	ellipse(x,y,50,50);
+	
+	
+
+	
+	
+	if (air == false && htravel == 0 && faceX == true)
+	{
+		image(mudIdleLL,x,y,38*2,37*2);
+		timeAnimate = 0;
+	}
+	if (air == false && htravel == 0 && faceX == false)
+	{
+		image(mudIdleRR,x,y,38*2,37*2);
+		timeAnimate = 0;
+	}	
+	
+	
+	
+	
+	if (air == false && htravel < 0)
+	{
+		timeAnimate = timeAnimate + 1;	
+		if (0 < timeAnimate && timeAnimate <= 5)
+		{
+			image(mudWalk1LL,x,y,38*2,37*2);
+		}
+		if (5 < timeAnimate && timeAnimate <= 10)
+		{
+			image(mudWalk2LL,x,y,38*2,37*2);
+		}
+		if (10 < timeAnimate && timeAnimate <= 15)
+		{
+			image(mudWalk3LL,x,y,38*2,37*2);
+		}		
+		if (15 < timeAnimate && timeAnimate <= 20)
+		{
+			image(mudWalk4LL,x,y,38*2,37*2);
+			timeAnimate = 0;
+		}		
+	}
+	
+	if (air == false && htravel > 0)
+	{
+		timeAnimate = timeAnimate + 1;	
+		if (0 < timeAnimate && timeAnimate <= 5)
+		{
+			image(mudWalk1RR,x,y,38*2,37*2);
+		}
+		if (5 < timeAnimate && timeAnimate <= 10)
+		{
+			image(mudWalk2RR,x,y,38*2,37*2);
+		}
+		if (10 < timeAnimate && timeAnimate <= 15)
+		{
+			image(mudWalk3RR,x,y,38*2,37*2);
+		}		
+		if (15 < timeAnimate && timeAnimate <= 20)
+		{
+			image(mudWalk4RR,x,y,38*2,37*2);
+			timeAnimate = 0;
+		}		
+	}	
+
+	if (air == true && vtravel >= 0 && faceX == true)
+	{
+		image(mudFallLL,x,y,38*2,37*2);
+	}
+	if (air == true && vtravel >= 0 && faceX == false)
+	{
+		image(mudFallRR,x,y,38*2,37*2);
+	}
+	
+	
+	if (air == true && vtravel < 0 && faceX == true)
+	{
+		image(mudWalk1LL,x,y,38*2,37*2);
+	}
+	if (air == true && vtravel < 0 && faceX == false)
+	{
+		image(mudWalk1RR,x,y,38*2,37*2);
+	}
+
+
+
+
+
+	
+	vtravel = (time^2)/2;
+	
+	
+	
+	
+//////////////PLATFORMING/////////////////////	
+	
+	if (x > 45 && x < 180 && y > 325 && y < 330 && up == false)	
+	{
+		platform = true; 
+	}
+	if (x > 745 && x < 880 && y > 325 && y < 330 && up == false)
+	{
+		platform = true;
+	}
+	
+	
+	
+	
+	
+	if (platform == true)
+	{
+		if (y > 325)
+		{
+			y = 325;
+			air = false;
+			up = false;
+			airlock = false;
+		}
+	}
+	
+
+
+		
+	if (x < 45 && platform == true)
+	{
+		platform = false;
+		air = true;
+	}
+	if (x > 180 && x < 745 && platform == true)
+	{
+		platform = false;
+		air = true;
+	}
+	
+	
+	if (x > 880 && platform == true)
+	{
+		platform = false;
+		air = true;
+	}	
+//////////////////////////////////////////////////////	
+	
+	
+	if (up == true)
+	{
+		y = y + vtravel;
+	}
+	if (time > 0 && up == false)
+	{
+		y = y + vtravel;
+	}
+	if (air == true)
+	{
+		time = time + 1;
+	}
+	if (air == false)
+	{
+		time = 0;
+	}
+	
+	
+	
+	if (y > 501)
+	{
+		y = 501;
+		air = false;
+		airlock = false;
+	}
+	if (time > -10 && time < -1)
+	{
+		up = false;
+	}
+	
+	
+	
+	
+	if (airlock == false)
+	{
+		if(left == true)
+		{
+			htravel = -7;
+		}
+		if(right == true)
+		{
+			htravel = 7;
+		}	
+		if(left == false && right == false)
+		{
+			htravel = 0;
+		}
+
+	}	
+	
+	
+	if (airlock == true)
+	{
+		if(keyPressed == true && key == 'a')
+		{	
+			htravel = -3;
+		}
+
+		
+		
+		if(keyPressed == true && key == 'd')
+		{
+			htravel =  3;
+		}
+		
+		
+		
+			
+	}
+	
+	
+	x = x + htravel; 
+	
+
+		
+	
+
+
+
+
+
+	
+	
+
+	
+	if (air == true)
+	{
+		fill(100,100,100);
+		rect(0,550,100,100);
+	}
+	if (up == true)
+	{
+		rect(100,550,100,100);
+	}
+	if (platform == true)
+	{
+		rect(200,550,100,100);
+	}
+	if (faceX == true)
+	{
+		fill(255,255,255);
+		text("LEFT",300,100);
+	}
+	if (faceX == false)
+	{
+		fill(255,255,255);
+		text("RIGHT",300,100);
+	}	
+	
+	fill(255,255,255);
+	text(time,100,100);
+	text(x+" "+y,100,125);
+
+	
+//	fill(100,100,100);
+//	rect(100,375,100,25);
+//	rect(800,375,100,25);
+
+
+
+
+
+
+
+
+}
+
+
+void keyPressed()
+{
+	if(key == 'a')
+	{
+		left = true;
+//////	v.4
+		faceX = true;
+	}
+	if(key == 'd')
+	{
+		right = true;
+//////	v.4
+		faceX = false;
+	}
+
+	
+	
+	
+	if(key == 'w' && up == false && air == false)
+	{
+		time = -32;
+		air = true;
+		up = true;
+		airlock = true;
+	}
+//////	v.4
+
+	
+	
+	
+	
+
+
+}
+
+
+void keyReleased()
+{
+	if(key == 'a')
+	{
+		left = false;
+	}
+	if(key == 'd')
+	{
+		right = false;
+	}
+////////////////////////////////////////////////
+
+
+}
+
+</script>
+<canvas id="mycanvas"></canvas>
+</head>
+
+<body>
+
+</body>
+</html>

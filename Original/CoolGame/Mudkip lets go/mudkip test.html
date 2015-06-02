@@ -1,0 +1,107 @@
+<html>
+<head>
+<title> mudkip test </title>
+<!-- copy and paste the next 2 lines to setup the sound files, you must modify the loadsoundchrome.js file with your sounds -->
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+<!-- Stop copying here -->
+
+<center>
+	<script type="text/javascript" src="processing-1.4.1.js"></script>
+	<script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+int t;
+int mudMove;
+int moveDecide;
+
+PImage mud1;
+PImage mud2;
+PImage mud3;
+PImage mud4;
+
+//PImage mudSprite;
+
+
+
+
+void setup()
+
+{
+	size(1000,600);
+	
+	
+	mud1 = loadImage("mudkips/MudWalk1.png");
+	mud2 = loadImage("mudkips/MudWalk2.png");
+	mud3 = loadImage("mudkips/MudWalk3.png");
+	mud4 = loadImage("mudkips/MudWalk4.png");
+	
+	t = 0;
+	mudMove = 550;
+	moveDecide = 0;
+}
+
+
+void draw()
+{
+
+
+	
+	t = t + 1;
+	
+	
+//	image(mudSprite,mudMove,563,37,37);
+	
+	if(t == 5)
+	{
+		background(0,0,0);
+		image(mud1,mudMove,563,37,37);
+	}
+	if(t == 10)
+	{
+		background(0,0,0);
+		image(mud2,mudMove,563,38,37);
+	}
+	if(t == 15)
+	{
+		background(0,0,0);
+		image(mud3,mudMove,563,37,37);
+	}
+	if(t == 20)
+	{
+		background(0,0,0);
+		image(mud4,mudMove,563,35,37);
+		t = 0;
+	}
+
+	
+	if(keyPressed == true && key == 'a')
+	{
+		moveDecide = 1;
+	}
+	if(keyPressed == true && key == 's')
+	{
+		moveDecide = 0;
+	}
+
+
+	if(moveDecide == 1)
+	{
+		mudMove = mudMove - 2;
+	}
+
+
+	
+	
+	
+}
+
+</script>
+<canvas id="mycanvas"></canvas>
+</head>
+
+<body>
+
+</body>
+</html>

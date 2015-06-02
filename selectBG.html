@@ -1,0 +1,289 @@
+<title> Select Background </title>
+
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+
+<center>
+    <script src="script/processing-1.4.1.js"></script>
+    <script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+PImage select;
+PImage back;
+PImage next;
+PImage title;
+
+PImage bg1;
+PImage bg2;
+PImage bg3;
+
+int select1;
+int select2;
+int select3;
+
+String character1;
+String character2; 
+String selectBackground;
+
+PFont basictitlefont;
+
+boolean changeLock;
+boolean champSelPlay;
+boolean champSelLock;
+
+PImage volumeOn;
+PImage volumeOff;
+
+
+void setup(){  
+
+    size(1000,600);  
+    background(0,0,0);
+    frameRate( 30 );
+    
+    character1 = (int)sessionStorage.transferx1;
+	character2 = (int)sessionStorage.transferx2;
+	selectBackground = (int)sessionStorage.transferx3;
+	
+	//BUTTONS
+    back = loadImage("Buttons/back.png");
+    next = loadImage("Buttons/next.png");
+    title = loadImage("Buttons/selectBG.png");
+    
+    //BACKGROUNDS
+    bg1 = loadImage("Background1/background11.png");
+    bg2 = loadImage("Background2/1.png");
+    bg3 = loadImage("Background3/1.png");
+	
+	basictitlefont = loadFont("basictitlefont");
+	
+	select1 = 0;
+	select2 = 0;
+	select3 = 0;
+	
+	volumeOn = loadImage("ETC Pics/VolumeOn.png");
+    volumeOff = loadImage("ETC Pics/VolumeOff.png");
+    
+    changeLock = false;
+    champSelPlay = true;
+    champSelLock = false;
+}  
+
+
+void draw()
+{
+    size(1000,600);  
+    background(0,0,0);
+    frameRate( 30 );
+    
+    //BUTTONS
+	image(back,20,530,110,50);
+	image(next,870,530,110,50);
+	image(title,250,10,550,90);
+	
+	textFont(basictitlefont,20);
+	
+	//BACKGROUND IMAGES
+	image(bg1,50,250,250,150);
+	image(bg2,365,250,270,150);
+	image(bg3,700,250,250,150);
+	text("LaLa Land",130,240);
+	text("Amusement Park",430,240);
+	text("Fountain",780,240);
+
+	noFill();
+	stroke(255,255,255);
+	strokeWeight(4);
+	
+	//SELECTION RECTANGLES
+    if ( 50 < mouseX && mouseX < 300
+	&& 250 < mouseY && mouseY < 400
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		select1 = 1;
+		selectBackground = 1;
+	}
+	if(select1 == 1)
+	{
+		rect(50,250,250,150,3,3,3,3);
+		select2 = 0;
+		select3 = 0;
+	}
+	
+    if ( 365 < mouseX && mouseX < 635
+	&& 250 < mouseY && mouseY < 400
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		select2 = 1;
+		selectBackground = 2;
+	}
+	if(select2 == 1)
+	{
+		rect(365,250,270,150,3,3,3,3);
+		select1 = 0;
+		select3 = 0;
+	}
+    
+    if ( 695 < mouseX && mouseX < 955
+	&& 250 < mouseY && mouseY < 400
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		select3 = 1;
+		selectBackground = 3;
+	}
+	if(select3 == 1)
+	{
+		rect(700,250,250,150,3,3,3,3);
+		select1 = 0;
+		select2 = 0;
+	}
+	
+	
+	//DISPLAY CHARACTER 1 NAMES 
+	{
+		text("Player1 :",30,40);
+		text("Player2 :",30,80);
+	
+		if(character1 == 1)
+		{
+			text("Mudkip",120,40);
+		}
+		if(character1 == 2)
+		{
+			text("Pikachu",120,40);
+		}
+		if(character1 == 3)
+		{
+			text("Yoshi",120,40);
+		}
+		if(character1 == 4)
+		{
+			text("Mario",120,40);
+		}
+		if(character1 == 5)
+		{
+			text("Kirby",120,40);
+		}
+	}
+	
+	//DISPLAYING CHARACTER 2 NAMES 
+	{
+		if(character2 == 1)
+		{
+			text("Mudkip",120,80);
+		}
+		if(character2 == 2)
+		{
+			text("Pikachu",120,80);
+		}
+		if(character2 == 3)
+		{
+			text("Yoshi",120,80);
+		}
+		if(character2 == 4)
+		{
+			text("Mario",120,80);
+		}
+		if(character2 == 5)
+		{
+			text("Kirby",120,80);
+		}
+	}	
+	
+	//BACK BUTTON
+    if ( 20 < mouseX && mouseX < 130
+	&& 530 < mouseY && mouseY < 580
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		link("character2.html");
+	}
+    
+    //NEXT BUTTON
+    if ( 870 < mouseX && mouseX < 980
+	&& 530 < mouseY && mouseY < 580
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		link("BattleScene3.html");
+		sessionStorage.transferx1 = character1;
+		sessionStorage.transferx2 = character2;	
+		sessionStorage.transferx3 = selectBackground;
+	}
+	
+	
+	
+	
+	
+	//Background
+	
+	{
+
+ if (champSelPlay == true && champSelLock == false)
+    {
+    	soundManager.setVolume("s8",20);
+    	soundManager.play("s8",{loops:2});
+    	champSelLock = true;
+	}
+	if (champSelPlay == false && champSelLock == true)
+	{
+		soundManager.stop("s8");
+		champSelLock = false;
+	}
+	
+	
+//mute (MOUSE PRESS)	
+	if (mouseX > 760 && mouseX < 812 && mouseY > 20 && mouseY < 72)
+	{
+		fill(100,100,100);
+		rect(760,20,52,52);
+	} 
+	
+	if (mousePressed == true && mouseX > 770 && mouseX < 802
+	 && mouseY > 30 && mouseY < 62 && champSelPlay == false && changeLock == false)
+	{	
+		champSelPlay = true;
+		soundManager.setVolume("s6",25);
+		soundManager.play("s6");
+		changeLock = true;
+	} 
+	
+	if (mousePressed == true && mouseX > 770 && mouseX < 802
+	 && mouseY > 30 && mouseY < 62 && champSelPlay == true && changeLock == false)
+	{
+		champSelPlay = false;
+		soundManager.setVolume("s6",25);
+		soundManager.play("s6");
+		changeLock = true;
+	}
+
+	if (mousePressed == false && mouseX > 770 && mouseX < 802
+	 && mouseY > 30 && mouseY < 62)
+	{	
+		changeLock = false;
+	} 
+
+
+
+
+	
+	if (champSelPlay == true)
+	{
+		image(volumeOn,770,30,32,32);
+	}	
+	if (champSelPlay == false)
+	{
+		image(volumeOff,770,30,32,32);
+	}
+	
+	
+	}
+
+  
+}
+
+
+
+    </script>
+    <canvas id="mycanvas"></canvas>
+</center>
+

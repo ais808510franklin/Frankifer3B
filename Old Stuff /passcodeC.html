@@ -1,0 +1,372 @@
+<title> Enter Passcode >:) </title>
+
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+
+<center>
+    <script src="script/processing-1.4.1.js"></script>
+    <script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+//make variables, make digits available one after another 
+//one digit triggers the activation of another
+
+int digit1; //These are the digits that appear in the 4 boxes
+int digit2;
+int digit3;
+int digit4;
+
+int reg1; //These register that a digit has been filled up 
+int reg2;
+int reg3;
+int reg4;
+
+int title;
+
+PFont basictitlefont;
+
+PImage one; //The numbers
+PImage two;
+PImage three;
+PImage four;
+PImage five;
+PImage six;
+PImage seven;
+PImage eight;
+PImage nine;
+PImage zero;
+
+void setup(){  
+
+    size(1000,600);  
+    background(0,0,0);
+    frameRate( 30 );
+    
+    title = loadImage("Buttons/enterCode.png");
+    basictitlefont = loadFont("basictitlefont")
+    romanceFatal = loadFont("Assassin")
+    
+    one = loadImage("Numbers/one.png");
+    two = loadImage("Numbers/two.png");
+    three = loadImage("Numbers/three.png");
+    four = loadImage("Numbers/four.png");
+    five = loadImage("Numbers/five.png");
+    six = loadImage("Numbers/six.png");
+    seven = loadImage("Numbers/seven.png");
+    eight = loadImage("Numbers/eight.png");
+    nine = loadImage("Numbers/nine.png");
+    zero = loadImage("Numbers/zero.png");
+	
+	digit1 = 0;
+    digit2 = 0;
+    digit3 = 0;
+    digit4 = 0;
+    
+    reg1 = 1;
+    reg2 = 1;
+    reg3 = 0;
+    reg4 = 0;
+    
+    lock1 = 0;
+}  
+
+
+void draw()
+{
+    size(1000,600);  
+    background(0,0,0);
+    frameRate( 30 );
+	
+	image(title,200,30,570,90);
+	
+	//PASSCODE BOXES
+	fill(150,150,150);
+    rect(350,180,60,60,5,5,5,5);
+    rect(420,180,60,60,5,5,5,5);
+    rect(490,180,60,60,5,5,5,5);
+    rect(560,180,60,60,5,5,5,5);
+    
+    //NUMBERS
+    image(one,370,260,60,60);
+    image(two,455,260,60,60);
+    image(three,540,260,60,60);
+    image(four,370,340,60,60);
+    image(five,455,340,60,60);
+    image(six,540,340,60,60);
+    image(seven,370,420,60,60);
+    image(eight,455,420,60,60);
+    image(nine,540,420,60,60);
+    image(zero,455,500,60,60);
+    
+    
+    textFont(basictitlefont,24);
+    text("This character is reserved for V.I.P. players, please enter passcode to proceed.",70,160);
+    
+    //DIGITS
+    fill(255,255,255);
+    text(digit1,373,220);
+    text(digit2,443,220);
+    text(digit3,513,220);
+    text(digit4,583,220);
+/*
+    //DIGIT 3
+    if ( 370 < mouseX && mouseX < 430
+	&& 260 < mouseY && mouseY < 320
+	&& mousePressed == true && mouseButton == LEFT && reg3 == 1)
+	{	
+		digit3 = 1;
+		reg4 = 1;
+	}
+    
+    if ( 455 < mouseX && mouseX < 515
+	&& 260 < mouseY && mouseY < 320
+	&& mousePressed == true && mouseButton == LEFT && reg3 == 1)
+	{	
+		digit3 = 2;
+		reg4 = 1;
+	}
+    if ( 540 < mouseX && mouseX < 600
+	&& 260 < mouseY && mouseY < 320
+	&& mousePressed == true && mouseButton == LEFT && reg3 == 1)
+	{	
+		digit3 = 3;
+		reg4 = 1;
+	}
+    if ( 370 < mouseX && mouseX < 430
+	&& 340 < mouseY && mouseY < 400
+	&& mousePressed == true && mouseButton == LEFT && reg3 == 1)
+	{	
+		digit3 = 4;
+		reg4 = 1;
+	}
+    if ( 455 < mouseX && mouseX < 515
+	&& 340 < mouseY && mouseY < 400
+	&& mousePressed == true && mouseButton == LEFT && reg3 == 1)
+	{	
+		digit3 = 5
+		reg3 = 1;
+	}
+    if ( 540 < mouseX && mouseX < 600
+	&& 340 < mouseY && mouseY < 400
+	&& mousePressed == true && mouseButton == LEFT && reg3 == 1)
+	{	
+		digit3 = 6;
+		reg3 = 3;
+	}
+    if ( 370 < mouseX && mouseX < 430
+	&& 420 < mouseY && mouseY < 480
+	&& mousePressed == true && mouseButton == LEFT && reg3 == 1)
+	{	
+		digit3 = 7;
+		reg3 = 2;
+	}
+    if ( 455 < mouseX && mouseX < 515
+	&& 420 < mouseY && mouseY < 480
+	&& mousePressed == true && mouseButton == LEFT && reg3 == 1)
+	{	
+		digit3 = 8;
+		reg3 = 2;
+	}
+    if ( 540 < mouseX && mouseX < 600
+	&& 420 < mouseY && mouseY < 480
+	&& mousePressed == true && mouseButton == LEFT && reg3 == 1)
+	{	
+		digit3 = 9;
+		reg3 = 2;
+	}
+    if ( 455 < mouseX && mouseX < 515
+	&& 500 < mouseY && mouseY < 560
+	&& mousePressed == true && mouseButton == LEFT && reg3 == 1)
+	{	
+		digit3 = 0;
+		reg3 = 2;
+	}
+	if(reg3 == 2)
+	{
+		reg4 = 1;
+	}
+*/
+    //DIGIT 2
+    if ( 370 < mouseX && mouseX < 430
+	&& 260 < mouseY && mouseY < 320
+	&& mousePressed == true && mouseButton == LEFT && reg1 ==2)
+	{	
+		digit2 = 1;
+		
+		
+		
+	}
+    
+    if ( 455 < mouseX && mouseX < 515
+	&& 260 < mouseY && mouseY < 320
+	&& mousePressed == true && mouseButton == LEFT && reg1 == 2)
+	{	
+		digit2 = 2;
+		
+		
+		
+	}
+/*
+	
+    if ( 540 < mouseX && mouseX < 600
+	&& 260 < mouseY && mouseY < 320
+	&& mousePressed == true && mouseButton == LEFT && reg2 == 1)
+	{	
+		digit2 = 3;
+		reg2 = 2;
+		
+	}
+    if ( 370 < mouseX && mouseX < 430
+	&& 340 < mouseY && mouseY < 400
+	&& mousePressed == true && mouseButton == LEFT && reg2 == 1)
+	{	
+		digit2 = 4;
+		reg2 = 2;
+		
+	}
+    if ( 455 < mouseX && mouseX < 515
+	&& 340 < mouseY && mouseY < 400
+	&& mousePressed == true && mouseButton == LEFT && reg2 == 1)
+	{	
+		digit2 = 5
+		reg2 = 2;
+		
+	}
+    if ( 540 < mouseX && mouseX < 600
+	&& 340 < mouseY && mouseY < 400
+	&& mousePressed == true && mouseButton == LEFT && reg2 == 1)
+	{	
+		digit2 = 6;
+		reg2 = 2;
+		
+	}
+    if ( 370 < mouseX && mouseX < 430
+	&& 420 < mouseY && mouseY < 480
+	&& mousePressed == true && mouseButton == LEFT && reg2 == 1)
+	{	
+		digit2 = 7;
+		reg2 = 2;
+		
+	}
+    if ( 455 < mouseX && mouseX < 515
+	&& 420 < mouseY && mouseY < 480
+	&& mousePressed == true && mouseButton == LEFT && reg2 == 1)
+	{	
+		digit2 = 8;
+		reg2 = 2;
+		
+	}
+    if ( 540 < mouseX && mouseX < 600
+	&& 420 < mouseY && mouseY < 480
+	&& mousePressed == true && mouseButton == LEFT && reg2 == 1)
+	{	
+		digit2 = 9;
+		reg2 = 2;
+		
+	}
+    if ( 455 < mouseX && mouseX < 515
+	&& 500 < mouseY && mouseY < 560
+	&& mousePressed == true && mouseButton == LEFT && reg2 == 1)
+	{	
+		digit2 = 0;
+		reg2 = 2;
+		
+	}
+	if(reg2 ==2)
+	{
+		reg3 = 1;
+	}
+*/ 
+    
+    //DIGIT 1  
+    if ( 370 < mouseX && mouseX < 430
+	&& 260 < mouseY && mouseY < 320
+	&& mousePressed == true && mouseButton == LEFT && reg1 == 1)
+	{	
+		digit1 = 1;
+		reg1 = 2;
+	}
+    
+    if ( 455 < mouseX && mouseX < 515
+	&& 260 < mouseY && mouseY < 320
+	&& mousePressed == true && mouseButton == LEFT && reg1 == 1)
+	{	
+		digit1 = 2;
+		reg1 = 2;
+	}
+    if ( 540 < mouseX && mouseX < 600
+	&& 260 < mouseY && mouseY < 320
+	&& mousePressed == true && mouseButton == LEFT && reg1 == 1)
+	{	
+		digit1 = 3;
+		reg1 = 2;
+	}
+    if ( 370 < mouseX && mouseX < 430
+	&& 340 < mouseY && mouseY < 400
+	&& mousePressed == true && mouseButton == LEFT && reg1 == 1)
+	{	
+		digit1 = 4;
+		reg1 = 2;
+	}
+    if ( 455 < mouseX && mouseX < 515
+	&& 340 < mouseY && mouseY < 400
+	&& mousePressed == true && mouseButton == LEFT && reg1 == 1)
+	{	
+		digit1 = 5
+		reg1 = 2;
+	}
+    if ( 540 < mouseX && mouseX < 600
+	&& 340 < mouseY && mouseY < 400
+	&& mousePressed == true && mouseButton == LEFT && reg1 == 1)
+	{	
+		digit1 = 6;
+		reg1 = 2;
+	}
+    if ( 370 < mouseX && mouseX < 430
+	&& 420 < mouseY && mouseY < 480
+	&& mousePressed == true && mouseButton == LEFT && reg1 == 1)
+	{	
+		digit1 = 7;
+		reg1 = 2;
+	}
+    if ( 455 < mouseX && mouseX < 515
+	&& 420 < mouseY && mouseY < 480
+	&& mousePressed == true && mouseButton == LEFT && reg1 == 1)
+	{	
+		digit1 = 8;
+		reg1 = 2;
+	}
+    if ( 540 < mouseX && mouseX < 600
+	&& 420 < mouseY && mouseY < 480
+	&& mousePressed == true && mouseButton == LEFT && reg1 == 1)
+	{	
+		digit1 = 9;
+		reg1 = 2;
+	}
+    if ( 455 < mouseX && mouseX < 515
+	&& 500 < mouseY && mouseY < 560
+	&& mousePressed == true && mouseButton == LEFT && reg1 == 1)
+	{	
+		digit1 = 0;
+		reg1 = 2;
+	}
+
+	
+
+
+	
+	//SECRET BACK BUTTON
+    if ( 0 < mouseX && mouseX < 100
+	&& 0 < mouseY && mouseY < 100
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		link("character1.html");
+	}
+    
+}
+
+
+
+    </script>
+    <canvas id="mycanvas"></canvas>
+</center>

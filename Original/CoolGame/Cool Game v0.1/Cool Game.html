@@ -1,0 +1,131 @@
+<html>
+<head>
+<title> Cool Game </title>
+<!-- copy and paste the next 2 lines to setup the sound files, you must modify the loadsoundchrome.js file with your sounds -->
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+<!-- Stop copying here -->
+
+<center>
+	<script type="text/javascript" src="script/processing-1.4.1.js"></script>
+	<script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+boolean stateX;
+boolean stateY;
+boolean stateX1;
+
+int t;
+
+
+int x;
+int y;
+
+
+
+void setup()
+
+{
+	background(0,0,0);
+	size(1000,600);
+	
+	x = 500;
+	y = 300;
+	t = 0;
+	
+	stateX = false;
+	stateY = false;
+}
+
+
+void draw()
+{
+	background(0,0,0);
+	fill(255,255,255);
+	stroke(0,0,0);
+	ellipse(x,y,50,50);
+	fill(200,0,0);
+	rect(0,575,1100,50);
+	
+	if (y < 550)
+	{
+		t = t + 1;
+		y = y + (t^2)/4;
+	}
+	
+	if (y > 550)
+	{
+		y = 550;
+		t = 0;
+		stateY = false;
+	}
+	if (stateY == true && t > -1 && t < 20)
+	{
+		y = y - 30 + (t^2)/4;
+		t = t + 1;
+	}
+	
+	
+
+	if (stateX == true)
+	{
+		x = x - 7;
+	}
+	if (stateX1 == true)
+	{
+		x = x + 7;
+	}
+	
+
+	
+	
+	
+	
+	if (keyPressed == true && key == 'q')
+	{	
+		fill(200,0,0);
+		ellipse(x,y,75,75);
+	}
+	
+}
+
+
+void keyPressed()
+{
+	if(key == 'a')
+	{
+		stateX = true;
+	}
+	if(key == 'd')
+	{
+		stateX1 = true;
+	}
+	if(key == 'w')
+	{
+		stateY = true;
+	}
+}
+
+
+void keyReleased()
+{
+	if(key == 'a')
+	{
+		stateX = false;
+	}
+	if(key == 'd')
+	{
+		stateX1 = false;
+	}
+
+}
+
+</script>
+<canvas id="mycanvas"></canvas>
+</head>
+
+<body>
+
+</body>
+</html>

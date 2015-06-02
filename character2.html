@@ -1,0 +1,495 @@
+<title> Select Characters </title>
+
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+
+<center>
+    <script src="script/processing-1.4.1.js"></script>
+    <script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+PImage select;
+PImage back;
+PImage mudkip;
+PImage pikachu;
+PImage yoshi;
+PImage kirby;
+PImage mario;
+PImage next;
+PImage rules;
+PImage instructions;
+
+String character1;
+String character2; 
+
+PFont basictitlefont;
+
+int mudkip1;
+int pikachu1;
+int yoshi1;
+int mario1;
+int kirby1;
+
+int mudkip2;
+int pikachu2;
+int yoshi2;
+int mario2;
+int kirby2;
+
+int instructionsOn;
+int backgroundOn;
+
+
+PImage volumeOn;
+PImage volumeOff;
+boolean changeLock;
+boolean champSelPlay;
+boolean champSelLock;
+
+
+
+void setup(){  
+
+    size(1000,600);  
+    background(0,0,0);
+    frameRate( 30 );
+    
+    select = loadImage("Buttons/selectCharacter1.png");
+    back = loadImage("Buttons/back.png");
+    next = loadImage("Buttons/next.png");
+    rules = loadImage("Buttons/rules.png");
+    instructions = loadImage("Buttons/instruction.png");
+    
+    mudkip = loadImage("Characters/mudkip.png");
+    pikachu = loadImage("Characters/pikachu.png");
+	yoshi = loadImage("Characters/yoshi.png");
+	kirby = loadImage("Characters/kirby.png");
+	mario = loadImage("Characters/mario.png");
+	
+	basictitlefont = loadFont("basictitlefont");
+	
+	
+	volumeOn = loadImage("ETC Pics/VolumeOn.png");
+    volumeOff = loadImage("ETC Pics/VolumeOff.png");
+    
+    changeLock = false;
+    champSelPlay = true;
+    champSelLock = false;
+	
+	mudkip1 = 0;
+	pikachu1 = 0;
+	yoshi1 = 0;
+	mario1 = 0;
+	kirby1 = 0;
+	
+	selectMu1 = 0;
+	selectP1 = 0;
+	selectY1 = 0;
+	selectMa1 = 0;
+	selectK1 = 0;
+	
+	selectMu2 = 0;
+	selectP2 = 0;
+	selectY2 = 0;
+	selectMa2 = 0;
+	selectK2 = 0;
+	
+	pass1 = 0;
+	pass2 = 0;
+}  
+
+
+void draw()
+{
+    size(1000,600);  
+    background(0,0,0);
+    frameRate( 30 );
+    
+    //BUTTONS
+	image(select,250,30,500,90);
+	image(back,20,530,110,50);
+	image(next,870,530,110,50);
+	image(rules,420,520,200,60);
+	
+	textFont(basictitlefont,20);
+	text("Player 1", 205,170);
+	text("Player 2", 715,170);
+	
+	//PLAYER 1 
+	noFill();
+	noStroke();
+	rect(30,200,90,120,5,5,5,5);
+	rect(140,200,90,120,5,5,5,5);
+	rect(250,200,90,120,5,5,5,5);
+	rect(360,200,90,120,5,5,5,5);
+	rect(85,340,90,120,5,5,5,5);
+	
+	stroke(255,255,255);
+	rect(195,340,90,120,5,5,5,5);
+	rect(305,340,90,120,5,5,5,5);
+	text("COMING",212,390);
+	text("SOON",220,415);
+	text("COMING",322,390);
+	text("SOON",330,415);
+	
+	
+	//PLAYER 2
+	noStroke();
+	rect(540,200,90,120,5,5,5,5);
+	rect(650,200,90,120,5,5,5,5);
+	rect(760,200,90,120,5,5,5,5);
+	rect(870,200,90,120,5,5,5,5);
+	rect(600,340,90,120,5,5,5,5);
+	
+	stroke(255,255,255);
+	rect(710,340,90,120,5,5,5,5);
+	rect(820,340,90,120,5,5,5,5);
+	text("COMING",727,390);
+	text("SOON",735,415);
+	text("COMING",837,390);
+	text("SOON",845,415);
+	
+	//PLAYER 1 CHARACTERS
+	image(mudkip,35,205,80,110);
+	image(pikachu,145,205,80,110);
+	image(yoshi,255,205,80,110);
+	image(kirby,87,355,85,90);
+	image(mario,355,192,90,128);
+	
+	//PLAYER 2 CHARACTERS
+	image(mudkip,545,205,80,110);
+	image(pikachu,655,205,80,110);
+	image(yoshi,765,205,80,110);
+	image(kirby,603,355,85,90);
+	image(mario,865,192,90,128);
+	 
+////////////////////////////////////////////////////////////////////CHARACTER 1
+
+    //MUDKIP RECT
+    noStroke();
+    if ( 30 < mouseX && mouseX < 120
+	&& 200 < mouseY && mouseY < 320
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		mudkip1 = 1;
+		pikachu1 = 0;
+		yoshi1 = 0;
+		mario1 = 0;
+		kirby1 = 0;
+	}
+	if(mudkip1 == 1)
+	{
+		fill(0,0,102);
+		rect(30,200,90,120,5,5,5,5);
+		image(mudkip,35,205,80,110);
+		selectMu1 = 1;
+		character1 =1;
+	}
+	
+    //PIKACHU RECT
+    if ( 140 < mouseX && mouseX < 230
+	&& 200 < mouseY && mouseY < 320
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		mudkip1 = 0;
+		pikachu1 = 1;
+		yoshi1 = 0;
+		mario1 = 0;
+		kirby1 = 0;
+	}
+	if(pikachu1 == 1)
+	{
+		fill(102,102,0);
+		rect(140,200,90,120,5,5,5,5);
+		image(pikachu,145,205,80,110);
+		selectP1 = 1;
+		character1 = 2;
+	}
+	
+	//YOSHI RECT
+    if ( 250 < mouseX && mouseX < 340
+	&& 200 < mouseY && mouseY < 320
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		mudkip1 = 0;
+		pikachu1 = 0;
+		yoshi1 = 1;
+		mario1 = 0;
+		kirby1 = 0;
+	}
+	if(yoshi1 == 1)
+	{
+		fill(0,102,0)
+		rect(250,200,90,120,5,5,5,5);
+		image(yoshi,255,205,80,110);
+		selectY1 = 1;
+		character1 = 3;
+	}
+	
+	//MARIO RECT
+    if ( 360 < mouseX && mouseX < 450
+	&& 200 < mouseY && mouseY < 320
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		mudkip1 = 0;
+		pikachu1 = 0;
+		yoshi1 = 0;
+		mario1 = 1;
+		kirby1 = 0;
+	}
+	if(mario1 == 1)
+	{
+		fill(102,0,0);
+		rect(360,200,90,120,5,5,5,5);
+		image(mario,355,192,90,128);
+		selectMa1 = 1;
+		character1 = 4;
+	}
+    //KIRBY RECT
+    if ( 85 < mouseX && mouseX < 175
+	&& 340 < mouseY && mouseY < 460
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		mudkip1 = 0;
+		pikachu1 = 0;
+		yoshi1 = 0;
+		mario1 = 0;
+		kirby1 = 1;
+	}
+	if(kirby1 == 1)
+	{
+		fill(102,0,51);
+		rect(85,340,90,120,5,5,5,5);
+		image(kirby,87,355,85,90);
+		selectK1 = 1;
+		character1 = 5;
+	}
+	
+	if(selectMu1 == 1 || selectP1 == 1 || selectY1 == 1|| selectMa1 == 1
+	|| selectK1 == 1)
+	{
+		pass1 = 1;
+	}
+	
+//////////////////////////////////////////////////////////////////CHARACTER 2
+  
+    //MUDKIP RECT
+    if ( 540 < mouseX && mouseX < 630
+	&& 200 < mouseY && mouseY < 320
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		mudkip2 = 1;
+		pikachu2 = 0;
+		yoshi2 = 0;
+		mario2 = 0;
+		kirby2 = 0;
+	}
+	if(mudkip2 == 1)
+	{
+		fill(0,0,102);
+		rect(540,200,90,120,5,5,5,5);
+		image(mudkip,545,205,80,110);
+		selectMu2 = 1;
+		character2 = 1;
+	}
+    
+    //PIKACHU RECT
+    if ( 650 < mouseX && mouseX < 740
+	&& 200 < mouseY && mouseY < 320
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		mudkip2 = 0;
+		pikachu2 = 1;
+		yoshi2 = 0;
+		mario2 = 0;
+		kirby2 = 0;
+	}
+	if(pikachu2 == 1)
+	{
+		fill(102,102,0);
+		rect(650,200,90,120,5,5,5,5);
+		image(pikachu,655,205,80,110);
+		selectP2 = 1;
+		character2 = 2;
+	}
+	
+	//YOSHI RECT 
+    if ( 760 < mouseX && mouseX < 850
+	&& 200 < mouseY && mouseY < 320
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		mudkip2 = 0;
+		pikachu2 = 0;
+		yoshi2 = 1;
+		mario2 = 0;
+		kirby2 = 0;
+	}
+	if(yoshi2 == 1)
+	{
+		fill(0,102,0);
+		rect(760,200,90,120,5,5,5,5);
+		image(yoshi,765,205,80,110);
+		selectY2 = 1;
+		character2 = 3;
+	}
+	//MARIO RECT 
+    if ( 870 < mouseX && mouseX < 960
+	&& 200 < mouseY && mouseY < 320
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		mudkip2 = 0;
+		pikachu2 = 0;
+		yoshi2 = 0;
+		mario2 = 1;
+		kirby2 = 0;
+	}
+	if(mario2 == 1)
+	{
+		fill(102,0,0);
+		rect(870,200,90,120,5,5,5,5);
+		image(mario,865,192,90,128);
+		selectMa2 = 1;
+		character2 = 4;
+	}
+	
+	//KIRBY RECT 
+    if ( 600 < mouseX && mouseX < 690
+	&& 340 < mouseY && mouseY < 460
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		mudkip2 = 0;
+		pikachu2 = 0;
+		yoshi2 = 0;
+		mario2 = 0;
+		kirby2 = 1;
+	}
+	if(kirby2 == 1)
+	{
+		fill(102,0,51);
+		rect(600,340,90,120,5,5,5,5);
+		image(kirby,603,355,85,90);
+		selectK2 = 1;
+		character2 = 5;
+	}
+	
+	if(selectMu2 == 1 || selectP2 == 1 || selectY2 == 1|| selectMa2 == 1
+	|| selectK2 == 1)
+	{
+		pass2 = 1;
+	}
+	
+	//INSTRUCTIONS BUTTON
+    if ( 420 < mouseX && mouseX < 620
+	&& 520 < mouseY && mouseY < 580
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		instructionsOn = 1;
+	}
+	if(instructionsOn == 1)
+	{
+		image(instructions,220,30,600,500);
+	}
+	
+	//GOT IT BUTTON
+    if ( 460 < mouseX && mouseX < 540
+	&& 480 < mouseY && mouseY < 517
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		instructionsOn = 0;
+	}
+	
+	//BACK BUTTON
+    if ( 20 < mouseX && mouseX < 130
+	&& 530 < mouseY && mouseY < 580
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		link("StartPage.html");
+	}
+
+
+    //NEXT BUTTON
+    if ( 870 < mouseX && mouseX < 980
+	&& 530 < mouseY && mouseY < 580
+	&& mousePressed == true && mouseButton == LEFT
+	&& pass1 == 1 && pass2 == 1)
+	{	
+		link("selectBG.html");
+		sessionStorage.transferx1 = character1;
+		sessionStorage.transferx2 = character2;	
+	}
+
+
+
+	//Background music
+
+	{
+
+ if (champSelPlay == true && champSelLock == false)
+    {
+    	soundManager.setVolume("s7",20);
+    	soundManager.play("s7",{loops:2});
+    	champSelLock = true;
+	}
+	if (champSelPlay == false && champSelLock == true)
+	{
+		soundManager.stop("s7");
+		champSelLock = false;
+	}
+	
+	
+//mute (MOUSE PRESS)	
+	if (mouseX > 760 && mouseX < 812 && mouseY > 20 && mouseY < 72)
+	{
+		fill(100,100,100);
+		rect(760,20,52,52);
+	} 
+	
+	if (mousePressed == true && mouseX > 770 && mouseX < 802
+	 && mouseY > 30 && mouseY < 62 && champSelPlay == false && changeLock == false)
+	{	
+		champSelPlay = true;
+		soundManager.setVolume("s6",25);
+		soundManager.play("s6");
+		changeLock = true;
+	} 
+	
+	if (mousePressed == true && mouseX > 770 && mouseX < 802
+	 && mouseY > 30 && mouseY < 62 && champSelPlay == true && changeLock == false)
+	{
+		champSelPlay = false;
+		soundManager.setVolume("s6",25);
+		soundManager.play("s6");
+		changeLock = true;
+	}
+
+	if (mousePressed == false && mouseX > 770 && mouseX < 802
+	 && mouseY > 30 && mouseY < 62)
+	{	
+		changeLock = false;
+	} 
+
+
+
+
+	
+	if (champSelPlay == true)
+	{
+		image(volumeOn,770,30,32,32);
+	}	
+	if (champSelPlay == false)
+	{
+		image(volumeOff,770,30,32,32);
+	}
+	
+	
+	}
+  
+}
+
+
+
+    </script>
+    <canvas id="mycanvas"></canvas>
+</center>
+

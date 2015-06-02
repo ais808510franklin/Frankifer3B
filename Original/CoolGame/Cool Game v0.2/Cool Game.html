@@ -1,0 +1,211 @@
+<html>
+<head>
+<title> Cool Game </title>
+<!-- copy and paste the next 2 lines to setup the sound files, you must modify the loadsoundchrome.js file with your sounds -->
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+<!-- Stop copying here -->
+
+<center>
+	<script type="text/javascript" src="script/processing-1.4.1.js"></script>
+	<script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+boolean stateX;
+boolean stateY;
+boolean stateX1;
+boolean hit;
+boolean rectang;
+boolean fall;
+
+int t;
+
+
+int x;
+int y;
+
+
+
+void setup()
+
+{
+	background(0,0,0);
+	size(1000,600);
+	
+	x = 500;
+	y = 300;
+	t = 0;
+	
+	stateX = false;
+	stateY = false;
+	fall = true;
+	rectang = false;
+}
+
+
+void draw()
+{
+	background(0,0,0);
+	fill(255,255,255);
+	stroke(0,0,0);
+	ellipse(x,y,50,50);
+	fill(200,0,0);
+	rect(0,575,1100,50);
+	rect(100,400,100,10);
+	rect(800,400,100,10);
+	
+//	fill(100,100,100);
+//	rect(100,375,100,25);
+//	rect(800,375,100,25);
+	
+	if (y < 400 && y > 375 && x > 100 && x < 200)
+	{
+		rectang = true;
+	}
+	if (y < 400 && y > 375 && x > 800 && x < 900)
+	{
+		rectang = true;
+	}
+
+	if (rectang == true)
+	{
+		y = y + t^2/4;
+		t = t + 1;
+		if (y > 375)
+		{
+			y = 375;
+			t = 0;
+		}
+	}
+	if (x > 200)
+	{
+		rectang = false;
+	}
+	if (x < 100)
+	{
+		rectang = false;
+	}
+	if (x < 800)
+	{
+		rectang = false;
+	}
+	if (x > 900)
+	{
+		rectang = false;
+	}
+	
+
+	if (rectang == true)
+	{
+		fill(0,200,0);
+		rect(0,575,1100,50);
+	}
+	if(rectang == false)
+	{
+		fall = true;
+	}
+	
+	
+	if (fall == true && rectang == false)
+	{
+		if (y < 550)
+		{
+			t = t + 1;
+			y = y + (t^2)/4;
+		}
+	}	
+		
+	
+	if (y > 550 && fall == true)
+	{
+		y = 550;
+		t = 0
+	}
+	if (stateY == true && t > -1 && t < 20)
+	{
+		y = y - 30 + (t^2)/4;
+		t = t + 1;
+	}
+
+	
+	
+	
+
+	if (stateX == true)
+	{
+		x = x - 7;
+	}
+	if (stateX1 == true)
+	{
+		x = x + 7;
+	}
+	
+
+	
+	
+	
+	
+	if (hit == true)
+	{	
+		fill(200,0,0);
+		ellipse(x,y,75,75);
+	}
+	
+}
+
+
+void keyPressed()
+{
+	if(key == 'a')
+	{
+		stateX = true;
+	}
+	if(key == 'd')
+	{
+		stateX1 = true;
+	}
+	if(key == 'w')
+	{
+		stateY = true;
+	}
+	if(key == 's')
+	{
+		rectang = false;
+	}
+	if(key == 'q')
+	{
+		hit = true;
+	}
+}
+
+
+void keyReleased()
+{
+	if(key == 'a')
+	{
+		stateX = false;
+	}
+	if(key == 'd')
+	{
+		stateX1 = false;
+	}
+	if(key == 'w')
+	{
+		stateY = false;
+	}
+	if(key == 'q')
+	{
+		hit = false;
+	}
+
+}
+
+</script>
+<canvas id="mycanvas"></canvas>
+</head>
+
+<body>
+
+</body>
+</html>

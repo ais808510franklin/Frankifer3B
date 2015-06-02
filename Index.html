@@ -1,0 +1,238 @@
+<title> Start! </title>
+
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+
+<center>
+    <script src="script/processing-1.4.1.js"></script>
+    <script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+//s0 = Atk
+//s1 = Dmg
+//s2 = R Atk
+//s3 = Nintendo background loop
+//s4 = Poke background loop
+//s5 = menu click
+//s6 = menu hit
+//s7 = Champ select
+//s8 = champ select 2
+
+PImage home;
+PImage name;
+PImage start;
+boolean nintLock;
+boolean nintPlay;
+
+boolean menuClickLock;
+
+boolean changeLock;
+
+PImage volumePicOn;
+PImage volumePicOff;
+
+
+
+
+PImage marioAtkLL = new PImage [4];
+int timeMarioAtk;
+
+
+
+PImage mudkipRun = new PImage [4];
+int timeMudkipRun;
+int mudkipX;
+
+
+
+
+void setup(){  
+
+    size(1000,600);  
+    background(0,0,0);
+    frameRate( 60 );
+    
+    nintPlay = true;
+    nintLock = false;
+    
+    changeLock = false;
+    
+    menuClickLock = false;
+    
+    home = loadImage("home.jpg"); //background image
+    name = loadImage("Buttons/title.png"); //the title
+    start = loadImage("Buttons/start.png"); //the start button
+    
+    volumeOn = loadImage("ETC Pics/VolumeOn.png");
+    volumeOff = loadImage("ETC Pics/VolumeOff.png");
+    
+    
+    marioAtkLL[1] = loadImage("Mario/Atk/MarioAtkLL1.png");
+    marioAtkLL[2] = loadImage("Mario/Atk/MarioAtkLL2.png");
+    marioAtkLL[3] = loadImage("Mario/Atk/MarioAtkLL3.png");
+    marioAtkLL[4] = loadImage("Mario/Atk/MarioAtkLL4.png");
+    
+    mudkipRun[1] = loadImage("mudkips/WALK/MudkipWalk1.png");
+    mudkipRun[2] = loadImage("mudkips/WALK/MudkipWalk2.png");
+    mudkipRun[3] = loadImage("mudkips/WALK/MudkipWalk3.png");
+    mudkipRun[4] = loadImage("mudkips/WALK/MudkipWalk4.png");            
+}  
+
+
+void draw()
+{
+    size(1000,600);  
+    background(0,0,0);
+ 
+ 
+	//Background Music
+	{
+    if (nintPlay == true && nintLock == false)
+    {
+    	soundManager.setVolume("s3",20);
+    	soundManager.play("s3",{loops:2});
+    	nintLock = true;
+	}
+	if (nintPlay == false && nintLock == true)
+	{
+		soundManager.stop("s3");
+		nintLock = false;
+	}
+	
+	
+//mute (MOUSE PRESS)	
+	if (mouseX > 460 && mouseX < 512 && mouseY > 20 && mouseY < 72)
+	{
+		fill(100,100,100);
+		rect(460,20,52,52);
+	} 
+	
+	if (mousePressed == true && mouseX > 470 && mouseX < 502
+	 && mouseY > 30 && mouseY < 62 && nintPlay == false && changeLock == false)
+	{	
+		nintPlay = true;
+		soundManager.setVolume("s6",25);
+		soundManager.play("s6");
+		changeLock = true;
+	} 
+	
+	if (mousePressed == true && mouseX > 470 && mouseX < 502
+	 && mouseY > 30 && mouseY < 62 && nintPlay == true && changeLock == false)
+	{
+		nintPlay = false;
+		soundManager.setVolume("s6",25);
+		soundManager.play("s6");
+		changeLock = true;
+	}
+
+	if (mousePressed == false && mouseX > 470 && mouseX < 502
+	 && mouseY > 30 && mouseY < 62)
+	{	
+		changeLock = false;
+	} 
+
+
+
+
+	
+	if (nintPlay == true)
+	{
+		image(volumeOn,470,30,32,32);
+	}	
+	if (nintPlay == false)
+	{
+		image(volumeOff,470,30,32,32);
+	}
+	}
+	
+	
+	
+	
+  	//image(home,0,0,1000,750);
+    image(name,210,130,580,180);
+    image(start,390,330,200,100);
+    
+    if ( 390 < mouseX && mouseX < 590 && 330 < mouseY && mouseY < 430)
+    {
+    	if (menuClickLock == false)
+    	{
+    		soundManager.setVolume("s5",25);
+			soundManager.play("s5");
+			menuClickLock = true;
+		}
+    } else { menuClickLock = false; }
+
+    if ( 390 < mouseX && mouseX < 590
+	&& 330 < mouseY && mouseY < 430
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		link("character2.html");		
+		soundManager.setVolume("s6",25);
+		soundManager.play("s6");
+	}
+	
+	
+	
+	
+	timeMarioAtk = timeMarioAtk + 1;
+	if (timeMarioAtk >= 0 && timeMarioAtk <= 7)
+	{
+		image(marioAtkLL[1],550,310,33,41);
+	}
+	if (timeMarioAtk > 7 && timeMarioAtk <= 14)
+	{
+		image(marioAtkLL[2],550,310,50,41);
+	}
+	if (timeMarioAtk > 14 && timeMarioAtk <= 21)
+	{
+		image(marioAtkLL[3],550,310,51,41);
+	}
+	if (timeMarioAtk > 21 && timeMarioAtk <= 28)
+	{
+		image(marioAtkLL[4],550,310,47,42);
+	}
+	if (timeMarioAtk >= 28)
+	{
+		timeMarioAtk = 0;
+	}
+	
+	
+	
+	timeMudkipRun = timeMudkipRun + 1;
+	if (timeMudkipRun >= 0 && timeMudkipRun <= 7)
+	{
+		image(mudkipRun[1],mudkipX,500,38,37);
+	}
+	if (timeMudkipRun > 7 && timeMudkipRun <= 14)
+	{
+		image(mudkipRun[2],mudkipX,500,38,37);
+	}
+	if (timeMudkipRun > 14 && timeMudkipRun <= 21)
+	{
+		image(mudkipRun[3],mudkipX,500,38,37);
+	}
+	if (timeMudkipRun > 21 && timeMudkipRun <= 28)
+	{
+		image(mudkipRun[4],mudkipX,500,38,37);
+	}
+	if (timeMudkipRun >= 28)
+	{
+		timeMudkipRun = 0;
+	}
+	mudkipX = mudkipX - 5;
+	if (mudkipX < -50)
+	{
+		mudkipX = 1050;
+	}	
+	
+	
+	
+    
+}
+
+
+
+    </script>
+    <canvas id="mycanvas"></canvas>
+</center>

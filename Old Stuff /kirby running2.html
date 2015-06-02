@@ -1,0 +1,640 @@
+<title> Kirby Running </title>
+
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+
+<center>
+    <script src="script/processing-1.4.1.js"></script>
+    <script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+//RUNNING RIGHT
+PImage kirby1;
+PImage kirby2;
+PImage kirby3;
+PImage kirby4;
+PImage kirby5;
+PImage kirby6;
+PImage kirby7;
+PImage kirby8;
+
+//RUNNING LEFT
+PImage left1;
+PImage left2;
+PImage left3;
+PImage left4;
+PImage left5;
+PImage left6;
+PImage left7;
+PImage left8;
+
+int right;
+
+//ATTACK
+PImage kirby9;
+PImage kirby10;
+PImage kirby11;
+PImage kirby12;
+PImage kirby13;
+PImage kirby14;
+PImage kirby15;
+PImage kirby16;
+PImage kirby17;
+PImage kirby18;
+PImage kirby19;
+PImage kirby20;
+PImage kirby21;
+PImage kirby22;
+PImage kirby23;
+PImage kirby24;
+
+String character1;
+String character2;
+
+void setup(){  
+
+    size(1000,600);  
+    background(0,0,0);
+    frameRate( 30 );
+    
+    //RIGHT
+	kirby1 = loadImage("Kirby/Kirby Right/1.png");
+	kirby2 = loadImage("Kirby/Kirby Right/2.png");
+	kirby3 = loadImage("Kirby/Kirby Right/3.png");
+	kirby4 = loadImage("Kirby/Kirby Right/4.png");
+	kirby5 = loadImage("Kirby/Kirby Right/5.png");
+	kirby6 = loadImage("Kirby/Kirby Right/6.png");
+	kirby7 = loadImage("Kirby/Kirby Right/7.png");
+	kirby8 = loadImage("Kirby/Kirby Right/8.png");
+	
+	//ATTACK
+	kirby9 = loadImage("Kirby/Kirby Attack/1.jpg");
+	kirby10 = loadImage("Kirby/Kirby Attack/2.jpg");
+	kirby11 = loadImage("Kirby/Kirby Attack/3.jpg");
+	kirby12 = loadImage("Kirby/Kirby Attack/4.jpg");
+	kirby13 = loadImage("Kirby/Kirby Attack/5.jpg");
+	kirby14 = loadImage("Kirby/Kirby Attack/6.jpg");
+	kirby15 = loadImage("Kirby/Kirby Attack/7.jpg");
+	kirby16 = loadImage("Kirby/Kirby Attack/8.jpg");
+	kirby17 = loadImage("Kirby/Kirby Attack/9.jpg");
+	kirby18 = loadImage("Kirby/Kirby Attack/10.jpg");
+	kirby19 = loadImage("Kirby/Kirby Attack/11.jpg");
+	kirby20 = loadImage("Kirby/Kirby Attack/12.jpg");
+	kirby21 = loadImage("Kirby/Kirby Attack/13.jpg");
+	kirby22 = loadImage("Kirby/Kirby Attack/14.jpg");
+	kirby23 = loadImage("Kirby/Kirby Attack/15.jpg");
+	kirby24 = loadImage("Kirby/Kirby Attack/16.jpg");
+	
+	//LEFT
+	
+	//RUNNING
+	kirbyB1 = 1;
+	kirbyB2 = 0;
+	kirbyB3 = 0;
+	kirbyB4 = 0;
+	kirbyB5 = 0;
+	kirbyB6 = 0;
+	kirbyB7 = 0;
+	kirbyB8 = 0;
+	
+	//ATTACKING
+	kirbyA1 = 1;
+	kirbyA2 = 0;
+	kirbyA3 = 0;
+	kirbyA4 = 0;
+	kirbyA5 = 0;
+	kirbyA6 = 0;
+	kirbyA7 = 0;
+	kirbyA8 = 0;
+	kirbyA9 = 0;
+	kirbyA10 = 0;
+	kirbyA11 = 0;
+	kirbyA12 = 0;
+	kirbyA13 = 0;
+	kirbyA14 = 0;
+	kirbyA15 = 0;
+	kirbyA16 = 0;
+	
+	
+	
+}  
+
+
+void draw()
+{
+    size(1000,600);  
+    background(0,0,0);
+    frameRate(15);
+	
+	character1 = (int)sessionStorage.transferx1;
+	character2 = (int)sessionStorage.transferx2;
+	
+	textSize(40);
+	if(character1 ==1)
+	{
+		fill(255,255,255);
+		text("MUDKIP",20,200);
+	}
+	if(character1 ==2)
+	{
+		fill(255,255,255);
+		text("PIKACHU",20,200);
+	}
+	if(character1 ==3)
+	{
+		fill(255,255,255);
+		text("YOSHI",20,200);
+	}
+	if(character1 ==4)
+	{
+		fill(255,255,255);
+		text("MARIO",20,200);
+	}
+	if(character1 ==5)
+	{
+		fill(255,255,255);
+		text("KIRBY",20,200);
+	}
+	
+	if(character2 ==1)
+	{
+		fill(255,255,255);
+		text("MUDKIP",20,260);
+	}
+	if(character2 ==2)
+	{
+		fill(255,255,255);
+		text("PIKACHU",20,260);
+	}
+	if(character2 ==3)
+	{
+		fill(255,255,255);
+		text("YOSHI",20,260);
+	}
+	if(character2 ==4)
+	{
+		fill(255,255,255);
+		text("MARIO",20,260);
+	}
+	if(character2 ==5)
+	{
+		fill(255,255,255);
+		text("KIRBY",20,260);
+	}	
+	//ATTACK
+	if(kirbyA16 ==1)
+	{
+		image(kirby24,200,70,60,70);
+		kirbyA1 = 1;
+		kirbyA2 = 0;
+		kirbyA3 = 0;
+		kirbyA4= 0;
+		kirbyA5 = 0;
+		kirbyA6 = 0;
+		kirbyA7 = 0;
+		kirbyA8 = 0;
+		kirbyA9 = 0;
+		kirbyA10 = 0;
+		kirbyA11 = 0;
+		kirbyA12 = 0;
+		kirbyA13 = 0;
+		kirbyA14 = 0;
+		kirbyA15 = 0;
+		kirbyA16 = 0;
+	}
+		
+	if(kirbyA15 ==1)
+	{
+		image(kirby23,200,70,60,70);
+		kirbyA1 = 0;
+		kirbyA2 = 0;
+		kirbyA3 = 0;
+		kirbyA4= 0;
+		kirbyA5 = 0;
+		kirbyA6 = 0;
+		kirbyA7 = 0;
+		kirbyA8 = 0;
+		kirbyA9 = 0;
+		kirbyA10 = 0;
+		kirbyA11 = 0;
+		kirbyA12 = 0;
+		kirbyA13 = 0;
+		kirbyA14 = 0;
+		kirbyA15 = 0;
+		kirbyA16 = 1;
+	}
+	
+	if(kirbyA14 ==1)
+	{
+		image(kirby22,200,70,60,70);
+		kirbyA1 = 0;
+		kirbyA2 = 0;
+		kirbyA3 = 0;
+		kirbyA4= 0;
+		kirbyA5 = 0;
+		kirbyA6 = 0;
+		kirbyA7 = 0;
+		kirbyA8 = 0;
+		kirbyA9 = 0;
+		kirbyA10 = 0;
+		kirbyA11 = 0;
+		kirbyA12 = 0;
+		kirbyA13 = 0;
+		kirbyA14 = 0;
+		kirbyA15 = 1;
+		kirbyA16 = 0;
+	}
+		
+	if(kirbyA13 ==1)
+	{
+		image(kirby21,200,70,60,70);
+		kirbyA1 = 0;
+		kirbyA2 = 0;
+		kirbyA3 = 0;
+		kirbyA4= 0;
+		kirbyA5 = 0;
+		kirbyA6 = 0;
+		kirbyA7 = 0;
+		kirbyA8 = 0;
+		kirbyA9 = 0;
+		kirbyA10 = 0;
+		kirbyA11 = 0;
+		kirbyA12 = 0;
+		kirbyA13 = 0;
+		kirbyA14 = 1;
+		kirbyA15 = 0;
+		kirbyA16 = 0;
+	}
+		
+	if(kirbyA12 ==1)
+	{
+		image(kirby20,200,70,60,70);
+		kirbyA1 = 0;
+		kirbyA2 = 0;
+		kirbyA3 = 0;
+		kirbyA4= 0;
+		kirbyA5 = 0;
+		kirbyA6 = 0;
+		kirbyA7 = 0;
+		kirbyA8 = 0;
+		kirbyA9 = 0;
+		kirbyA10 = 0;
+		kirbyA11 = 0;
+		kirbyA12 = 0;
+		kirbyA13 = 1;
+		kirbyA14 = 0;
+		kirbyA15 = 0;
+		kirbyA16 = 0;
+	}
+	
+	if(kirbyA11 ==1)
+	{
+		image(kirby19,200,70,60,70);
+		kirbyA1 = 0;
+		kirbyA2 = 0;
+		kirbyA3 = 0;
+		kirbyA4= 0;
+		kirbyA5 = 0;
+		kirbyA6 = 0;
+		kirbyA7 = 0;
+		kirbyA8 = 0;
+		kirbyA9 = 0;
+		kirbyA10 = 0;
+		kirbyA11 = 0;
+		kirbyA12 = 1;
+		kirbyA13 = 0;
+		kirbyA14 = 0;
+		kirbyA15 = 0;
+		kirbyA16 = 0;
+	}	
+		
+	if(kirbyA10 ==1)
+	{
+		image(kirby18,200,70,60,70);
+		kirbyA1 = 0;
+		kirbyA2 = 0;
+		kirbyA3 = 0;
+		kirbyA4= 0;
+		kirbyA5 = 0;
+		kirbyA6 = 0;
+		kirbyA7 = 0;
+		kirbyA8 = 0;
+		kirbyA9 = 0;
+		kirbyA10 = 0;
+		kirbyA11 = 1;
+		kirbyA12 = 0;
+		kirbyA13 = 0;
+		kirbyA14 = 0;
+		kirbyA15 = 0;
+		kirbyA16 = 0;
+	}	
+		
+	if(kirbyA9 ==1)
+	{
+		image(kirby17,200,70,60,70);
+		kirbyA1 = 0;
+		kirbyA2 = 0;
+		kirbyA3 = 0;
+		kirbyA4= 0;
+		kirbyA5 = 0;
+		kirbyA6 = 0;
+		kirbyA7 = 0;
+		kirbyA8 = 0;
+		kirbyA9 = 0;
+		kirbyA10 = 1;
+		kirbyA11 = 0;
+		kirbyA12 = 0;
+		kirbyA13 = 0;
+		kirbyA14 = 0;
+		kirbyA15 = 0;
+		kirbyA16 = 0;
+	}
+	
+	if(kirbyA8 ==1)
+	{
+		image(kirby16,200,70,60,70);
+		kirbyA1 = 0;
+		kirbyA2 = 0;
+		kirbyA3 = 0;
+		kirbyA4= 0;
+		kirbyA5 = 0;
+		kirbyA6 = 0;
+		kirbyA7 = 0;
+		kirbyA8 = 0;
+		kirbyA9 = 1;
+		kirbyA10 = 0;
+		kirbyA11 = 0;
+		kirbyA12 = 0;
+		kirbyA13 = 0;
+		kirbyA14 = 0;
+		kirbyA15 = 0;
+		kirbyA16 = 0;
+	}
+		
+	if(kirbyA7 ==1)
+	{
+		image(kirby15,200,70,60,70);
+		kirbyA1 = 0;
+		kirbyA2 = 0;
+		kirbyA3 = 0;
+		kirbyA4= 0;
+		kirbyA5 = 0;
+		kirbyA6 = 0;
+		kirbyA7 = 0;
+		kirbyA8 = 1;
+		kirbyA9 = 0;
+		kirbyA10 = 0;
+		kirbyA11 = 0;
+		kirbyA12 = 0;
+		kirbyA13 = 0;
+		kirbyA14 = 0;
+		kirbyA15 = 0;
+		kirbyA16 = 0;
+	}
+		
+	if(kirbyA6 ==1)
+	{
+		image(kirby14,200,70,60,70);
+		kirbyA1 = 0;
+		kirbyA2 = 0;
+		kirbyA3 = 0;
+		kirbyA4= 0;
+		kirbyA5 = 0;
+		kirbyA6 = 0;
+		kirbyA7 = 1;
+		kirbyA8 = 0;
+		kirbyA9 = 0;
+		kirbyA10 = 0;
+		kirbyA11 = 0;
+		kirbyA12 = 0;
+		kirbyA13 = 0;
+		kirbyA14 = 0;
+		kirbyA15 = 0;
+		kirbyA16 = 0;
+	}
+		
+	if(kirbyA5 ==1)
+	{
+		image(kirby13,200,70,60,70);
+		kirbyA1 = 0;
+		kirbyA2 = 0;
+		kirbyA3 = 0;
+		kirbyA4= 0;
+		kirbyA5 = 0;
+		kirbyA6 = 1;
+		kirbyA7 = 0;
+		kirbyA8 = 0;
+		kirbyA9 = 0;
+		kirbyA10 = 0;
+		kirbyA11 = 0;
+		kirbyA12 = 0;
+		kirbyA13 = 0;
+		kirbyA14 = 0;
+		kirbyA15 = 0;
+		kirbyA16 = 0;
+	}
+	
+	if(kirbyA4 ==1)
+	{
+		image(kirby12,200,70,60,70);
+		kirbyA1 = 0;
+		kirbyA2 = 0;
+		kirbyA3 = 0;
+		kirbyA4= 0;
+		kirbyA5 = 1;
+		kirbyA6 = 0;
+		kirbyA7 = 0;
+		kirbyA8 = 0;
+		kirbyA9 = 0;
+		kirbyA10 = 0;
+		kirbyA11 = 0;
+		kirbyA12 = 0;
+		kirbyA13 = 0;
+		kirbyA14 = 0;
+		kirbyA15 = 0;
+		kirbyA16 = 0;
+	}
+	
+	if(kirbyA3 ==1)
+	{
+		image(kirby11,200,70,60,70);
+		kirbyA1 = 0;
+		kirbyA2 = 0;
+		kirbyA3 = 0;
+		kirbyA4= 1;
+		kirbyA5 = 0;
+		kirbyA6 = 0;
+		kirbyA7 = 0;
+		kirbyA8 = 0;
+		kirbyA9 = 0;
+		kirbyA10 = 0;
+		kirbyA11 = 0;
+		kirbyA12 = 0;
+		kirbyA13 = 0;
+		kirbyA14 = 0;
+		kirbyA15 = 0;
+		kirbyA16 = 0;
+	}
+	 
+	if(kirbyA2 ==1)
+	{
+		image(kirby10,200,70,60,70);
+		kirbyA1 = 0;
+		kirbyA2 = 0;
+		kirbyA3 = 1;
+		kirbyA4= 0;
+		kirbyA5 = 0;
+		kirbyA6 = 0;
+		kirbyA7 = 0;
+		kirbyA8 = 0;
+		kirbyA9 = 0;
+		kirbyA10 = 0;
+		kirbyA11 = 0;
+		kirbyA12 = 0;
+		kirbyA13 = 0;
+		kirbyA14 = 0;
+		kirbyA15 = 0;
+		kirbyA16 = 0;
+	}
+	
+	if(kirbyA1 ==1)
+	{
+		image(kirby9,200,70,60,70);
+		kirbyA1 = 0;
+		kirbyA2 = 1;
+		kirbyA3 = 0;
+		kirbyA4= 0;
+		kirbyA5 = 0;
+		kirbyA6 = 0;
+		kirbyA7 = 0;
+		kirbyA8 = 0;
+		kirbyA9 = 0;
+		kirbyA10 = 0;
+		kirbyA11 = 0;
+		kirbyA12 = 0;
+		kirbyA13 = 0;
+		kirbyA14 = 0;
+		kirbyA15 = 0;
+		kirbyA16 = 0;
+	}
+	
+	
+
+	//RUNNING
+	if(kirbyB8 ==1)
+	{
+		image(kirby8,60,70,60,70);
+		kirbyB1 = 0;
+		kirbyB2 = 0;
+		kirbyB3 = 1;
+		kirbyB4 = 0;
+		kirbyB5 = 0;
+		kirbyB6 = 0;
+		kirbyB7 = 0;
+		kirbyB8 = 0;
+	}
+	if(kirbyB7 ==1)
+	{
+		image(kirby7,60,70,60,70);
+		kirbyB1 = 0;
+		kirbyB2 = 0;
+		kirbyB3 = 0;
+		kirbyB4 = 0;
+		kirbyB5 = 0;
+		kirbyB6 = 0;
+		kirbyB7 = 0;
+		kirbyB8 = 1;
+	}
+	if(kirbyB6 ==1)
+	{
+		image(kirby6,60,70,60,70);
+		kirbyB1 = 0;
+		kirbyB2 = 0;
+		kirbyB3 = 0;
+		kirbyB4 = 0;
+		kirbyB5 = 0;
+		kirbyB6 = 0;
+		kirbyB7 = 1;
+		kirbyB8 = 0;
+	}
+	if(kirbyB5 ==1)
+	{
+		image(kirby5,60,70,60,70);
+		kirbyB1 = 0;
+		kirbyB2 = 0;
+		kirbyB3 = 0;
+		kirbyB4 = 0;
+		kirbyB5 = 0;
+		kirbyB6 = 1;
+		kirbyB7 = 0;
+		kirbyB8 = 0;
+	}
+	if(kirbyB4 ==1)
+	{
+		image(kirby4,60,70,60,70);
+		kirbyB1 = 0;
+		kirbyB2 = 0;
+		kirbyB3 = 0;
+		kirbyB4 = 0;
+		kirbyB5 = 1;
+		kirbyB6 = 0;
+		kirbyB7 = 0;
+		kirbyB8 = 0;
+	}
+	if(kirbyB3 ==1)
+	{
+		image(kirby3,60,70,60,70);
+		kirbyB1 = 0;
+		kirbyB2 = 0;
+		kirbyB3 = 0;
+		kirbyB4 = 1;
+		kirbyB5 = 0;
+		kirbyB6 = 0;
+		kirbyB7 = 0;
+		kirbyB8 = 0;
+	}
+	
+	if(kirbyB2 ==1)
+	{
+		image(kirby2,60,70,60,70);
+		kirbyB1 = 0;
+		kirbyB2 = 0;
+		kirbyB3 = 1;
+		kirbyB4 = 0;
+		kirbyB5 = 0;
+		kirbyB6 = 0;
+		kirbyB7 = 0;
+		kirbyB8 = 0;
+	}
+	
+	if(kirbyB1 ==1)
+	{
+		image(kirby1,60,70,60,70);
+		kirbyB1 = 0;
+		kirbyB2 = 1;
+		kirbyB3 = 0;
+		kirbyB4 = 0;
+		kirbyB5 = 0;
+		kirbyB6 = 0;
+		kirbyB7 = 0;
+		kirbyB8 = 0;
+	}
+
+    //NEXT BUTTON
+    if ( 0 < mouseX && mouseX < 100
+	&& 0 < mouseY && mouseY < 100
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		link("character2.html");
+	}
+	
+}
+
+
+	
+
+
+    </script>
+    <canvas id="mycanvas"></canvas>
+</center>

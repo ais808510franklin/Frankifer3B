@@ -1,0 +1,149 @@
+<title> ntestig </title>
+
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+
+<center>
+    <script src="script/processing-1.4.1.js"></script>
+    <script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+int x;
+int y;
+int bulletX;
+int bulletY;
+
+boolean faceX; //left = TRUE ; right = FALSE
+
+boolean leftX;
+boolean rightX;
+
+boolean bulletLeft;
+boolean bulletRight;
+
+boolean shoot;
+
+boolean lockDir;
+
+
+
+
+
+void setup()
+{
+	x = 500;
+	y = 300;
+}
+void draw()
+{
+    size(1000,600);  
+    background(0,0,0);
+    fill(0,0,255);
+    ellipse(x,y,50,50);
+    
+    
+    if (leftX == true)
+    {
+    	x = x - 7;
+    }
+    if (rightX == true)
+    {
+    	x = x + 7;
+    }
+    
+    
+    fill(255,255,255);
+    ellipse(bulletX,bulletY,30,30);
+    
+    if (shoot == false)
+    {
+    	bulletX = x;
+    	bulletY = y;
+    }
+    if (shoot == true && faceX == true && lockDir == false)
+    {
+    	bulletRight = true;
+    	lockDir = true;
+    }
+    if (bulletRight == true)
+    {
+    	bulletX = bulletX - 10;
+    }
+    
+    
+    if (shoot == true && faceX == false && lockDir == false)
+    {
+    	bulletLeft = true;
+    	lockDir = true;
+    }
+    if (bulletLeft == true)
+    {	
+    	bulletX = bulletX + 10;
+    }
+    
+    
+    if (bulletX < 0)
+    {
+    	shoot = false;
+    	bulletRight = false;
+    	bulletLeft = false;
+    	lockDir = false;
+    }
+    if (bulletX > 1000)
+    {
+    	shoot = false;
+    	bulletRight = false;
+    	bulletLeft = false;
+    	lockDir = false;
+    }
+    
+     
+    fill(100,100,255);
+    if (faceX == true)
+    {
+    	text("Facing LEFT",500,50);
+    }
+    if (faceX == false)
+    {
+    	text("Facing RIGHT",500,50);
+    }
+    
+}
+void keyPressed()
+{
+	if (key == 'a')
+	{
+		leftX = true; 
+		faceX = true;
+	}
+	if (key == 'd')
+	{
+		rightX = true;
+		faceX = false;
+	}
+	if (key == 'e')
+	{
+		shoot = true;
+	}
+}
+void keyReleased()
+{
+	if (key == 'a')
+	{
+		leftX = false;
+	}
+	if (key == 'd')
+	{
+		rightX = false;
+	}
+
+}
+
+
+	
+
+
+    </script>
+    <canvas id="mycanvas"></canvas>
+</center>

@@ -1,0 +1,1150 @@
+<title> Basic Game Scene </title>
+
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+
+<center>
+    <script src="script/processing-1.4.1.js"></script>
+    <script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+
+//KIRBY PIMAGE //XXXX 
+{
+	PImage moveR1 = new PImage[8];
+	PImage moveL1 = new PImage[8];
+	PImage standR1 = new PImage[10];
+	PImage standL1 = new PImage[10];
+	PImage jumpR1 = new PImage[10];
+	PImage jumpL1 = new PImage[10];
+	PImage fallR1;
+	PImage fallL1;
+	PImage damageR1;
+	PImage damageL1;
+}
+
+
+//MUDKIP PIMAGES //  XXXX
+{
+PImage mudIdleLL;
+PImage mudIdleRR;
+
+PImage mudWalk1LL;
+PImage mudWalk2LL;
+PImage mudWalk3LL;
+PImage mudWalk4LL;
+
+
+PImage mudWalk1RR;
+PImage mudWalk2RR;
+PImage mudWalk3RR;
+PImage mudWalk4RR;
+
+
+PImage mudFallLL;
+PImage mudFallRR;
+}
+
+//MOTION CONTROL 1  XXXX
+int left1;
+int right1;
+
+//MOTION CONTROL 2 XXXX
+boolean left2; //
+boolean right2; //
+
+//JUMPING CONTROLS 1 XXXX
+int groundJump1; //Jump from the ground (when jumpGround/Plat = 2 then it falls)
+int platJump1; //Jump from the platform 
+
+//JUMPING CONTROL 2 XXXXX
+int groundJump2;
+int platJump2;
+
+//PLATFORMING CONTROL 1 XXXX
+int onPlatform1; //defines when the character is on the platform 
+int jumpAllow1; //Determines when the 'w' is activated
+ 
+//PLAT CONTROL 2 XXXXX
+int onPlatform2;
+int jumpAllow2;
+
+//HP COLOR 1 XXXX
+int r1;
+int g1;
+int b1;
+
+//HP COLOR 2 XXXX
+int r2;
+int g2;
+int b2;
+
+//HP LENTH 1  XXXXXX 
+int length1;
+int rp1; //Refractory period 
+
+//HP LENGTH 2 XXXXX
+int length2;
+int rp2; //refractory period
+
+//COORDINATES 1 xXXXXXX
+int x1;
+int y1;
+
+//COORDINATES 2 XXXXXX
+int x2;
+int y2;
+
+//ATTACK  XXXXXX 
+int attack1;
+int attack2;
+
+//DISTANCE BETWEEN THE CHARACTERS XXXXXX
+int d;
+
+//DAMAGE XXXXXXX 
+int damage1;
+int damage2;
+
+//HP DECREASING RECTS  XXXXXXX 
+int hpLoss1;
+int hpLoss2;
+int lockAttack1;
+int lockAttack2;
+
+//RANGE ATTACK STUFF XXXXX
+int shootingR1;
+int shootingL1;
+
+
+//BULLET XXXXXXXX
+int bulletX1;
+int bulletX2;
+int bulletY1;
+int bulletY2;
+
+//SHOOTING OR NOT XXXXXXXXXX
+int shooting1; //when shooting == 0 then not shooting
+int shooting2; //when shooting == 1 then shooing
+
+//LAST KEY PRESSED (determines standing position and direction of shooting) XXXXXX
+int rightLast1; 
+int leftLast1;
+int rightLast2;
+int leftLast2;
+
+//RP LOSS  
+int rpLoss1;
+int rpLoss2;
+
+//RP REPAIR XXXXXXXXXXXXXXX 
+int rpRepair1;
+int rpRepair2;
+
+//SHOOT ACTIVATION XXXXXXXXX
+int shootAct1;
+int shootAct2;
+
+//KIRBY  XXXX
+int moveRT1;
+int moveLT1;
+int standRT1;
+int standLT1;
+int jumpRT1;
+int jumpLT1;
+int kirbyRight;
+
+//ANIMATION ACTIVATION XXXX
+int playRight1;
+ 
+//USE CHARACTER ***************************************
+int useKirby;
+int useMudkip;
+
+//WINNER STRINGS *************************************************
+String winner1;
+String winner2;
+
+//DISTANCE BULLET AND CHARACTER XXXX 
+int d1;
+int d2;
+
+//LOCK BULLET DIRECTION and DIRECTION OF MOVEMENT XXXX
+int lockDirection1;
+int lockDirection2;
+int bulletDirection1;
+int bulletDirection2;
+
+//DAMAGE BY RANGE ATTACK  XXXXXX 
+int rangeDamage1; 
+int rangeDamage2; 
+
+//////////////////////////////////////////////////////////////////////COMBINATION STUFF
+boolean airlock2;
+// if lock == true =======> locked
+// if lock == fals =======> not locked
+boolean air2;
+
+int vtravel2;
+int htravel2;
+int timeAnimate2;
+int time2;
+
+
+useKirby = 1;
+useMudkip = 1;
+
+void setup(){  
+
+    size(1000,600);  
+    background(255,255,255);
+    frameRate(60);
+    
+////////////////////////////////////////////////////[KIRBY] 
+   {
+		//MOVE RIGHT KIRBY
+		{
+			moveR1[1] = loadImage("Kirby/Right/Run/1.png");
+			moveR1[2] = loadImage("Kirby/Right/Run/2.png");
+			moveR1[3] = loadImage("Kirby/Right/Run/3.png");
+			moveR1[4] = loadImage("Kirby/Right/Run/4.png");
+			moveR1[5] = loadImage("Kirby/Right/Run/5.png");
+			moveR1[6] = loadImage("Kirby/Right/Run/6.png");
+			moveR1[7] = loadImage("Kirby/Right/Run/7.png");
+			moveR1[8] = loadImage("Kirby/Right/Run/8.png");
+		}
+	
+		//MOVE LEFT KIRBY
+		{
+		moveL1[1] = loadImage("Kirby/Left/Run/1.png");
+		moveL1[2] = loadImage("Kirby/Left/Run/2.png");
+		moveL1[3] = loadImage("Kirby/Left/Run/3.png");
+		moveL1[4] = loadImage("Kirby/Left/Run/4.png");
+		moveL1[5] = loadImage("Kirby/Left/Run/5.png");
+		moveL1[6] = loadImage("Kirby/Left/Run/6.png");
+		moveL1[7] = loadImage("Kirby/Left/Run/7.png");
+		moveL1[8] = loadImage("Kirby/Left/Run/8.png");
+		}
+	
+		//STAND RIGHT KIRBY
+		{
+			standR1[1] = loadImage("Kirby/Right/Stand/1.png");
+			standR1[2] = loadImage("Kirby/Right/Stand/2.png");
+			standR1[3] = loadImage("Kirby/Right/Stand/3.png");
+			standR1[4] = loadImage("Kirby/Right/Stand/4.png");
+			standR1[5] = loadImage("Kirby/Right/Stand/5.png");
+			standR1[6] = loadImage("Kirby/Right/Stand/6.png");
+			standR1[7] = loadImage("Kirby/Right/Stand/7.png");
+			standR1[8] = loadImage("Kirby/Right/Stand/8.png");
+			standR1[9] = loadImage("Kirby/Right/Stand/9.png");
+			standR1[10] = loadImage("Kirby/Right/Stand/10.png");
+		}
+	
+		//STAND LEFT KIRBY
+		{
+			standL1[1] = loadImage("Kirby/Left/Stand/1.png");
+			standL1[2] = loadImage("Kirby/Left/Stand/2.png");
+			standL1[3] = loadImage("Kirby/Left/Stand/3.png");
+			standL1[4] = loadImage("Kirby/Left/Stand/4.png");
+			standL1[5] = loadImage("Kirby/Left/Stand/5.png");
+			standL1[6] = loadImage("Kirby/Left/Stand/6.png");
+			standL1[7] = loadImage("Kirby/Left/Stand/7.png");
+			standL1[8] = loadImage("Kirby/Left/Stand/8.png");
+			standL1[9] = loadImage("Kirby/Left/Stand/9.png");
+			standL1[10] = loadImage("Kirby/Left/Stand/10.png");
+		}	
+	
+		//JUMP RIGHT KIRBY
+		{
+			jumpR1[1] = loadImage("Kirby/Right/Jump/1.png");
+			jumpR1[2] = loadImage("Kirby/Right/Jump/2.png");
+			jumpR1[3] = loadImage("Kirby/Right/Jump/3.png");
+			jumpR1[4] = loadImage("Kirby/Right/Jump/4.png");
+			jumpR1[5] = loadImage("Kirby/Right/Jump/5.png");
+			jumpR1[6] = loadImage("Kirby/Right/Jump/6.png");
+			jumpR1[7] = loadImage("Kirby/Right/Jump/7.png");
+			jumpR1[8] = loadImage("Kirby/Right/Jump/8.png");
+			jumpR1[9] = loadImage("Kirby/Right/Jump/9.png");
+			jumpR1[10] = loadImage("Kirby/Right/Jump/10.png");
+		}
+	
+		//JUMP LEFT
+		{
+			jumpL1[1] = loadImage("Kirby/Left/Jump/1.png");
+			jumpL1[2] = loadImage("Kirby/Left/Jump/2.png");
+			jumpL1[3] = loadImage("Kirby/Left/Jump/3.png");
+			jumpL1[4] = loadImage("Kirby/Left/Jump/4.png");
+			jumpL1[5] = loadImage("Kirby/Left/Jump/5.png");
+			jumpL1[6] = loadImage("Kirby/Left/Jump/6.png");
+			jumpL1[7] = loadImage("Kirby/Left/Jump/7.png");
+			jumpL1[8] = loadImage("Kirby/Left/Jump/8.png");
+			jumpL1[9] = loadImage("Kirby/Left/Jump/9.png");
+			jumpL1[10] = loadImage("Kirby/Left/Jump/10.png");
+		}
+	
+		//FALL RIGHT KIRBY
+		fallR1 = loadImage("Kirby/Right/Fall/1.png");
+	
+		//FALL LEFT KIRBY
+		fallL1 = loadImage("Kirby/Left/Fall/1.png");
+	
+		//DAMAGE RIGHT KIRBY
+		damageR1 = loadImage("Kirby/Right/Damage/1.png");
+	
+		//DAMAGE LEFT KIRBY
+		damageL1 = loadImage("Kirby/Left/Damage/1.png");
+	}
+
+/////////////////////////////////////////////////////[MUDKIP]
+	{
+		mudIdleLL = loadImage("mudkips/MudkipIdle.png")
+		mudIdleRR = loadImage("mudkips/RRMudkipIdleRR.png")
+
+		mudWalk1LL = loadImage("mudkips/WALK/MudkipWalk1.png")
+		mudWalk2LL = loadImage("mudkips/WALK/MudkipWalk2.png")
+		mudWalk3LL = loadImage("mudkips/WALK/MudkipWalk3.png")
+		mudWalk4LL = loadImage("mudkips/WALK/MudkipWalk4.png")
+
+		mudWalk1RR = loadImage("mudkips/WALK/RRMudkipWalk1RR.png")
+		mudWalk2RR = loadImage("mudkips/WALK/RRMudkipWalk2RR.png")
+		mudWalk3RR = loadImage("mudkips/WALK/RRMudkipWalk3RR.png")
+		mudWalk4RR = loadImage("mudkips/WALK/RRMudkipWalk4RR.png")	
+
+		mudFallLL = loadImage("mudkips/MudkipFallLL.png")
+		mudFallRR = loadImage("mudkips/MudkipFallRR.png")
+	}
+	
+
+    x1 = 400;
+    y1 = 545;
+    
+    x2 = 600;
+    y2 = 545;
+    
+    hpLoss1 = 0;
+    hpLoss2 = 0;
+    
+    rightLast1 = 1;
+    leftLast1 = 0;
+    rightLast2 = 1;
+    leftLast2 = 0;
+    
+    shootAct1 = 1;
+    shootAct2 = 1;
+    
+    rangeDamage1 = 1;
+    rangeDamage2 = 1;
+
+}  
+
+
+void draw()
+{
+    size(1000,600);  
+    background(0,0,0);
+	
+	character1 = (int)sessionStorage.transferx1;
+	character2 = (int)sessionStorage.transferx2;
+	
+	textSize(16);
+
+
+	//CHARACTER 1 NAME TRANSFER
+	if(character1 ==1)
+	{
+		fill(255,255,255);
+		text("MUDKIP",80,30);
+	}
+	if(character1 ==2)
+	{
+		fill(255,255,255);
+		text("PIKACHU",80,30);
+	}
+	if(character1 ==3)
+	{
+		fill(255,255,255);
+		text("YOSHI",80,30);
+	}
+	if(character1 ==4)
+	{
+		fill(255,255,255);
+		text("MARIO",80,30);
+	}
+	if(character1 ==5)
+	{
+		fill(255,255,255);
+		text("KIRBY",80,30);
+		useKirby = 1;
+	}
+	
+	//CHARACTER 2 NAME TRANSFER
+	if(character2 ==1)
+	{
+		fill(255,255,255);
+		text("MUDKIP",865,30);
+		useMudkip = 1;
+	}
+	if(character2 ==2)
+	{
+		fill(255,255,255);
+		text("PIKACHU",865,30);
+	}
+	if(character2 ==3)
+	{
+		fill(255,255,255);
+		text("YOSHI",865,30);
+	}
+	if(character2 ==4)
+	{
+		fill(255,255,255);
+		text("MARIO",865,30);
+	}
+	if(character2 ==5)
+	{
+		fill(255,255,255);
+		text("KIRBY",865,30);
+	}	
+    
+	//FLOOR + PLATS
+	fill(153,76,0);
+	rect(0,570,1000,30);
+	rect(100,400,200,10);
+	rect(500,400,200,10);
+	
+	//CHARACTER 1
+	fill(0,0,255);
+	ellipse(x1,y1,50,50);
+	
+	//BULLET 1
+	if(shooting1 == 0)
+	{
+		bulletX1 = x1;
+		bulletY1 = y1;
+		fill(255,255,255);
+		ellipse(bulletX1,bulletY1,20,20);
+	}
+	
+	//CHARACTER 2
+	fill(255,0,0);
+	ellipse(x2,y2,50,50);
+	
+	//BULLET 2
+	if(shooting2 == 0)
+		{
+			bulletX2 = x2;
+			bulletY2 = y2;
+			fill(255,255,255);
+			ellipse(bulletX2,bulletY2,20,20);
+		}
+
+
+	//HP BAR COLORS AND LENGTH 1
+	r1 = 0;
+	g1 = 255;
+	b1 = 0;
+	length1 = 200;
+	rp1 = 150;
+	
+	//HP BAR COLORS AND LENGTH 2
+	r2 = 0;
+	g2 = 255;
+	b2 = 0;
+	length2 = 200;
+	rp2 = 150;
+	
+	//HP 1
+	strokeWeight(1);
+	stroke(0,0,0);
+	fill(255,255,255);
+	textSize(16);
+	text("HP",25,62);
+	text("Player 1:",15,30);
+	text("R.P.",18,80);
+	
+	fill(r1,g1,b1);
+	rect(50,40,length1,15,3,3,3,3);
+	rect(50,70,rp1,10,3,3,3,3);
+	
+	//HP 2
+	fill(255,255,255);
+	textSize(16);
+	text("HP",938,62);
+	text("Player 2:",800,30);
+	text("R.P.",938,80);
+	fill(r2,g2,b2);
+	rect(730,40,length2,15,3,3,3,3);
+	rect(780,70,rp2,10,3,3,3,3);
+	
+	//DISTANCE
+	d = (int)sqrt(sq(x2-x1)+sq(y2-y1));
+	
+	//DISTANCE B/W BULLET AND CHARACTER 
+	d1 = (int)sqrt(sq(bulletX1-x2)+sq(bulletY1-y2));
+	d2 = (int)sqrt(sq(bulletX2-x1)+sq(bulletY2-y1));
+	
+	text(d1,100,100);
+	text(d2,150,150);
+	
+	
+	//BLACK RECTS THAT WILL MAKE HP BAR APPEAR TO HAVE SHORTENED\
+	noStroke();
+	fill(0,0,0);
+	rect(250,40,hpLoss1,15);
+	rect(730,40,hpLoss2,15);
+	
+	//BLACK RECTS THAT WILL MAKE THE RP BAR APPEAR TO HAVE SHORTENED
+	noStroke();
+	rect(200,70,rpLoss1,10);
+	rect(780,70,rpLoss2,10);
+	
+	
+	
+		
+////////////////////////////////////////////////////////////////////////////CHARACTER 1
+	//MOVE RIGHT
+	if(useKirby ==1)
+	{
+	
+		standRT1 = standRT1 +1;
+		standLT1 = standLT1 +1;
+		jumpRT1 = jumpRT1 +1;
+		jumpLT1 = jumpLT1 +1;
+	
+		int moveRa1; 
+		int moveRb1; 
+	
+		int moveLa1;
+		int moveLb1;
+	
+		int standRa1;
+		int standRb1;
+	
+		int standLa1;
+		int standLb1;
+	
+		int jumpRa1;
+		int jumpRb1;
+	
+		int jumpLa1;
+		int jumpLb1;
+	
+		moveRa1 = 0;
+		moveRb1 = 1;
+	
+		moveLa1 = 0;
+		moveLb1 = 1;
+	
+		standRa1 = 0;
+		standRb1 = 1;
+	
+		standLa1 = 0;
+		standLb1 = 1;
+	
+		jumpRa1 = 0;
+		jumpRb1 = 1;
+	
+		jumpLa1 = 0;
+		jumpLb1 = 1;
+	
+		if(right1 ==1 && x1 < 975)
+			{
+				x1 = x1+7;
+				moveRT1 = moveRT1 + 1;
+			
+				while (moveRb1 <= 8 && playRight1 ==1)			
+				{
+				 
+					if(moveRT1 >= moveRa1 && moveRT1 <= moveRa1 +5)
+					{
+						image(moveR1[moveRb1], x1-50,y1-40,60,70);	
+					}
+					moveRa1 = moveRa1  + 5;
+					moveRb1 = moveRb1 + 1;
+				}
+	
+
+				if(moveRT1 > 35 && moveRT1 <=40)
+				{
+					image(moveR1[8], x1-50,y1-40,60,70);	
+					moveRT1 = 0;
+				}
+			
+			}
+
+		//MOVE LEFT
+		if(left1 == 1 && x1 > 25)
+			{
+				x1 = x1-7;
+				moveLT1 = moveLT1 +1;
+			
+				while (moveLb1 <= 8)			
+				{
+					if(moveLT1 >= moveLa1 && moveLT1 <= moveLa1+5)
+					{
+						image(moveL1[moveLb1], x1-50,y1-40,60,70);	
+					}
+					moveLa1 = moveLa1 + 5;
+					moveLb1 = moveLb1 + 1;
+				}
+				if(moveLT1 > 35 && moveLT1 <=40)
+				{
+					image(moveL1[8], x1-50,y1-40,60,70);	
+					moveLT1 = 0;
+				}	
+			}
+		
+		//JUMP FROM GROUND
+		if(groundJump1 == 1)
+			{
+				y1 = y1 -30;
+			}
+	
+		//JUMP FROM PLATFORM
+		if(platJump1 == 1)
+			{
+				y1 = y1 -30;
+			}
+		
+		//FALL WHEN W IS RELEASED
+		if(groundJump1 == 2 && y1<545)
+			{
+				y1 = y1 + 10;
+			}
+		if(platJump1 == 2 && y1<545)
+			{
+				y1 = y1+ 10;
+			}
+	
+		//FALL WHEN MAX HEIGHT EXCEEDED (GROUND)
+		if(y1 <250 && groundJump1 == 1)
+			{
+				groundJump1 = 2;
+				jumpAllow1 = 0;
+			}
+	
+		//FALL WHEN MAX HEIGHT EXCEEDED (PLATFORM)
+		if(y1 <80 && platJump1 == 1)
+			{
+				platJump1 = 2;
+				jumpAllow1 = 0;
+			}
+
+		//JUMP AGAIN ONLY AFTER LANDING
+		if(y1 == 545)
+			{
+				jumpAllow1 = 1;
+			}
+		if(y1 < 545 && onPlatform1 == 0)
+			{
+				jumpAllow1 = 0;
+			}
+		
+		//DEFINE ON PLATFORM
+		if((x1> 100 && x1 < 300) && y1 < 400)
+			{
+				onPlatform1 = 1;
+				jumpAllow1 = 1; 
+			}
+		if((x1> 500 && x1 < 700) && y1 < 400)
+			{
+				onPlatform1 = 1;
+				jumpAllow1 = 1; 
+			}
+	
+		//WHAT HAPPENS WHEN ON PLATFORM IS TRUE
+		if(onPlatform1 ==1 && y1 > 375)
+			{
+				y1 = 375;
+			}
+	
+		//DEFINE NOT ON PLATFORM
+		if(x1< 100 || x1 > 300)
+			{
+				onPlatform1 = 0;
+			}	
+	
+		//ATTACK 
+		if(attack1 == 1 && d < 55)
+			{
+				damage1 = 1;
+			}
+		if(damage1 == 1 && lockAttack1 ==0 && hpLoss2 <= 200)
+			{
+				hpLoss2 = hpLoss2 + 20;	
+				lockAttack1 = 1;
+			}
+		//TURNS YELLOW WHEN DAMAGE > 100
+		if(hpLoss2 >= 100)
+			{
+				r2 = 255;
+				g2 = 255;
+				b2 = 0;
+				fill(r2,g2,b2);
+				stroke(0,0,0);
+				strokeWeight(1);
+				rect(730,40,length2,15,3,3,3,3);
+			
+				noStroke();
+				fill(0,0,0);
+				rect(730,40,hpLoss2,15);
+			}
+		//TURNS RED WHEN DAMAGE > 150
+		if(hpLoss2 >= 150)
+			{
+				r2 = 255;
+				g2 = 0;
+				b2 = 0;
+				fill(r2,g2,b2);
+				stroke(0,0,0);
+				strokeWeight(1);
+				rect(730,40,length2,15,3,3,3,3);
+			
+				noStroke();
+				fill(0,0,0);
+				rect(730,40,hpLoss2,15);
+			}
+	
+		//GOES TO WINNER PAGE 
+		if(hpLoss2 >= 200)
+			{
+				winner1 =1;
+			}
+		
+		//BULLET
+		fill(255,255,255);
+		ellipse(bulletX1,bulletY1,20,20);
+	
+		//RANGE ATTACK RIGHT
+		if(shooting1 == 1 && rightLast1 == 1 && lockDirection1 == 0)
+		{
+			bulletDirection1 = 1;
+			lockDirection1 = 1;
+			rpLoss1 = -150;
+		
+		}
+	
+		if (bulletDirection1 == 1)
+		{
+			bulletX1 = bulletX1 + 20;
+		}
+	
+		if(bulletX1 > 1000)
+		{
+			shooting1 = 0;
+		}
+	
+
+		//RANGE ATTACK LEFT
+		if(shooting1 == 1 && leftLast1 == 1 && lockDirection1 == 0)
+		{
+			bulletDirection1 = 2;
+			lockDirection1 = 1;
+			rpLoss1 = -150;
+		}
+	
+		if(bulletDirection1 == 2)
+		{
+			bulletX1 = bulletX1 - 20;
+		
+		}
+	
+		if(bulletX1 < 0)
+		{
+			shooting1 = 0;
+		
+		}
+
+
+		//REFRACTORY PERIOD
+		if(rpRepair1 == 1)
+		{
+			rpLoss1 = rpLoss1 + 0.5;
+			shootAct1 = 0;
+		
+		}
+		if(rpLoss1 == 0)
+		{
+			rpRepair1 = 0;
+			shootAct1 = 1;
+			rangeDamage1 = 1;
+		}
+	
+		if(rpLoss1 <= -150)
+		{ 
+			rpRepair1 = 1;
+			shootAct1 = 0;
+		}
+
+		//DAMAGE CAUSED BY BULLET
+		if(d1 <= 70 && rangeDamage1 == 1 && shooting1 == 1)
+			{
+				hpLoss2 = hpLoss2 + 30;
+				rangeDamage1 = 0;
+			}
+	
+	}
+	
+	
+text(shooting1,400,400);
+text(rightLast1,420,400);
+text(leftLast1,440,400);
+
+
+
+/////////////////////////////////////////////////////////////////////CHARACTER 2
+	
+if(useMudkip ==1)
+{
+	//MOVE RIGHT
+	if(right2 ==1 && x2 < 975)
+		{
+			x2 = x2+10;
+		}
+	//MOVE LEFT
+	if(left2 == 1 && x2 > 25)
+		{
+			x2 = x2-10;
+		}
+		
+
+	//JUMP FROM GROUND
+	if(groundJump2 == 1)
+		{
+			y2 = y2 -30;
+		}
+	//JUMP FROM PLATFORM
+	if(platJump2 == 1)
+		{
+			y2 = y2 -30;
+		}
+		
+	//FALL WHEN W IS RELEASED
+	if(groundJump2 == 2 && y2<545)
+		{
+			y2 = y2 + 10;
+		}
+	if(platJump2 == 2 && y2<545)
+		{
+			y2 = y2+ 10;
+		}
+	
+	//FALL WHEN MAX HEIGHT EXCEEDED (GROUND)
+	if(y2 <250 && groundJump2 == 1)
+		{
+			groundJump2 = 2;
+			jumpAllow2 = 0;
+		}
+	//FALL WHEN MAX HEIGHT EXCEEDED (PLATFORM)
+	if(y2 <80 && platJump2 == 1)
+		{
+			platJump2 = 2;
+			jumpAllow2 = 0;
+		}
+
+
+	//JUMP AGAIN ONLY AFTER LANDING
+	if(y2 == 545)
+		{
+			jumpAllow2 = 1;
+		}
+	if(y2 < 545 && onPlatform2 == 0)
+		{
+			jumpAllow2 = 0;
+		}
+		
+	
+	//DEFINE ON PLATFORM
+	if((x2> 100 && x2 < 300) && y2 < 400)
+		{
+			onPlatform2 = 1;
+			jumpAllow2 = 1; 
+		}
+	if((x2> 500 && x2 < 700) && y2 < 400)
+		{
+			onPlatform2 = 1;
+			jumpAllow2 = 1; 
+		}
+	//WHAT HAPPENS WHEN ON PLATFORM IS TRUE
+	if(onPlatform2 ==1 && y2 > 375)
+		{
+			y2 = 375;
+		}
+	//DEFINE NOT ON PLATFORM
+	if(x2< 100 || x2 > 300)
+		{
+			onPlatform2 = 0;
+		}
+	
+	//ATTACK 
+	if(attack2 == 1 && d < 55)
+		{
+			damage2 = 1;
+		}
+	if(damage2 == 1 && lockAttack2 ==0 && hpLoss1 >= -180)
+		{
+			hpLoss1 = hpLoss1 - 20;	
+			lockAttack2 = 1;
+		}
+	
+	
+	//TURNS YELLOW WHEN DAMAGE > 100
+	if(hpLoss1 <= -100)
+		{
+			r1 = 255;
+			g1 = 255;
+			b1 = 0;
+			fill(r1,g1,b1);
+			stroke(0,0,0);
+			strokeWeight(1);
+			rect(50,40,length1,15,3,3,3,3);
+			
+			noStroke();
+			fill(0,0,0);
+			rect(250,40,hpLoss1,15);
+		}
+	//TURNS RED WHEN DAMAGE > 150
+	if(hpLoss1 <= -150)
+		{
+			r1 = 255;
+			g1 = 0;
+			b1 = 0;
+			fill(r1,g1,b1);
+			stroke(0,0,0);
+			strokeWeight(1);
+			rect(50,40,length1,15,3,3,3,3);
+			
+			noStroke();
+			fill(0,0,0);
+			rect(250,40,hpLoss1,15);
+		}
+
+		
+	//WINNER
+	if(hpLoss1 == -200)
+		{
+			winner2 = 1;
+		}
+
+	//BULLET
+		fill(255,255,255);
+		ellipse(bulletX2,bulletY2,20,20);
+	
+		
+	//RANGE ATTACK RIGHT
+	if(shooting2 == 1 && rightLast2 == 1 && lockDirection2 == 0)
+	{
+		bulletDirection2 = 1;	
+		rpLoss2 = 160;
+	}
+	if(bulletDirection2 ==1)
+	{
+		bulletX2 = bulletX2 + 20;
+	}
+	
+	if(bulletX2 > 1000)
+	{
+		shooting2 = 0;
+	}
+	
+	
+	//RANGE ATTACK LEFT
+	if(shooting2 == 1 && leftLast2 == 1 && lockDirection2 == 0)
+	{
+		bulletDirection2 = 2;	
+		rpLoss2 = 150;
+	}
+	if(bulletDirection2 ==2)
+	{
+		bulletX2 = bulletX2 - 20;
+	}
+	
+	if(bulletX2 < 0)
+	{
+		shooting2 = 0;
+	}
+
+	//THE REFRACTORY PERIOD
+	if(rpRepair2 ==1 )
+	{
+		rpLoss2 = rpLoss2 - 0.5;
+		shootAct2 = 0;
+		
+	}
+	if(rpLoss2 == 0)
+	{
+		rpRepair2 = 0;
+		shootAct2 = 1;
+		rangeDamage2 = 1;
+		
+	}
+	
+	if(rpLoss2 >= 150)
+	{
+		rpRepair2 = 1;
+		shootAct2 = 0;
+	}
+
+	//DAMAGE CAUSED BY BULLET
+	if(d2 <= 70 && rangeDamage2 == 1 && shooting2 == 1)
+		{
+			hpLoss1 = hpLoss1 - 30;
+			rangeDamage2 = 0;
+		}
+	
+
+	
+}
+	
+	
+////////////////////////////////////////////////////////////////////BACK BUTTON
+    //BACK BUTTON
+    if ( 0 < mouseX && mouseX < 100
+	&& 0 < mouseY && mouseY < 100
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		link("character2.html");
+	}
+	
+	//WINNER PAGE
+	if(winner1 ==1 || winner2 == 1)
+		{
+			link("winner.html");
+			sessionStorage.transferx1 = winner1;
+			sessionStorage.transferx2 = winner2;
+		}	
+
+}
+
+//////////////////////////////////////////////////////////////////////////////KEY PRESSED
+
+void keyPressed()
+{
+//CHARACTER 1
+	if(key == 'd')
+		{
+			right1 = 1;
+			rightLast1 = 1;
+			leftLast1 = 0;
+			
+			kirbyRight = 1;
+			playRight1 = 1;
+			
+			
+		}
+	if(key == 'a')
+		{
+			left1 = 1;
+			leftLast1 = 1;
+			rightLast1 = 0;
+			
+			playRight1 = 0;
+			
+		}
+	if(key == 'w' && jumpAllow1 ==1 && y1 == 545)
+		{
+			groundJump1 = 1;
+		}
+	if(key == 'w' && jumpAllow1 ==1 && y1 == 375)
+		{
+			platJump1 = 1;
+		}
+	
+	if(key == 'v' && shootAct1 == 1)
+		{
+			shooting1 = 1;
+			lockDirection1 = 0;
+		}
+	if(key == 'c')
+		{
+			attack1 = 1;
+		}
+
+//CHARACTER 2
+	if(key == 'l')
+		{
+			right2 = 1;
+			rightLast2 = 1;
+			leftLast2 = 0;
+			
+		}
+	if(key == 'j')
+		{
+			left2 = 1;
+			rightLast2 = 0;
+			leftLast2 = 1;
+		}
+	if(key == 'i' && jumpAllow2 ==1 && y2 == 545)
+		{
+			groundJump2 = 1;
+		}
+	if(key == 'i' && jumpAllow2 ==1 && y2 == 375)
+		{
+			platJump2 = 1;
+		}
+	if(key == 'n')
+	 	{
+	 		attack2 = 1;
+	 	}
+	 if(key == 'b'&& shootAct2 ==1)
+	 	{
+	 		shooting2 = 1;
+	 		lockDirection2 = 0;
+	 	}
+	 
+	
+}
+
+void keyReleased()
+{
+//CHARACTER 1
+	if(key == 'd')
+		{
+			right1 = 0;
+			kirbyRight = 0;
+			
+		}
+	if(key == 'a')
+		{
+			left1 = 0;
+			
+		}
+	if(key == 'w')
+		{
+			groundJump1 = 2;
+			platJump1 = 2;
+		}
+	if(key == 'c')
+		{
+			attack1 = 0;
+			lockAttack1 = 0;
+		}
+
+//CHARACTER 2
+	if(key == 'l')
+		{
+			right2 = 0;
+		}
+	if(key == 'j')
+		{
+			left2 = 0;
+		}
+	if(key == 'i')
+		{
+			groundJump2 = 2;
+			platJump2 = 2;
+		}
+	if(key == 'n')
+		{
+			attack2 = 0;
+			lockAttack2 = 0;
+		}
+}
+
+
+	
+
+
+    </script>
+    <canvas id="mycanvas"></canvas>
+</center>

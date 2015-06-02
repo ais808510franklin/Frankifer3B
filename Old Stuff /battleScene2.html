@@ -1,0 +1,1136 @@
+<title> Basic Game Scene 2 </title>
+
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+
+<center>
+    <script src="script/processing-1.4.1.js"></script>
+    <script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+//BASIC CONTROLS
+int left;
+int right;
+
+//JUMPING CONTROLS 
+int groundJump; //Jump from the ground (when jumpGround/Plat = 2 then it falls)
+int platJump; //Jump from the platform 
+
+int onPlatform; //defines when the character is on the platform 
+int jumpAllow; //Determines when the 'w' is activated
+
+//position of character
+int x;
+int y;
+
+//Animations associated with change in position
+int kirbyLeft;
+int kirbyRight;
+int kirbyJump;
+int kirbyAttack;
+int kirbySword;
+int kirbyStand;
+int kirbyFallRight;
+int kirbyFallLeft;
+
+//This animation plays when kirby falls 
+int fallAni;
+
+//RUNNING RIGHT should name variables right1/right2 ... 
+PImage kirby1;
+PImage kirby2;
+PImage kirby3;
+PImage kirby4;
+PImage kirby5;
+PImage kirby6;
+PImage kirby7;
+PImage kirby8;
+
+//ATTACK (need better variable naming :3) should call it attack1/attack2...lazy to change
+PImage kirby9;
+PImage kirby10;
+PImage kirby11;
+PImage kirby12;
+PImage kirby13;
+PImage kirby14;
+PImage kirby15;
+PImage kirby16;
+PImage kirby17;
+PImage kirby18;
+PImage kirby19;
+PImage kirby20;
+PImage kirby21;
+PImage kirby22;
+PImage kirby23;
+PImage kirby24;
+
+//RUNNING LEFT 
+PImage left1;
+PImage left2;
+PImage left3;
+PImage left4;
+PImage left5;
+PImage left6;
+PImage left7;
+PImage left8;
+
+//STANDING
+PImage stand1;
+PImage stand2;
+PImage stand3;
+PImage stand4;
+PImage stand5;
+
+//JUMPING 
+PImage jump1;
+PImage jump2;
+
+void setup(){  
+
+    size(1000,600);  
+    background(0,0,0);
+    frameRate(60);
+    
+    x = 500;
+    y = 545;
+    
+    //RIGHT
+	kirby1 = loadImage("Kirby/Kirby Right/1.png");
+	kirby2 = loadImage("Kirby/Kirby Right/2.png");
+	kirby3 = loadImage("Kirby/Kirby Right/3.png");
+	kirby4 = loadImage("Kirby/Kirby Right/4.png");
+	kirby5 = loadImage("Kirby/Kirby Right/5.png");
+	kirby6 = loadImage("Kirby/Kirby Right/6.png");
+	kirby7 = loadImage("Kirby/Kirby Right/7.png");
+	kirby8 = loadImage("Kirby/Kirby Right/8.png");
+	
+	//ATTACKING
+	kirby9 = loadImage("Kirby/Kirby Attack/1.png");
+	kirby10 = loadImage("Kirby/Kirby Attack/2.png");
+	kirby11 = loadImage("Kirby/Kirby Attack/3.png");
+	kirby12 = loadImage("Kirby/Kirby Attack/4.png");
+	kirby13 = loadImage("Kirby/Kirby Attack/5.png");
+	kirby14 = loadImage("Kirby/Kirby Attack/6.png");
+	kirby15 = loadImage("Kirby/Kirby Attack/7.png");
+	kirby16 = loadImage("Kirby/Kirby Attack/8.png");
+	kirby17 = loadImage("Kirby/Kirby Attack/9.png");
+	kirby18 = loadImage("Kirby/Kirby Attack/10.png");
+	kirby19 = loadImage("Kirby/Kirbya Attack/11.png");
+	kirby20 = loadImage("Kirby/Kirby Attack/12.png");
+
+	
+	//LEFT
+	left1 = loadImage("Kirby/Kirby Left/1.png");
+	left2 = loadImage("Kirby/Kirby Left/2.png");
+	left3 = loadImage("Kirby/Kirby Left/3.png");
+	left4 = loadImage("Kirby/Kirby Left/4.png");
+	left5 = loadImage("Kirby/Kirby Left/5.png");
+	left6 = loadImage("Kirby/Kirby Left/6.png");
+	left7 = loadImage("Kirby/Kirby Left/7.png");
+	left8 = loadImage("Kirby/Kirby Left/8.png");
+	
+	//STAND
+	stand1 = loadImage("Kirby/Kirby Stand/1.png");
+	stand2 = loadImage("Kirby/Kirby Stand/2.png");
+	stand3 = loadImage("Kirby/Kirby Stand/3.png");
+	stand4 = loadImage("Kirby/Kirby Stand/4.png");
+	stand5 = loadImage("Kirby/Kirby Stand/5.png");
+	stand6 = loadImage("Kirby/Kirby Stand/6.png");
+	
+	//JUMP
+	jump1 = loadImage("Kirby/Kirby Jump/1.png");
+	jump2 = loadImage("Kirby/Kirby Jump/2.png");
+	jump3 = loadImage("Kirby/Kirby Jump/4.png");
+	jump4 = loadImage("Kirby/Kirby Jump/5.png");
+	jump5 = loadImage("Kirby/Kirby Jump/6.png");
+	jump6 = loadImage("Kirby/Kirby Jump/7.png");
+	
+	//FALL 
+	fallAniRight = loadImage("Kirby/Kirby Jump/3.png");
+	fallAniLeft = loadImage("Kirby/Kirby Jump/8.png");
+	
+	//JUMPING ANIMATION
+	jumpK1 = 1;
+	jumpK2 = 0;
+	jumpK3 = 0;
+	jumpK4 = 0;
+	jumpK5 = 0;
+	jumpK6 = 0;
+	
+	//FALLING ANIMATION
+	kirbyFallRight = 0;
+	kirbyFallLeft = 0;	
+		
+	//STANDING ANIMATION
+	standK1 = 1;
+	standK2 = 0;
+	standK3 = 0;
+	standK4 = 0;
+	standK5 = 0;
+	standK6 = 0;
+	
+	//RUNNING RIGHT ANIMATION
+	kirbyB1 = 1;
+	kirbyB2 = 0;
+	kirbyB3 = 0;
+	kirbyB4 = 0;
+	kirbyB5 = 0;
+	kirbyB6 = 0;
+	kirbyB7 = 0;
+	kirbyB8 = 0; 
+	
+	//RUNNING LEFT ANIMATION
+	leftK1 = 1;
+	leftK2 = 0;
+	leftK3 = 0;
+	leftK4 = 0;
+	leftK5 = 0;
+	leftK6 = 0;
+	leftK7 = 0;
+	leftK8 = 0;
+	
+	//ATTACKING ANIMATION
+	kirbyA1 = 1;
+	kirbyA2 = 0;
+	kirbyA3 = 0;
+	kirbyA4 = 0;
+	kirbyA5 = 0;
+	kirbyA6 = 0;
+	kirbyA7 = 0;
+	kirbyA8 = 0;
+	kirbyA9 = 0;
+	kirbyA10 = 0;
+	kirbyA11 = 0;
+	kirbyA12 = 0;
+
+	
+	//Activated only after keys are pressed 
+	kirbyRight = 0;
+	kirbyLeft = 0;
+	kirbyAttack = 0;
+	jumpAni = 0;
+	
+	//Activated initially 
+	kirbyStand = 1;
+}  
+
+
+void draw()
+{
+    size(1000,600);  
+    background(0,0,0);
+    frameRate(12);
+    
+    textSize(30);
+//    text("This is the hardest shit I've ever done, I don't even get it >:(",20,40);
+    	
+	//FLOOR + PLATS
+	fill(153,76,0);
+	rect(0,570,1000,30);
+	rect(100,400,200,10);
+	rect(500,400,200,10);
+	
+	//CHARACTER
+	fill(153,204,255);
+	ellipse(x,y,1,1);
+	
+///////////////////////////////////////////////////FALL ANIMATION
+	if(kirbyFallRight == 1 && right ==1)
+		{
+			image(fallAniRight,x-30,y-40,60,70)
+			kirbyRight = 0;
+			kirbyLeft = 0;
+		}
+	if(kirbyFallRight == 1)
+		{
+			image(fallAniRight,x-30,y-40,60,70)
+			kirbyRight = 0;
+			kirbyLeft = 0;
+		}
+	if(kirbyFallLeft ==1 && left == 1)
+		{
+			image(fallAniLeft,x-30,y-40,60,70)
+			kirbyRight = 0;
+			kirbyLeft = 0;
+		}
+	
+//////////////////////////////////////////////////////// MOTION 
+	
+	//MOVE RIGHT
+	if(right ==1 && allowRight == 1)
+		{
+			x = x+17;
+		}
+	//MOVE LEFT
+	if(left == 1 && allowLeft == 1)
+		{
+			x = x-17;
+		}
+		
+
+	//JUMP FROM GROUND
+	if(groundJump == 1)
+		{
+			y = y -30;
+		}
+	//JUMP FROM PLATFORM
+	if(platJump == 1)
+		{
+			y = y -30;
+		}
+		
+	//FALL WHEN W IS RELEASED
+	if(groundJump == 2 && y<545)
+		{
+			y = y+ 10;
+			kirbyFallRight = 1;
+			rightAllow = 0;
+			leftAllow = 0;
+		}
+	if(platJump == 2 && y<545)
+		{
+			y = y+ 10;
+			kirbyFallRight = 1;
+			rightAllow = 0;
+			leftAllow = 0;
+		}
+	
+	//FALL WHEN MAX HEIGHT EXCEEDED (GROUND)
+	if(y <250 && groundJump == 1)
+		{
+			groundJump = 2;
+			jumpAllow = 0;
+			jumpAni = 0;
+			kirbyFallRight = 1;
+			kirbyRight = 0;
+			kirbyLeft = 0;
+		}
+	//FALL WHEN MAX HEIGHT EXCEEDED (PLATFORM)
+	if(y <80 && platJump == 1)
+		{
+			platJump = 2;
+			jumpAllow = 0;
+			jumpAni = 0;
+			kirbyFallRight = 1;
+			kirbyRight = 0;
+			kirbyLeft = 0;
+		}
+
+
+	//JUMP AGAIN ONLY AFTER LANDING
+	if(y == 545)
+		{
+			jumpAllow = 1;
+		}
+
+//////////////////////////////////////////////////////////COMPLICATED MOTION
+
+	//WHEN LANDED GROUND AND 'A' IS STILL PRESSED, PLAY RIGHT ANIMATION
+	if(left == 1 && y == 545)
+		{
+			kirbyStand = 0;
+			kirbyLeft = 1;
+			kirbyFallRight = 0;
+			kirbyFallLeft = 0;
+		}
+	//WHEN LANDED GROUND AND 'D' IS STILL PRESSED, PLAY LEFT ANIMATION 
+	if(right == 1 && y == 545)
+		{
+			kirbyStand = 0;
+			kirbyRight = 1;
+			kirbyFallLeft = 0;
+			kirbyFallRight = 0;
+		}
+	
+	//ONLY ALLOWED TO JUMP AFTER LANDING ON PLAT
+	if(y < 545 && onPlatform == 0)
+		{
+			jumpAllow = 0;
+			kirbyFallRight = 0;
+			kirbyFallLeft = 0;
+			
+		}
+		
+	
+	//DEFINE ON PLATFORM
+	if((x> 100 && x < 300) && y < 400)
+		{
+			onPlatform = 1;
+			jumpAllow = 1; 
+			
+		}
+		
+	if((x> 500 && x < 700) && y < 400)
+		{
+			onPlatform = 1;
+			jumpAllow = 1; 
+		}
+		
+	//WHAT HAPPENS WHEN ON PLATFORM IS TRUE
+	if(onPlatform ==1 && y > 375)
+		{
+			y = 375;
+			kirbyStand = 1;
+			kirbyFallRight = 0;
+			kirbyFallLeft = 0;
+		}
+		
+	//MAKES KIRBY MOVE RIGHT IF 'D' IS NOT RELEASED
+	if(right == 1 && onPlatform == 1 && y == 375)
+		{
+			kirbyStand = 0;
+			kirbyRight = 1;
+			kirbyFallRight = 0;
+			kirbyFallLeft = 0;
+		}
+	//MAKES KIRBY MOVE LEFT IF 'A' IS NOT RELEASED
+	if(left == 1 && onPlatform == 1 && y == 375)
+		{
+			kirbyStand = 0;
+			kirbyLeft = 1;
+			kirbyFallRight = 0;
+			kirbyFallLeft = 0;
+		}
+	//DEFINE NOT ON PLATFORM
+	if(x< 100 || x > 300)
+		{
+			onPlatform = 0;
+		}
+	if(x<500 || x > 700)
+		{
+			onPlatform = 0;
+		}
+	
+	//FALLING OFF THE LEFT SIDE OF THE PLATFORMS
+	if(x<100 && onPlatform ==0 && left ==1 && y<545)
+		{
+			kirbyFallLeft = 1;
+			kirbyFallRight = 0;
+			kirbyLeft = 0;
+		}
+	if(x<500 && onPlatform ==0 && left ==1 && y<545)
+		{
+			kirbyFallLeft = 1;
+			kirbyFallRight = 0;
+			kirbyLeft = 0;
+		}
+	
+	//FALLING OFF THE RIGHT SIDE OF THE PLATFORMS
+	if(x>300 && onPlatform == 0 && right ==1 && y <545)
+		{
+			kirbyFallRight = 1;
+			kirbyRight = 0;
+			kirbyFallLeft = 0;
+		}
+	if(x>700 && onPlatform == 0 && right ==1 && y <545)
+		{
+			kirbyFallRight = 1;
+			kirbyFallLeft = 0;
+			kirbyRight = 0;
+		}
+	
+
+//////////////////////////////////////////////////// JUMP AND FALL ANIMATION
+
+	if(platJump == 1 || groundJump ==1)
+		{
+			jumpAni = 1;
+			kirbyFallRight = 0;
+			kirbyFallLeft = 0;
+			kirbyRight = 0;
+			kirbyLeft = 0;
+		}
+	
+	if(jumpAni == 1)
+		{
+			if(jumpK6 == 1)
+				{
+					jumpK1 = 1;
+					jumpK2 = 0;
+					jumpK3 = 0;
+					jumpK4 = 0;
+					jumpK5 = 0;
+					jumpK6 = 0;
+					image(jump6,x-30,y-40,60,70);
+				}
+			if(jumpK5 == 1)
+				{
+					jumpK1 = 0;
+					jumpK2 = 0;
+					jumpK3 = 0;
+					jumpK4 = 0;
+					jumpK5 = 0;
+					jumpK6 = 1;
+					image(jump5,x-30,y-40,60,70);
+				}
+			if(jumpK4 == 1)
+				{
+					jumpK1 = 0;
+					jumpK2 = 0;
+					jumpK3 = 0;
+					jumpK4 = 0;
+					jumpK5 = 1;
+					jumpK6 = 0;
+					image(jump4,x-30,y-40,60,70);
+				}
+			if(jumpK3 == 1)
+				{
+					jumpK1 = 0;
+					jumpK2 = 0;
+					jumpK3 = 0;
+					jumpK4 = 1;
+					jumpK5 = 0;
+					jumpK6 = 0;
+					image(jump3,x-30,y-40,60,70);
+				}
+			if(jumpK2 == 1)
+				{
+					jumpK1 = 0;
+					jumpK2 = 0;
+					jumpK3 = 1
+					jumpK4 = 0;
+					jumpK5 = 0;
+					jumpK6 = 0;
+					image(jump2,x-30,y-40,60,70);
+				}
+			if(jumpK1 == 1)
+				{
+					jumpK1 = 0;
+					jumpK2 = 1;
+					jumpK3 = 0;
+					jumpK4 = 0;
+					jumpK5 = 0;
+					jumpK6 = 0;
+					image(jump1,x-30,y-40,60,70);
+				}
+		}
+
+////////////////////////////////////////////////////STAND ANIMATION
+//it blinks like a retarded potato even at frame rate 12 
+	
+	if(kirbyStand == 1)
+		{
+			if(standK6 ==1)
+				{
+					standK6 = 0;
+					standK5 = 0;
+					standK4 = 0;
+					standK3 = 0;
+					standK2 = 0;
+					standK1 = 1;
+					image(stand6,x-30,y-40,60,70);
+				}
+		
+			if(standK5 ==1)
+				{
+					standK6 = 1;
+					standK5 = 0;
+					standK4 = 0;
+					standK3 = 0;
+					standK2 = 0;
+					standK1 = 0;
+					image(stand5,x-33,y-40,60,70);
+				}
+				
+			if(standK4 ==1)
+				{
+					standK6 = 0;
+					standK5 = 1;
+					standK4 = 0;
+					standK3 = 0;
+					standK2 = 0;
+					standK1 = 0;
+					image(stand4,x-30,y-40,60,70);
+				}
+			if(standK3 ==1)
+				{
+					standK6 = 0;
+					standK5 = 0;
+					standK4 = 1;
+					standK3 = 0;
+					standK2 = 0;
+					standK1 = 0;
+					image(stand3,x-30,y-40,60,70);
+				}
+			if(standK2 ==1)
+				{
+					standK6 = 0;
+					standK5 = 0;
+					standK4 = 0;
+					standK3 = 1;
+					standK2 = 0;
+					standK1 = 0;
+					image(stand2,x-30,y-40,60,70);
+				}
+			if(standK1 ==1)
+				{
+					standK6 = 0;
+					standK5 = 0;
+					standK4 = 0;
+					standK3 = 0;
+					standK2 = 1;
+					standK1 = 0;
+					image(stand1,x-30,y-40,60,70);
+				}
+			
+		}
+
+///////////////////////////////////////////////////////////// RIGHT ANIMATION
+//This makes the animation play when kirby goes right
+	
+	if(kirbyRight == 1)
+	{
+
+		if(kirbyB8 ==1)
+		{
+			image(kirby8,x-30,y-40,60,70);
+			kirbyB1 = 0;
+			kirbyB2 = 0;
+			kirbyB3 = 1;
+			kirbyB4 = 0;
+			kirbyB5 = 0;
+			kirbyB6 = 0;
+			kirbyB7 = 0;
+			kirbyB8 = 0;
+		}
+		if(kirbyB7 ==1)
+		{
+			image(kirby7,x-30,y-40,60,70);
+			kirbyB1 = 0;
+			kirbyB2 = 0;
+			kirbyB3 = 0;
+			kirbyB4 = 0;
+			kirbyB5 = 0;
+			kirbyB6 = 0;
+			kirbyB7 = 0;
+			kirbyB8 = 1;
+		}
+		if(kirbyB6 ==1)
+		{
+			image(kirby6,x-30,y-40,60,70);
+			kirbyB1 = 0;
+			kirbyB2 = 0;
+			kirbyB3 = 0;
+			kirbyB4 = 0;
+			kirbyB5 = 0;
+			kirbyB6 = 0;
+			kirbyB7 = 1;
+			kirbyB8 = 0;
+		}
+		if(kirbyB5 ==1)
+		{
+			image(kirby5,x-30,y-40,60,70);
+			kirbyB1 = 0;
+			kirbyB2 = 0;
+			kirbyB3 = 0;
+			kirbyB4 = 0;
+			kirbyB5 = 0;
+			kirbyB6 = 1;
+			kirbyB7 = 0;
+			kirbyB8 = 0;
+		}
+		if(kirbyB4 ==1)
+		{
+			image(kirby4,x-30,y-40,60,70);
+			kirbyB1 = 0;
+			kirbyB2 = 0;
+			kirbyB3 = 0;
+			kirbyB4 = 0;
+			kirbyB5 = 1;
+			kirbyB6 = 0;
+			kirbyB7 = 0;
+			kirbyB8 = 0;
+		}
+		if(kirbyB3 ==1)
+		{
+			image(kirby3,x-30,y-40,60,70);
+			kirbyB1 = 0;
+			kirbyB2 = 0;
+			kirbyB3 = 0;
+			kirbyB4 = 1;
+			kirbyB5 = 0;
+			kirbyB6 = 0;
+			kirbyB7 = 0;
+			kirbyB8 = 0;
+		}
+	
+		if(kirbyB2 ==1)
+		{
+			image(kirby2,x-30,y-40,60,70);
+			kirbyB1 = 0;
+			kirbyB2 = 0;
+			kirbyB3 = 1;
+			kirbyB4 = 0;
+			kirbyB5 = 0;
+			kirbyB6 = 0;
+			kirbyB7 = 0;
+			kirbyB8 = 0;
+		}	
+	
+		if(kirbyB1 ==1)
+		{
+			image(kirby1,x-30,y-40,60,70);
+			kirbyB1 = 0;
+			kirbyB2 = 1;
+			kirbyB3 = 0;
+			kirbyB4 = 0;
+			kirbyB5 = 0;
+			kirbyB6 = 0;
+			kirbyB7 = 0;
+			kirbyB8 = 0;
+		}
+	}
+	
+	////////////////////////////////////////////////////////////LEFT ANIMATION
+	
+	if(kirbyLeft == 1)
+		{
+			if(leftK8 ==1)
+				{
+					image(left8,x-30,y-40,60,70);
+					leftK1 = 0;
+					leftK2 = 1;
+					leftK3 = 0;
+					leftK4 = 0;
+					leftK5 = 0;
+					leftK6 = 0;
+					leftK7 = 0;
+					leftK8 = 0;
+				}
+			if(leftK7 ==1)
+				{
+					image(left7,x-30,y-40,60,70);
+					leftK1 = 0;
+					leftK2 = 0;
+					leftK3 = 0;
+					leftK4 = 0;
+					leftK5 = 0;
+					leftK6 = 0;
+					leftK7 = 0;
+					leftK8 = 1;
+				}
+			if(leftK6 ==1)
+				{
+					image(left6,x-30,y-40,60,70);
+					leftK1 = 0;
+					leftK2 = 0;
+					leftK3 = 0;
+					leftK4 = 0;
+					leftK5 = 0;
+					leftK6 = 0;
+					leftK7 = 1;
+					leftK8 = 0;
+				}
+			if(leftK5 ==1)
+				{
+					image(left5,x-30,y-40,60,70);
+					leftK1 = 0;
+					leftK2 = 0;
+					leftK3 = 0;
+					leftK4 = 0;
+					leftK5 = 0;
+					leftK6 = 1;
+					leftK7 = 0;
+					leftK8 = 0;
+				}
+			if(leftK4 ==1)
+				{
+					image(left4,x-30,y-40,60,70);
+					leftK1 = 0;
+					leftK2 = 0;
+					leftK3 = 0;
+					leftK4 = 0;
+					leftK5 = 1;
+					leftK6 = 0;
+					leftK7 = 0;
+					leftK8 = 0;
+				}
+			if(leftK3 ==1)
+				{
+					image(left3,x-30,y-40,60,70);
+					leftK1 = 0;
+					leftK2 = 0;
+					leftK3 = 0;
+					leftK4 = 1;
+					leftK5 = 0;
+					leftK6 = 0;
+					leftK7 = 0;
+					leftK8 = 0;
+				}
+			if(leftK2 ==1)
+				{
+					image(left2,x-30,y-40,60,70);
+					leftK1 = 0;
+					leftK2 = 0;
+					leftK3 = 1;
+					leftK4 = 0;
+					leftK5 = 0;
+					leftK6 = 0;
+					leftK7 = 0;
+					leftK8 = 0;
+				}
+			if(leftK1 ==1)
+				{
+					image(left1,x-30,y-40,60,70);
+					leftK1 = 0;
+					leftK2 = 1;
+					leftK3 = 0;
+					leftK4 = 0;
+					leftK5 = 0;
+					leftK6 = 0;
+					leftK7 = 0;
+					leftK8 = 0;
+				}
+			
+		}
+		
+////////////////////////////////////////////////////////////ATTACK ANIMATION
+	
+	if(kirbyAttack ==1)
+		{
+			kirbySword =1;
+		}
+		
+	if(kirbySword ==1)
+	{	
+		kirbySword = 0;
+		
+		
+	if(kirbyA12 ==1)
+		{
+			image(kirby20,x-30,y-40,60,70);
+			kirbyA1 = 0;
+			kirbyA2 = 1;
+			kirbyA3 = 0;
+			kirbyA4 = 0;
+			kirbyA5 = 0;	
+			kirbyA6 = 0;
+			kirbyA7 = 0;
+			kirbyA8 = 0;
+			kirbyA9 = 0;
+			kirbyA10 = 0;
+			kirbyA11 = 0;
+			kirbyA12 = 0;
+		}
+	
+	if(kirbyA11 ==1)
+		{
+			image(kirby19,x-30,y-40,60,70);
+			kirbyA1 = 0;
+			kirbyA2 = 0;
+			kirbyA3 = 0;
+			kirbyA4= 0;
+			kirbyA5 = 0;
+			kirbyA6 = 0;
+			kirbyA7 = 0;
+			kirbyA8 = 0;
+			kirbyA9 = 0;
+			kirbyA10 = 0;
+			kirbyA11 = 0;
+			kirbyA12 = 1;
+
+		}	
+		
+	if(kirbyA10 ==1)
+		{
+			image(kirby18,x-30,y-40,60,70);
+			kirbyA1 = 0;
+			kirbyA2 = 0;
+			kirbyA3 = 0;
+			kirbyA4= 0;
+			kirbyA5 = 0;
+			kirbyA6 = 0;
+			kirbyA7 = 0;
+			kirbyA8 = 0;
+			kirbyA9 = 0;
+			kirbyA10 = 0;
+			kirbyA11 = 1;
+			kirbyA12 = 0;
+
+		}	
+		
+	if(kirbyA9 ==1)
+		{
+			image(kirby17,x-30,y-40,60,70);
+			kirbyA1 = 0;
+			kirbyA2 = 0;
+			kirbyA3 = 0;
+			kirbyA4= 0;
+			kirbyA5 = 0;
+			kirbyA6 = 0;
+			kirbyA7 = 0;
+			kirbyA8 = 0;
+			kirbyA9 = 0;
+			kirbyA10 = 1;
+			kirbyA11 = 0;
+			kirbyA12 = 0;
+
+	}
+	
+	if(kirbyA8 ==1)
+		{
+			image(kirby16,x-30,y-40,60,70);
+			kirbyA1 = 0;
+			kirbyA2 = 0;
+			kirbyA3 = 0;
+			kirbyA4= 0;
+			kirbyA5 = 0;
+			kirbyA6 = 0;
+			kirbyA7 = 0;
+			kirbyA8 = 0;
+			kirbyA9 = 1;
+			kirbyA10 = 0;
+			kirbyA11 = 0;
+			kirbyA12 = 0;
+
+		}
+		
+	if(kirbyA7 ==1)
+		{
+			image(kirby15,x-30,y-40,60,70);
+			kirbyA1 = 0;
+			kirbyA2 = 0;
+			kirbyA3 = 0;
+			kirbyA4= 0;
+			kirbyA5 = 0;
+			kirbyA6 = 0;
+			kirbyA7 = 0;
+			kirbyA8 = 1;
+			kirbyA9 = 0;
+			kirbyA10 = 0;
+			kirbyA11 = 0;
+			kirbyA12 = 0;
+		}
+		
+	if(kirbyA6 ==1)
+		{
+			image(kirby14,x-30,y-40,60,70);
+			kirbyA1 = 0;
+			kirbyA2 = 0;
+			kirbyA3 = 0;
+			kirbyA4= 0;
+			kirbyA5 = 0;
+			kirbyA6 = 0;
+			kirbyA7 = 1;
+			kirbyA8 = 0;
+			kirbyA9 = 0;
+			kirbyA10 = 0;
+			kirbyA11 = 0;
+			kirbyA12 = 0;
+		}
+		
+	if(kirbyA5 ==1)
+		{
+			image(kirby13,x-30,y-40,60,70);
+			kirbyA1 = 0;
+			kirbyA2 = 0;
+			kirbyA3 = 0;
+			kirbyA4= 0;
+			kirbyA5 = 0;
+			kirbyA6 = 1;
+			kirbyA7 = 0;
+			kirbyA8 = 0;
+			kirbyA9 = 0;
+			kirbyA10 = 0;
+			kirbyA11 = 0;
+			kirbyA12 = 0;
+		}
+	
+	if(kirbyA4 ==1)
+		{
+			image(kirby12,x-30,y-40,60,70);
+			kirbyA1 = 0;
+			kirbyA2 = 0;
+			kirbyA3 = 0;
+			kirbyA4= 0;
+			kirbyA5 = 1;
+			kirbyA6 = 0;
+			kirbyA7 = 0;
+			kirbyA8 = 0;
+			kirbyA9 = 0;
+			kirbyA10 = 0;
+			kirbyA11 = 0;
+			kirbyA12 = 0;
+		}
+	
+	if(kirbyA3 ==1)
+		{
+			image(kirby11,x-30,y-40,60,70);
+			kirbyA1 = 0;
+			kirbyA2 = 0;
+			kirbyA3 = 0;
+			kirbyA4= 1;
+			kirbyA5 = 0;
+			kirbyA6 = 0;
+			kirbyA7 = 0;
+			kirbyA8 = 0;
+			kirbyA9 = 0;
+			kirbyA10 = 0;
+			kirbyA11 = 0;
+			kirbyA12 = 0;
+		}
+	 
+	if(kirbyA2 ==1)
+		{
+			image(kirby10,x-30,y-40,60,70);
+			kirbyA1 = 0;
+			kirbyA2 = 0;
+			kirbyA3 = 1;
+			kirbyA4= 0;
+			kirbyA5 = 0;
+			kirbyA6 = 0;
+			kirbyA7 = 0;
+			kirbyA8 = 0;
+			kirbyA9 = 0;
+			kirbyA10 = 0;
+			kirbyA11 = 0;
+			kirbyA12 = 0;
+		}
+	
+	if(kirbyA1 ==1)
+		{
+			image(kirby9,x-30,y-40,60,70);
+			kirbyA1 = 0;
+			kirbyA2 = 1;
+			kirbyA3 = 0;
+			kirbyA4= 0;
+			kirbyA5 = 0;
+			kirbyA6 = 0;
+			kirbyA7 = 0;
+			kirbyA8 = 0;
+			kirbyA9 = 0;
+			kirbyA10 = 0;
+			kirbyA11 = 0;
+			kirbyA12 = 0;
+		}
+		
+		
+	}
+
+	//Kirby appears stationary when no key is pressed 
+	if(keyPressed == false && kirbyFallRight == 0)	
+		{
+			kirbyStand =1;
+		}    
+	if(y == 545 && kirbyRight == 0 && kirbyLeft == 0)
+		{
+			kirbyStand = 1;
+			kirbyFallRight = 0;
+		}
+
+
+}
+
+//KEYBOARD CONTROLS 
+//I don't know how it works but it works XD 
+
+// right / left = x location 
+// kirbyRight / kirbyLeft = animation accompanied with x location/direction 
+// allowLeft / allowRight = determines whether the x location is allowed to change 
+
+void keyPressed()
+{
+	if(key == 'd')
+		{
+			right = 1;
+			kirbyRight = 1;
+			allowRight = 1;
+			kirbyAttack = 0;
+			kirbyLeft = 0;
+			kirbyStand = 0;
+			jumpAni = 0;
+			kirbyFallLeft = 0;
+
+		}
+	if(key == 'a')
+		{
+			left = 1;
+			kirbyLeft = 1;
+			allowLeft = 1;
+			kirbyAttack = 0;
+			kirbyRight = 0;
+			kirbyStand = 0;
+			jumpAni = 0;
+			kirbyFallRight = 0;
+			
+		}
+	if(key == 'w' && jumpAllow ==1 && y == 545)
+		{
+			groundJump = 1;
+			kirbyStand = 0;
+			jumpAni = 0;
+			kirbyFallRight = 0;
+			kirbyFallLeft = 0;
+			kirbyLeft = 0;
+			kirbyRight = 0;
+		}
+	if(key == 'w' && jumpAllow ==1 && y == 375)
+		{
+			platJump = 1;
+			kirbyStand = 0;
+			jumpAni = 0; 
+			kirbyFallRight = 0;
+			kirbyFallLeft = 0;
+			// need to clear up when both w and a/d is pressed the animations
+			// do not play simultaneously
+		
+		}
+	if(key == ' ')
+		{
+			kirbyAttack = 1;
+			allowLeft = 0;
+			allowRight = 0;
+			kirbyRight = 0;
+			kirbyLeft = 0;
+			kirbyStand = 0;
+			jumpAni = 0;
+		}
+
+	
+}
+
+void keyReleased()
+{
+	if(key == 'd')
+		{
+			right = 0;
+			kirbyRight = 0;
+			kirbyFallRight = 0;
+			kirbyFallLeft = 0;
+			
+		}
+	if(key == 'a')
+		{
+			left = 0;
+			kirbyLeft = 0;
+			kirbyFallRight = 0;
+			kirbyFallLeft = 0;
+			
+		}
+	if(key == 'w')
+		{
+			groundJump = 2;
+			platJump = 2;
+			kirbyFallRight = 1;
+			kirbyStand = 0;
+			jumpAni = 0;
+			
+		}
+	if(key == ' ')
+		{
+			kirbyAttack = 0;
+			allowRight = 1;
+			allowLeft = 1;
+		
+		}
+
+}
+
+
+	
+
+
+    </script>
+    <canvas id="mycanvas"></canvas>
+</center>

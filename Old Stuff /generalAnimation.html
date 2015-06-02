@@ -1,0 +1,698 @@
+<title> General Animation </title>
+
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+
+<center>
+    <script src="script/processing-1.4.1.js"></script>
+    <script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+///////////////////////////////////////////////////////////LOADING PICS
+//KIRBY 
+PImage moveR1 = new PImage[8];
+PImage moveL1 = new PImage[8];
+PImage standR1 = new PImage[10];
+PImage standL1 = new PImage[10];
+PImage jumpR1 = new PImage[10];
+PImage jumpL1 = new PImage[10];
+PImage fallR1;
+PImage fallL1;
+PImage damageR1;
+PImage damageL1;
+
+//YOSHI
+PImage moveR2 = new PImage[7];
+PImage moveL2 = new PImage[7];
+PImage standR2 = new PImage[5];
+PImage standL2 = new PImage[5];
+PImage jumpR2;
+PImage jumpL2;
+PImage damageR2;
+PImage damageL2;
+PImage fallR2;
+PImage fallL2;
+
+//PIKACHU
+PImage moveR3 = new PImage[6];
+PImage moveL3 = new PImage[6];
+PImage standR3 = new PImage[7];
+PImage standL3 = new PImage[7];
+PImage jumpR3;
+PImage jumpL3;
+
+PImage bg2 = new PImage[8];
+
+
+//////////////////////////////////////////////////////////ANIMATION TIMES
+//KIRBY
+int moveRT1;
+int moveLT1;
+int standRT1;
+int standLT1;
+int jumpRT1;
+int jumpLT1;
+
+//YOSHI
+int moveRT2;
+int moveLT2;
+int standRT2;
+int standLT2;
+
+//PIKACHU
+int moveRT3;
+int moveLT3;
+int standRT3;
+int standLT3;
+
+//BACKGROUND 
+int bg2T;
+
+String character1;
+String character2;
+
+void setup(){  
+
+    size(1000,600);  
+    background(0,0,0);
+    frameRate( 30 );
+    
+///BACKGROUND 2
+	bg2[1] = loadImage("Background2/1.png");
+	bg2[2] = loadImage("Background2/2.png");
+	bg2[3] = loadImage("Background2/3.png");
+	bg2[4] = loadImage("Background2/4.png");
+	bg2[5] = loadImage("Background2/5.png");
+	bg2[6] = loadImage("Background2/6.png");
+	bg2[7] = loadImage("Background2/7.png");
+	bg2[8] = loadImage("Background2/8.png");
+
+////////////////////////////////////////////////////[KIRBY] 
+    //MOVE RIGHT 
+	moveR1[1] = loadImage("Kirby/Right/Run/1.png");
+	moveR1[2] = loadImage("Kirby/Right/Run/2.png");
+	moveR1[3] = loadImage("Kirby/Right/Run/3.png");
+	moveR1[4] = loadImage("Kirby/Right/Run/4.png");
+	moveR1[5] = loadImage("Kirby/Right/Run/5.png");
+	moveR1[6] = loadImage("Kirby/Right/Run/6.png");
+	moveR1[7] = loadImage("Kirby/Right/Run/7.png");
+	moveR1[8] = loadImage("Kirby/Right/Run/8.png");
+	
+	//MOVE LEFT 
+	moveL1[1] = loadImage("Kirby/Left/Run/1.png");
+	moveL1[2] = loadImage("Kirby/Left/Run/2.png");
+	moveL1[3] = loadImage("Kirby/Left/Run/3.png");
+	moveL1[4] = loadImage("Kirby/Left/Run/4.png");
+	moveL1[5] = loadImage("Kirby/Left/Run/5.png");
+	moveL1[6] = loadImage("Kirby/Left/Run/6.png");
+	moveL1[7] = loadImage("Kirby/Left/Run/7.png");
+	moveL1[8] = loadImage("Kirby/Left/Run/8.png");
+	
+	//STAND RIGHT 
+	standR1[1] = loadImage("Kirby/Right/Stand/1.png");
+	standR1[2] = loadImage("Kirby/Right/Stand/2.png");
+	standR1[3] = loadImage("Kirby/Right/Stand/3.png");
+	standR1[4] = loadImage("Kirby/Right/Stand/4.png");
+	standR1[5] = loadImage("Kirby/Right/Stand/5.png");
+	standR1[6] = loadImage("Kirby/Right/Stand/6.png");
+	standR1[7] = loadImage("Kirby/Right/Stand/7.png");
+	standR1[8] = loadImage("Kirby/Right/Stand/8.png");
+	standR1[9] = loadImage("Kirby/Right/Stand/9.png");
+	standR1[10] = loadImage("Kirby/Right/Stand/10.png");
+	
+	//STAND LEFT 
+	standL1[1] = loadImage("Kirby/Left/Stand/1.png");
+	standL1[2] = loadImage("Kirby/Left/Stand/2.png");
+	standL1[3] = loadImage("Kirby/Left/Stand/3.png");
+	standL1[4] = loadImage("Kirby/Left/Stand/4.png");
+	standL1[5] = loadImage("Kirby/Left/Stand/5.png");
+	standL1[6] = loadImage("Kirby/Left/Stand/6.png");
+	standL1[7] = loadImage("Kirby/Left/Stand/7.png");
+	standL1[8] = loadImage("Kirby/Left/Stand/8.png");
+	standL1[9] = loadImage("Kirby/Left/Stand/9.png");
+	standL1[10] = loadImage("Kirby/Left/Stand/10.png");
+	
+	//JUMP RIGHT
+	jumpR1[1] = loadImage("Kirby/Right/Jump/1.png");
+	jumpR1[2] = loadImage("Kirby/Right/Jump/2.png");
+	jumpR1[3] = loadImage("Kirby/Right/Jump/3.png");
+	jumpR1[4] = loadImage("Kirby/Right/Jump/4.png");
+	jumpR1[5] = loadImage("Kirby/Right/Jump/5.png");
+	jumpR1[6] = loadImage("Kirby/Right/Jump/6.png");
+	jumpR1[7] = loadImage("Kirby/Right/Jump/7.png");
+	jumpR1[8] = loadImage("Kirby/Right/Jump/8.png");
+	jumpR1[9] = loadImage("Kirby/Right/Jump/9.png");
+	jumpR1[10] = loadImage("Kirby/Right/Jump/10.png");
+	
+	//JUMP LEFT
+	jumpL1[1] = loadImage("Kirby/Left/Jump/1.png");
+	jumpL1[2] = loadImage("Kirby/Left/Jump/2.png");
+	jumpL1[3] = loadImage("Kirby/Left/Jump/3.png");
+	jumpL1[4] = loadImage("Kirby/Left/Jump/4.png");
+	jumpL1[5] = loadImage("Kirby/Left/Jump/5.png");
+	jumpL1[6] = loadImage("Kirby/Left/Jump/6.png");
+	jumpL1[7] = loadImage("Kirby/Left/Jump/7.png");
+	jumpL1[8] = loadImage("Kirby/Left/Jump/8.png");
+	jumpL1[9] = loadImage("Kirby/Left/Jump/9.png");
+	jumpL1[10] = loadImage("Kirby/Left/Jump/10.png");
+	
+	//FALL RIGHT
+	fallR1 = loadImage("Kirby/Right/Fall/1.png");
+	
+	//FALL LEFT
+	fallL1 = loadImage("Kirby/Left/Fall/1.png");
+	
+	//DAMAGE RIGHT
+	damageR1 = loadImage("Kirby/Right/Damage/1.png");
+	
+	//DAMAGE LEFT
+	damageL1 = loadImage("Kirby/Left/Damage/1.png");
+	
+//////////////////////////////////////////////////////////////////////////[YOSHI]
+	//MOVE RIGHT
+	moveR2[1] = loadImage("Yoshi/Right/Running/1.png");
+	moveR2[2] = loadImage("Yoshi/Right/Running/2.png");
+	moveR2[3] = loadImage("Yoshi/Right/Running/3.png");
+	moveR2[4] = loadImage("Yoshi/Right/Running/4.png");
+	moveR2[5] = loadImage("Yoshi/Right/Running/5.png");
+	moveR2[6] = loadImage("Yoshi/Right/Running/6.png");
+	moveR2[7] = loadImage("Yoshi/Right/Running/7.png");
+	moveR2[8] = loadImage("Yoshi/Right/Running/8.png");
+	
+	//MOVE LEFT
+	moveL2[1] = loadImage("Yoshi/Left/Running/1.png");
+	moveL2[2] = loadImage("Yoshi/Left/Running/2.png");
+	moveL2[3] = loadImage("Yoshi/Left/Running/3.png");
+	moveL2[4] = loadImage("Yoshi/Left/Running/4.png");
+	moveL2[5] = loadImage("Yoshi/Left/Running/5.png");
+	moveL2[6] = loadImage("Yoshi/Left/Running/6.png");
+	moveL2[7] = loadImage("Yoshi/Left/Running/7.png");
+	moveL2[8] = loadImage("Yoshi/Left/Running/8.png");
+	
+	//STAND RIGHT
+	standR2[1] = loadImage("Yoshi/Right/Stand/1.png");
+	standR2[2] = loadImage("Yoshi/Right/Stand/2.png");
+	standR2[3] = loadImage("Yoshi/Right/Stand/3.png");
+	standR2[4] = loadImage("Yoshi/Right/Stand/4.png");
+	standR2[5] = loadImage("Yoshi/Right/Stand/5.png");
+	
+	//STAND LEFT
+	standL2[1] = loadImage("Yoshi/Left/Stand/1.png");
+	standL2[2] = loadImage("Yoshi/Left/Stand/2.png");
+	standL2[3] = loadImage("Yoshi/Left/Stand/3.png");
+	standL2[4] = loadImage("Yoshi/Left/Stand/4.png");
+	standL2[5] = loadImage("Yoshi/Left/Stand/5.png");
+	
+	//JUMP RIGHT
+	jumpR2 = loadImage("Yoshi/Right/Jump/1.png");
+	
+	//JUMP LEFT
+	jumpL2 = loadImage("Yoshi/Left/Jump/1.png");
+	
+	//DAMAGE RIGHT
+	damageR2 = loadImage("Yoshi/Right/Damage/1.png");
+	
+	//DAMAGE LEFT
+	damageL2 = loadImage("Yoshi/Left/Damage/1.png");
+	
+	//FALL RIGHT
+	fallR2 = loadImage("Yoshi/Right/Fall/1.png");
+	
+	//FALL LEFT
+	fallL2 = loadImage("Yoshi/Left/Fall/1.png");
+	
+/////////////////////////////////////////////////////////////////////////[PIKACHU]
+	//MOVE RIGHT
+	moveR3[1] = loadImage("Pikachu/Right/Run/1.png");
+	moveR3[2] = loadImage("Pikachu/Right/Run/2.png");
+	moveR3[3] = loadImage("Pikachu/Right/Run/3.png");
+	moveR3[4] = loadImage("Pikachu/Right/Run/4.png");
+	moveR3[5] = loadImage("Pikachu/Right/Run/5.png");
+	moveR3[6] = loadImage("Pikachu/Right/Run/6.png");
+	
+	//MOVE LEFT
+	moveL3[1] = loadImage("Pikachu/Left/Run/1.png");
+	moveL3[2] = loadImage("Pikachu/Left/Run/2.png");
+	moveL3[3] = loadImage("Pikachu/Left/Run/3.png");
+	moveL3[4] = loadImage("Pikachu/Left/Run/4.png");
+	moveL3[5] = loadImage("Pikachu/Left/Run/5.png");
+	moveL3[6] = loadImage("Pikachu/Left/Run/6.png");
+	
+	//STAND RIGHT
+	standR3[1] = loadImage("Pikachu/Right/Stand/1.png");
+	
+	//STAND LEFT
+	standL3[1] = loadImage("Pikachu/Left/Stand/1.png");
+	
+	//JUMP RIGHT
+	jumpR3 = loadImage("Pikachu/Right/Jump/1.png");
+	
+	//JUMP LEFT
+	jumpL3 = loadImage("Pikachu/Left/Jump/1.png");
+	
+	useKirby = 1;
+	useYoshi = 1;
+	usePikachu = 1;
+	
+}  
+
+
+void draw()
+{
+    size(1000,600);  
+    background(0,0,0);
+	
+	character1 = (int)sessionStorage.transferx1;
+	character2 = (int)sessionStorage.transferx2;
+	
+	textSize(40);
+
+//CHARACTER 1
+	if(character1 ==1)
+	{
+		fill(255,255,255);
+		text("MUDKIP",20,200);
+	}
+	if(character1 ==2)
+	{
+		fill(255,255,255);
+		text("PIKACHU",20,200);
+	}
+	if(character1 ==3)
+	{
+		fill(255,255,255);
+		text("YOSHI",20,200);
+	}
+	if(character1 ==4)
+	{
+		fill(255,255,255);
+		text("MARIO",20,200);
+	}
+	if(character1 ==5)
+	{
+		fill(255,255,255);
+		text("KIRBY",20,200);
+	}
+//CHARACTER 2
+	if(character2 ==1)
+	{
+		fill(255,255,255);
+		text("MUDKIP",20,260);
+	}
+	if(character2 ==2)
+	{
+		fill(255,255,255);
+		text("PIKACHU",20,260);
+	}
+	if(character2 ==3)
+	{
+		fill(255,255,255);
+		text("YOSHI",20,260);
+	}
+	if(character2 ==4)
+	{
+		fill(255,255,255);
+		text("MARIO",20,260);
+	}
+	if(character2 ==5)
+	{
+		fill(255,255,255);
+		text("KIRBY",20,260);
+	}	
+	
+//////////////////////////////////////////////////////////////////////////////[KIRBY]	
+
+
+	image(bg2[1],600,600,400,400);
+
+
+if(useKirby ==1)
+{
+	moveRT1 = moveRT1 + 1; 
+	moveLT1 = moveLT1 +1;
+	standRT1 = standRT1 +1;
+	standLT1 = standLT1 +1;
+	jumpRT1 = jumpRT1 +1;
+	jumpLT1 = jumpLT1 +1;
+	
+	int moveRa1; 
+	int moveRb1; 
+	
+	int moveLa1;
+	int moveLb1;
+	
+	int standRa1;
+	int standRb1;
+	
+	int standLa1;
+	int standLb1;
+	
+	int jumpRa1;
+	int jumpRb1;
+	
+	int jumpLa1;
+	int jumpLb1;
+	
+	moveRa1 = 0;
+	moveRb1 = 1;
+	
+	moveLa1 = 0;
+	moveLb1 = 1;
+	
+	standRa1 = 0;
+	standRb1 = 1;
+	
+	standLa1 = 0;
+	standLb1 = 1;
+	
+	jumpRa1 = 0;
+	jumpRb1 = 1;
+	
+	jumpLa1 = 0;
+	jumpLb1 = 1;
+	
+//MOVE RIGHT
+	while (moveRb1 <= 8)			
+	{
+		if(moveRT1 >= moveRa1 && moveRT1 <= moveRa1 +5)
+			{
+				image(moveR1[moveRb1], 20,20,60,70);	
+			}
+			moveRa1 = moveRa1  + 5;
+			moveRb1 = moveRb1 + 1;
+		}
+	
+
+	if(moveRT1 > 35 && moveRT1 <=40)
+		{
+			image(moveR1[8], 20,20,60,70);	
+			moveRT1 = 0;
+		}
+	
+//MOVE LEFT 	
+	while (moveLb1 <= 8)			
+	{
+		if(moveLT1 >= moveLa1 && moveLT1 <= moveLa1+5)
+			{
+				image(moveL1[moveLb1], 80,20,60,70);	
+			}
+			moveLa1 = moveLa1 + 5;
+			moveLb1 = moveLb1 + 1;
+	}
+	if(moveLT1 > 35 && moveLT1 <=40)
+		{
+			image(moveL1[8], 80,20,60,70);	
+			moveLT1 = 0;
+		}	
+//STAND RIGHT
+	while(standRb1 <= 10)
+		{
+			if(standRT1 >= standRa1 && standRT1 <= standRa1 +5)
+				{
+					image(standR1[standRb1],20,160,60,70)
+				}
+			standRa1 = standRa1 + 5;
+			standRb1 = standRb1 + 1;
+		}
+	if(standRT1 > 45 && standRT1 <= 50)
+		{
+			image(standR1[10],20,160,60,70);
+			standRT1 = 0;
+		}
+
+//STAND LEFT 
+	while(standLb1 <= 10)
+		{
+			if(standLT1 >= standLa1 && standLT1 <= standLa1 +5)
+				{
+					image(standL1[standLb1],80,160,60,70)
+				}
+			standLa1 = standLa1 + 5;
+			standLb1 = standLb1 + 1;
+		}
+	if(standLT1 > 45 && standLT1 <= 50)
+		{
+			image(standL1[10],80,160,60,70)
+			standLT1 = 0;
+		}
+
+//JUMP RIGHT
+	while(jumpRb1 <= 10)
+		{
+			if(jumpRT1 >= jumpRa1 && jumpRT1 <= jumpRa1 +5)
+				{
+					image(jumpR1[jumpRb1],20,260,60,70);
+				}
+			jumpRa1 = jumpRa1 + 5;
+			jumpRb1 = jumpRb1 +1;
+		}
+	if(jumpRT1 > 45 && jumpRT1 <=50)
+		{
+			image(jumpR1[10],20,260,60,70);
+			jumpRT1 = 0;
+		}
+//JUMP LEFT
+		while(jumpLb1 <= 10)
+		{
+			if(jumpLT1 >= jumpLa1 && jumpLT1 <= jumpLa1 +5)
+				{
+					image(jumpL1[jumpLb1],80,260,60,70);
+				}
+			jumpLa1 = jumpLa1 + 5;
+			jumpLb1 = jumpLb1 +1;
+		}
+	if(jumpLT1 > 45 && jumpLT1 <=50)
+		{
+			image(jumpL1[10],80,260,60,70);
+			jumpLT1 = 0;
+		}
+		
+//FALL RIGHT
+	image(fallR1,20,350,60,70);
+	
+//FALL LEFT 
+	image(fallL1,80,350,60,70);
+	
+//DAMAGE RIGHT
+	image(damageR1,20,450,60,70);
+
+//DAMAGE LEFT
+	image(damageL1,80,450,60,70);
+	
+		
+}
+
+////////////////////////////////////////////////////////////////////////////////[YOSHI]
+if(useYoshi ==1)
+{
+	moveRT2 = moveRT2 + 1; 
+	moveLT2 = moveLT2 +1;
+	standRT2 = standRT2 +1;
+	standLT2 = standLT2 +1;
+	
+	int moveRa2; 
+	int moveRb2; 
+	
+	int moveLa2;
+	int moveLb2;
+	
+	int standRa2;
+	int standRb2;
+	
+	int standLa2;
+	int standLb2;
+	
+	moveRa2 = 0;
+	moveRb2 = 1;
+	
+	moveLa2 = 0;
+	moveLb2 = 1;
+	
+	standRa2 = 0;
+	standRb2 = 1;
+	
+	standLa2 = 0;
+	standLb2 = 1;
+	
+//MOVE RIGHT
+	while (moveRb2 <= 8)			
+	{
+		if(moveRT2 >= moveRa2 && moveRT2 <= moveRa2 +3)
+			{
+				image(moveR2[moveRb2], 150,20,60,70);	
+			}
+			moveRa2 = moveRa2  + 3;
+			moveRb2 = moveRb2 + 1;
+	}
+	
+
+	if(moveRT2 > 18 && moveRT2 <=21)
+		{
+			image(moveR2[8], 150,20,60,70);	
+			moveRT2 = 0;
+		}
+	
+//MOVE LEFT 	
+	while (moveLb2 <= 8)			
+	{
+		if(moveLT2 >= moveLa2 && moveLT2 <= moveLa2+3)
+			{
+				image(moveL2[moveLb2], 220,20,60,70);	
+			}
+			moveLa2 = moveLa2 + 3;
+			moveLb2 = moveLb2 + 1;
+	}
+	
+
+	if(moveLT2 > 18 && moveLT2 <=21)
+		{
+			image(moveL2[8],220,20,60,70);	
+			moveLT2 = 0;
+		}	
+//STAND RIGHT
+	while(standRb2 <= 5)
+		{
+			if(standRT2 >= standRa2 && standRT2 <= standRa2 +5)
+				{
+					image(standR2[standRb2],150,160,60,70)
+				}
+			standRa2 = standRa2 + 5;
+			standRb2 = standRb2 + 1;
+		}
+	if(standRT2 > 20 && standRT2 <= 25)
+		{
+			image(standR2[5],150,160,60,70);
+			standRT2 = 0;
+		}
+
+//STAND LEFT 
+	while(standLb2 <= 5)
+		{
+			if(standLT2 >= standLa2 && standLT2 <= standLa2 +5)
+				{
+					image(standL2[standLb2],220,160,60,70)
+				}
+			standLa2 = standLa2 + 5;
+			standLb2 = standLb2 + 1;
+		}
+	if(standLT2 > 20 && standLT2 <= 25)
+		{
+			image(standL2[5],220,160,60,70)
+			standLT2 = 0;
+		}
+
+//JUMP RIGHT
+	image(jumpR2,150,270,60,70);
+
+//JUMP LEFT
+	image(jumpL2,220,270,60,70);
+	
+//DAMAGE RIGHT
+	image(damageR2,220,450,60,70);
+
+//DAMAGE LEFT
+	image(damageL2,150,450,60,70);
+	
+//FALL RIGHT
+	image(fallR2,150,360,60,70);
+	
+//FALL LEFT
+	image(fallL2,220,360,60,70);
+}
+
+/////////////////////////////////////////////////////////////////////////[PIKACHU]
+if(usePikachu == 1)
+	{
+		moveRT3 = moveRT3 +1;
+		moveLT3 = moveLT3 +1;
+		standRT3 = standRT3 +1;
+		standLT3 = standLT3 +1;
+				
+		int moveRa3;
+		int moveRb3;
+		
+		int moveLa3;
+		int moveLb3;
+		
+		int standLa3;
+		int standLb3;
+		
+		int standRa3;
+		int standRb3;
+		
+		moveRa3 = 0;
+		moveRb3 = 1;
+		
+		moveLa3 = 0;
+		moveLb3 = 1;
+		
+		standRa3 = 0;
+		standRb3 = 1;
+		
+		standLa3 = 0;
+		standLb3 = 1;
+	
+//MOVE RIGHT	
+	while (moveRb3 <= 6)			
+		{
+			if(moveRT3 >= moveRa3 && moveRT3 <= moveRa3 +5)
+			{
+				image(moveR3[moveRb3], 300,20,70,70);	
+			}
+			moveRa3 = moveRa3  + 5;
+			moveRb3 = moveRb3 + 1;
+		}
+	
+			if(moveRT3 > 25 && moveRT3 <=30)
+			{
+				image(moveR3[6], 300,20,70,70);	
+				moveRT3 = 0;
+			}
+//MOVE LEFT 
+	while (moveLb3 <= 6)			
+		{
+			if(moveLT3 >= moveLa3 && moveLT3 <= moveLa3 +5)
+			{
+				image(moveL3[moveLb3], 380,20,70,70);	
+			}
+			moveLa3 = moveLa3  + 5;
+			moveLb3 = moveLb3 + 1;
+		}
+	
+			if(moveLT3 > 25 && moveLT3 <=30)
+			{
+				image(moveL3[6], 380,20,70,70);	
+				moveLT3 = 0;
+			}
+//STAND RIGHT
+	image(standR3[1],300,160,70,70);
+	
+//STAND LEFT
+	image(standL3[1],380,160,70,70);
+	
+//JUMP RIGHT
+	image(jumpR3,300,265,70,65);
+//JUMP LEFT
+	image(jumpL3,380,265,70,65);
+
+
+
+
+}
+
+    //NEXT BUTTON
+    if ( 0 < mouseX && mouseX < 100
+	&& 0 < mouseY && mouseY < 100
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		link("character2.html");
+	}
+	
+}
+
+
+
+    </script>
+    <canvas id="mycanvas"></canvas>
+</center>

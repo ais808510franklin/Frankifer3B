@@ -1,0 +1,108 @@
+<title> Congratulations! </title>
+
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+
+<center>
+    <script src="script/processing-1.4.1.js"></script>
+    <script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+  
+PFont basicTitle;
+PImage congratz;
+PImage box;
+PImage again;
+PImage playSelect;
+
+String character1;
+String character2; 
+String selectBackground;
+
+void setup()
+{
+	basicTitle = loadFont("basictitlefont");
+	congratz = loadImage("Buttons/congratz.png");
+	box = loadImage("Buttons/bg1.png");
+	again = loadImage("Buttons/again.png");
+	playSelect = loadImage("Buttons/PlaySelect.jpg");
+}
+
+void draw()
+{
+    size(1000,600);  
+    background(0,0,0);
+    frameRate(30);
+	
+	winner1 = (int)sessionStorage.transferx1;
+	winner2 = (int)sessionStorage.transferx2;
+	character1 = (int)sessionStorage.transferx3;
+	character2 = (int)sessionStorage.transferx4;
+	selectBackground = (int)sessionStorage.transferx5;
+
+
+	//CONGRATZ 
+	image(box,200,215,560,140)
+	image(congratz,230,50,500,130);
+	
+	//PLAY AGAIN
+	image(again,810,530,180,60);
+	
+	//PLAYER SELECT
+	image(playSelect,50,550,215,30);
+	
+	
+	textFont(basicTitle);
+	textSize(100);
+	fill(0,0,0);
+	
+	if(winner1 ==1 && winner2 == 0)
+		{
+			text("Player 1",290,320);
+		}
+	if(winner2 ==1 && winner1 == 0)
+		{
+			text("Player 2",290,320);
+		}
+	if (winner2 == 1 && winner1 == 1)
+	{
+		image(box,200,215,560,140)
+		image(congratz,230,50,500,130);
+		text("TIE",290,320);
+		textSize(40);
+		text("- you both suck",400,300);
+	}
+
+    //BACK BUTTON
+    if ( 0 < mouseX && mouseX < 100
+	&& 0 < mouseY && mouseY < 100
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		link("battleScene3.html");
+	}
+	
+	//PLAY AGAIN BUTTON
+	if ( 810 < mouseX && mouseX < 990
+	&& 530 < mouseY && mouseY < 590
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		link("BattleScene3.html");
+		sessionStorage.transferx1 = character1;
+		sessionStorage.transferx2 = character2;	
+		sessionStorage.transferx3 = selectBackground;
+	}
+	
+	//REPLAY WITH SAME CHARACTERS
+	if(50 < mouseX && mouseX < 265
+	&& 550 < mouseY && mouseY < 580
+	&& mousePressed == true && mouseButton == LEFT)
+	{
+		link("character2.html");
+	}
+}
+
+
+
+    </script>
+    <canvas id="mycanvas"></canvas>
+</center>

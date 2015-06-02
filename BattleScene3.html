@@ -1,0 +1,3986 @@
+<html>
+<head>
+<title> Cool Game Muahaha </title>
+
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+
+<center>
+	<script type="text/javascript" src="script/processing-1.4.1.js"></script>
+	<script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+//TIME LIMIT
+
+int initialTime = 0;
+int newSecond = 0;
+int q = 0;
+int minuteMultiplier = 0;
+int reversedTime = 0;
+boolean recordTime = false;
+boolean nextMinute = true;
+
+//WINNER STRINGS
+String winner1;
+String winner2;
+
+//CHARACTER CHOICE
+int character1;
+int character2;
+
+//BACKGROUND TIME 
+int timeBackground; //background 1
+int bg2T; //background 2
+int bg3T; //background 3
+
+//DISTANCE BULLET AND CHARACTER
+int d1;
+int d2;
+
+//DISTANCE BETWEEN THE CHARACTERS
+int d;
+
+//LOCK BULLET DIRECTION 
+int lockBDirection1;
+int lockBDirection2;
+
+//MOTION VARIABLES
+{
+	//CHARACTER 2
+	int x2; 
+	int y2; 
+	int time2; 
+	int vtravel2; 
+	int htravel2; 
+	boolean air2;
+	boolean left2; 
+	boolean right2; 
+	boolean up2;
+	boolean platform2;
+	
+	boolean airlock2;
+	// if lock == true =======> locked
+	// if lock == fals =======> not locked
+
+	// ANIMATION ASSOCIATED WITH MOTION
+	boolean faceX2; // 
+	// if faceX == false : right
+	// if faceX == true : left
+	int timeAnimate2; 
+	
+	//CHARACTER 1
+	int x1; 
+	int y1; 
+	int time1; 
+	int vtravel1; 
+	int htravel1; 
+	boolean air1;
+	boolean left1; 
+	boolean right1; 
+	boolean up1;
+	boolean platform1;
+
+	boolean airlock1;
+	// if lock == true =======> locked
+	// if lock == fals =======> not locked
+
+	//ANIMATION ASSOCIATED WITH MOTION 
+	boolean faceX1;
+	// if faceX == false : right
+	// if faceX == true : left
+	int timeAnimate1;  
+}
+
+//MUDKIP ANIMATION PIMAGES
+{
+	PImage mudIdleLL;
+	PImage mudIdleRR;
+
+	PImage mudWalk1LL;
+	PImage mudWalk2LL;
+	PImage mudWalk3LL;
+	PImage mudWalk4LL;
+
+
+	PImage mudWalk1RR;
+	PImage mudWalk2RR;
+	PImage mudWalk3RR;
+	PImage mudWalk4RR;
+
+
+	PImage mudFallLL;
+	PImage mudFallRR;
+	
+	PImage mudDmgLL;
+	PImage mudDmgRR;
+	
+	PImage mudAtkLL;
+	PImage mudAtkRR;
+	
+	PImage mudRAtkLL;
+	PImage mudRAtkRR;
+	
+	PImage mudItem;
+}
+
+//KIRBY ANIMATION WHILE PIMAGE // variable naming here is really bad sorry it came from another file
+{
+	PImage moveR1 = new PImage[8];
+	PImage moveL1 = new PImage[8];
+	PImage attackR1 = new PImage[4];
+	PImage attackL1 = new PImage[4];
+	PImage standR1;
+	PImage standL1;
+	PImage jumpR1;
+	PImage jumpL1;
+	PImage fallR1;
+	PImage fallL1;
+	PImage damageR1;
+	PImage damageL1;
+	
+	PImage jumpRKirby;
+	PImage jumpLKirby;
+	PImage standRKirby;
+	PImage standLKirby;
+	
+	PImage kirbyRAtkRR = new PImage[2];
+	PImage kirbyRAtkLL = new PImage[2];
+	
+	PImage kirbyItemLL;
+	PImage kirbyItemRR;
+	
+	int actAniKirby1; //this is for melee
+	int actAniKirby2;
+}
+
+//PIKACHU ANIMATION PIMAGES 
+{
+	PImage pikaWalkRR = new PImage[6];
+	PImage pikaWalkLL = new PImage[6];
+	PImage pikaStandRR;
+	PImage pikaStandLL; 
+	PImage pikaJumpLL;
+	PImage pikaJumpRR;
+	PImage pikaFallRR;
+	PImage pikaFallLL;
+	
+	PImage pikaDmgLL;
+	PImage pikaDmgRR;
+	
+	PImage pikaAtkLL;
+	PImage pikaAtkRR;
+	
+	PImage pikaRAtkLL;
+	PImage pikaRAtkRR;
+	
+	PImage pikaItem;
+	
+}
+
+//YOSHI ANIMATION PIMAGES
+{
+	PImage yoshiWalkRR = new PImage[8];
+	PImage yoshiWalkLL = new PImage[8];
+	
+	PImage yoshiStandRR;
+	PImage yoshiStandLL;
+	
+	PImage yoshiFallRR;
+	PImage yoshiFallLL;
+	
+	PImage yoshiJumpRR;
+	PImage yoshiJumpLL;
+	
+	PImage yoshiAtkRR;
+	PImage yoshiAtkLL;
+	
+	PImage yoshiDmgRR;
+	PImage yoshiDmgLL;
+	
+	PImage yoshiRAtkRR = new PImage[4];
+	PImage yoshiRAtkLL = new PImage[4];
+	
+	PImage yoshiItemLL;
+	PImage yoshiItemRR;
+	
+	int actYoshiRAtk1;
+	int actYoshiRAtk2;
+}
+
+//MARIO ANIMATION PIMAGES
+{
+	PImage marioWalkRR = new PImage[8];
+	PImage marioWalkLL = new PImage[8];
+	
+	PImage marioStandRR;
+	PImage marioStandLL;
+	
+	PImage marioJumpRR;
+	PImage marioJumpLL;
+	
+	PImage marioFallRR;
+	PImage marioFallLL;
+	
+	PImage marioDmgRR;
+	PImage marioDmgLL;
+	
+	PImage marioAtkRR = new PImage[4];
+	PImage marioAtkLL = new PImage[4];
+	
+	PImage marioRAtkRR = new PImage[2];
+	PImage marioRAtkLL = new PImage[2];
+	
+	PImage marioItemRR;
+	PImage marioItemLL;
+	
+	int actAniMario;
+	int actAniMario1;
+	
+	int actMarioRAtk1;
+	int actMarioRAtk2;
+}
+
+//HP AND RP BARS 
+{
+	//HP COLOR 1
+	int r1;
+	int g1;
+	int b1;
+
+	//HP LENTH 1
+	int length1;
+	int rp1; //Refractory period 
+
+	//RP REPAIR
+	int rpRepair1;
+
+	//RP LOSS  
+	int rpLoss1;
+	
+	//HP COLOR 2 
+	int r2;
+	int g2;
+	int b2;
+
+	//HP LENTH 2
+	int length2;
+	int rp2; //Refractory period 
+
+	//RP REPAIR
+	int rpRepair2;
+
+	//RP LOSS  
+	int rpLoss2;
+	
+	//HP DECREASING RECTS
+	int hpLoss1;
+	int hpLoss2;
+	int lockAttack1;
+	int lockAttack2;
+
+	//ATTACK
+	int attack1;
+	int attack2;
+
+	//DAMAGE
+	int damage1;
+	int damage2;
+
+	//DAMAGE BY RANGE ATTACK 
+	int rangeDamage1; 
+	int rangeDamage2; 
+	
+	//HP LOSS
+	int totalHpLoss1;
+	int totalHpLoss2;
+}
+
+//ANIMATION TIME VARIABLES 
+{
+	//KIRBY
+	int moveRT1;
+	int moveLT1;
+	int jumpRT1;
+	int jumpLT1;	
+	int atkRT1;
+	int atkLT1;
+	
+	//PIKACHU 
+	int pikaMoveRT1; 
+	int pikaMoveLT1;
+	int pikaMoveRT2;
+	int pikaMoveLT2;
+	
+	//YOSHI; 
+	int yoshiMoveRT2;
+	int yoshiMoveLT2; 
+	int yoshiMoveRT1;
+	int yoshiMoveLT1;
+	
+	//MARIO
+	int marioWalkRT;
+	int marioWalkLT; 
+	int marioMoveLT1;
+	int marioMoveRT1;
+
+	//MUDKIP
+	int mudWalkRT;
+	int mudWalkLT;
+		
+	//GENERAL 
+	int timeDmg2;
+	int timeAtk2;
+	int timeDmg1;
+	int timeAtk1;
+	
+	int timeRAtk1;
+	int timeRAtk2;
+	
+	int timeItem1;
+	int timeItem2;
+
+}
+
+//SHOOTING VARIABLES
+{
+	//RANGE ATTACK DIRECTIONs
+	int shootingR1;
+	int shootingL1;
+
+	int shootingR2;
+	int shootingL2;
+
+	//BULLET COORDINATES
+	int bulletX1;
+	int bulletX2;
+	int bulletY1;
+	int bulletY2;
+
+	//SHOOTING OR NOT 
+	int shooting1; //when shooting == 0 then not shooting
+	int shooting2; //when shooting == 1 then shooing
+
+	//SHOOT ACTIVATION 
+	int shootAct1;
+	int shootAct2;
+
+	//LOCK BULLET DIRECTION and DIRECTION OF MOVEMENT
+	int lockDirection1;
+	int lockDirection2;
+	int bulletDirection1;
+	int bulletDirection2;
+}
+
+//BACKGROUND 1 PIMAGE 
+{
+	PImage background11;
+	PImage background12;
+	PImage background13;
+	PImage background14;
+	PImage background15;
+	PImage background16;
+	PImage background17;
+	PImage background18;
+	PImage platformPic1;
+}
+
+//BACKGROUND 2
+PImage bg2 = new PImage[8];
+
+//BACKGROUND 3 
+PImage bg3 = new PImage[8];
+PImage platformPic3;
+
+//FONT AND WORDS
+PFont basictitle;
+PFont cooper;
+PImage bgTemplate;
+
+//Sounds
+{
+	//Locks
+	boolean sAtkLock1;
+	boolean sAtkLock2;
+	
+	boolean sRAtkLock1;
+	boolean sRAtkLock2;
+	
+	boolean pokePlay;
+	boolean pokeLock;
+}
+
+PImage volumeOn;
+PImage volumeOff;
+boolean changeLock;
+
+//healthaid
+
+PImage pudding[] = new PImage[2];
+
+int n;
+int randomTime;
+int randomTime2;
+int pudding;
+int puddingx;
+int puddingy;
+int puddingactivated;
+
+int pudding1d;
+int pudding2d;
+
+int heal1;
+int heal2;
+
+//Mewtwo Attack
+
+PImage Mewtwo[] = new PImage[17];
+PImage beam[] = new PImage[3];
+int m;
+int a;
+int b;
+int sexyTime;
+
+int hurt1;
+int hurt2;
+
+int mewAppear;
+int beamAppear;
+
+void setup()
+{
+	background(0,0,0);
+	size(1000,600);
+	
+	//TECHNICAL STUFF 
+	{
+		//CHARACTER 2 
+		x2 = 600;
+		y2 = 300;
+		time2 = 0;
+		air2 = true;
+		timeAnimate2 = 0;
+		hpLoss2 = 0;
+		shootAct2 = 1;
+		rangeDamage2 = 1;
+		timeDmg2 = -1;
+		timeAtk2 = 20;
+	
+	
+		//CHARACTER 1
+		x1 = 400;
+		y1 = 300;
+		time1 = 0;
+		air1 = true;
+		timeAnimate1 = 0;
+		hpLoss1 = 0;
+		shootAct1 = 1;
+		rangeDamage1 = 1;
+		timeDmg1 = -1;
+		timeAtk1 = 20;
+		
+		faceX1 = false;
+		faceX2 = true;
+		
+		//TOTAL HP LOSS
+		lengthStart2 = 200;
+		lengthStart1 = 200;
+	}
+	
+	//LOADING MUDKIP IMAGES 
+	{
+		mudIdleLL = loadImage("mudkips/MudkipIdle.png")
+		mudIdleRR = loadImage("mudkips/RRMudkipIdleRR.png")
+	
+		mudWalk1LL = loadImage("mudkips/WALK/MudkipWalk1.png")
+		mudWalk2LL = loadImage("mudkips/WALK/MudkipWalk2.png")
+		mudWalk3LL = loadImage("mudkips/WALK/MudkipWalk3.png")
+		mudWalk4LL = loadImage("mudkips/WALK/MudkipWalk4.png")
+	
+		mudWalk1RR = loadImage("mudkips/WALK/RRMudkipWalk1RR.png")
+		mudWalk2RR = loadImage("mudkips/WALK/RRMudkipWalk2RR.png")
+		mudWalk3RR = loadImage("mudkips/WALK/RRMudkipWalk3RR.png")
+		mudWalk4RR = loadImage("mudkips/WALK/RRMudkipWalk4RR.png")	
+	
+		mudFallLL = loadImage("mudkips/MudkipFallLL.png")
+		mudFallRR = loadImage("mudkips/MudkipFallRR.png")
+		
+		mudDmgLL = loadImage("mudkips/MudkipDmgLL.png")
+		mudDmgRR = loadImage("mudkips/MudkipDmgRR.png")
+		
+		mudAtkLL = loadImage("mudkips/MudkipAtkLL.png")
+		mudAtkRR = loadImage("mudkips/MudkipAtkRR.png")
+		
+		
+		mudRAtkLL = loadImage("mudkips/R Atk/mudRAtkLL.png");
+		mudRAtkRR = loadImage("mudkips/R Atk/mudRAtkRR.png");
+		
+		mudItemLL = loadImage("mudkips/Item/mudItemLL.png");
+		mudItemRR = loadImage("mudkips/Item/mudItemRR.png");
+		
+	}
+	
+	//LOADING KIRBY IMAGES 
+	{
+		//MOVE RIGHT KIRBY
+		{
+			moveR1[1] = loadImage("Kirby/Run/KirbyRunRR1.png");
+			moveR1[2] = loadImage("Kirby/Run/KirbyRunRR2.png");
+			moveR1[3] = loadImage("Kirby/Run/KirbyRunRR3.png");
+			moveR1[4] = loadImage("Kirby/Run/KirbyRunRR4.png");
+			moveR1[5] = loadImage("Kirby/Run/KirbyRunRR5.png");
+			moveR1[6] = loadImage("Kirby/Run/KirbyRunRR6.png");
+			moveR1[7] = loadImage("Kirby/Run/KirbyRunRR7.png");
+			moveR1[8] = loadImage("Kirby/Run/KirbyRunRR8.png");
+
+		}
+	
+		//MOVE LEFT KIRBY
+		{
+			moveL1[1] = loadImage("Kirby/Run/KirbyRunLL1.png");
+			moveL1[2] = loadImage("Kirby/Run/KirbyRunLL2.png");
+			moveL1[3] = loadImage("Kirby/Run/KirbyRunLL3.png");
+			moveL1[4] = loadImage("Kirby/Run/KirbyRunLL4.png");
+			moveL1[5] = loadImage("Kirby/Run/KirbyRunLL5.png");
+			moveL1[6] = loadImage("Kirby/Run/KirbyRunLL6.png");
+			moveL1[7] = loadImage("Kirby/Run/KirbyRunLL7.png");
+			moveL1[8] = loadImage("Kirby/Run/KirbyRunLL8.png");
+		}
+		
+		//ATTACK RIGHT KIRBY 
+		{
+			attackR1[1] = loadImage("Kirby/Atk/KirbyAtkRR1.png");
+			attackR1[2] = loadImage("Kirby/Atk/KirbyAtkRR2.png");
+			attackR1[3] = loadImage("Kirby/Atk/KirbyAtkRR3.png");
+			attackR1[4] = loadImage("Kirby/Atk/KirbyAtkRR4.png");
+		} 
+		
+		//ATTACK LEFT KIRBY
+		{
+			attackL1[1] = loadImage("Kirby/Atk/KirbyAtkLL1.png");
+			attackL1[2] = loadImage("Kirby/Atk/KirbyAtkLL2.png");
+			attackL1[3] = loadImage("Kirby/Atk/KirbyAtkLL3.png");
+			attackL1[4] = loadImage("Kirby/Atk/KirbyAtkLL4.png");
+		}
+	
+		//STAND RIGHT KIRBY
+		standR1 = loadImage("Kirby/Stand/KirbyIdleRR.png");
+	
+		//STAND LEFT KIRBY
+		standL1 = loadImage("Kirby/Stand/KirbyIdleLL.png");
+	
+		//JUMP RIGHT KIRBY
+		jumpR1 = loadImage("Kirby/Jump/KirbyJumpRR.png");
+		
+		//JUMP LEFT
+		jumpL1 = loadImage("Kirby/Jump/KirbyJumpLL.png");	
+	
+		//FALL RIGHT KIRBY
+		fallR1 = loadImage("Kirby/Fall/KirbyFallRR.png");
+	
+		//FALL LEFT KIRBY
+		fallL1 = loadImage("Kirby/Fall/KirbyFallLL.png");
+	
+		//DAMAGE RIGHT KIRBY
+		damageR1 = loadImage("Kirby/Dmg/KirbyDmgRR.png");
+	
+		//DAMAGE LEFT KIRBY
+		damageL1 = loadImage("Kirby/Dmg/KirbyDmgLL.png");
+		
+		//RANGE ATK RIGHT
+		kirbyRAtkRR = loadImage("Kirby/R Atk/KirbyRAtkRR.png");
+		
+		//RANGE ATK LEFT
+		kirbyRAtkLL = loadImage("Kirby/R Atk/KirbyRAtkLL.png");
+		
+		//RANGE ATTACK ITEM
+		kirbyItemLL = loadImage("Kirby/R Item/kirbyItemLL.png");
+		kirbyItemRR = loadImage("Kirby/R Item/kirbyItemRR.png");
+	}
+	
+	//LOADING PIKACHU IMAGES 
+	{
+		//MOVE RIGHT 
+		pikaWalkRR[1] = loadImage("Pikachu/Right/Run/1.png");
+		pikaWalkRR[2] = loadImage("Pikachu/Right/Run/2.png");
+		pikaWalkRR[3] = loadImage("Pikachu/Right/Run/3.png");
+		pikaWalkRR[4] = loadImage("Pikachu/Right/Run/4.png");
+		pikaWalkRR[5] = loadImage("Pikachu/Right/Run/5.png");
+		pikaWalkRR[6] = loadImage("Pikachu/Right/Run/6.png");
+		
+		//MOVE LEFT
+		pikaWalkLL[1] = loadImage("Pikachu/Left/Run/1.png");
+		pikaWalkLL[2] = loadImage("Pikachu/Left/Run/2.png");
+		pikaWalkLL[3] = loadImage("Pikachu/Left/Run/3.png");
+		pikaWalkLL[4] = loadImage("Pikachu/Left/Run/4.png");
+		pikaWalkLL[5] = loadImage("Pikachu/Left/Run/5.png");
+		pikaWalkLL[6] = loadImage("Pikachu/Left/Run/6.png");
+		
+		//STAND RIGHT 
+		pikaStandRR = loadImage("Pikachu/Right/Stand/1.png");
+		
+		//STAND LEFT
+		pikaStandLL = loadImage("Pikachu/Left/Stand/1.png");
+		
+		//JUMP RIGHT 
+		pikaJumpRR = loadImage("Pikachu/Right/Jump/1.png");
+		
+		//JUMP LEFT
+		pikaJumpLL = loadImage("Pikachu/Left/Jump/1.png");
+		
+		//FALL RIGHT
+		pikaFallRR = loadImage("Pikachu/Right/Fall/PikaFallRR.png");
+		
+		//FALL LEFT
+		pikaFallLL = loadImage("Pikachu/Left/Fall/PikaFallLL.png");
+		
+		//DAMAGE
+		pikaDmgLL = loadImage("Pikachu/Damage/pikaDmgLL.png");
+		pikaDmgRR = loadImage("Pikachu/Damage/pikaDmgRR.png");
+		
+		//ATTACK
+		pikaAtkLL = loadImage("Pikachu/Atk/pikaAtkLL.png");
+		pikaAtkRR = loadImage("Pikachu/Atk/pikaAtkRR.png");
+		
+		//RANGE ATTACK
+		pikaRAtkLL = loadImage("Pikachu/R Atk/pikaRAtkLL.png");
+		pikaRAtkRR = loadImage("Pikachu/R Atk/pikaRAtkRR.png");
+		
+		//ITEM
+		pikaItem = loadImage("Pikachu/PikaItem.png");
+		
+	}
+	
+	//LOADING YOSHI IMAGES 
+	{
+		//MOVE RIGHT
+		yoshiWalkRR[1] = loadImage("Yoshi/Right/Run/1.png");
+		yoshiWalkRR[2] = loadImage("Yoshi/Right/Run/2.png");
+		yoshiWalkRR[3] = loadImage("Yoshi/Right/Run/3.png");
+		yoshiWalkRR[4] = loadImage("Yoshi/Right/Run/4.png");
+		yoshiWalkRR[5] = loadImage("Yoshi/Right/Run/5.png");
+		yoshiWalkRR[6] = loadImage("Yoshi/Right/Run/6.png");
+		yoshiWalkRR[7] = loadImage("Yoshi/Right/Run/7.png");
+		yoshiWalkRR[8] = loadImage("Yoshi/Right/Run/8.png");
+		
+		//MOVE LEFT
+		yoshiWalkLL[1] = loadImage("Yoshi/Left/Run/1.png");
+		yoshiWalkLL[2] = loadImage("Yoshi/Left/Run/2.png");
+		yoshiWalkLL[3] = loadImage("Yoshi/Left/Run/3.png");
+		yoshiWalkLL[4] = loadImage("Yoshi/Left/Run/4.png");
+		yoshiWalkLL[5] = loadImage("Yoshi/Left/Run/5.png");
+		yoshiWalkLL[6] = loadImage("Yoshi/Left/Run/6.png");
+		yoshiWalkLL[7] = loadImage("Yoshi/Left/Run/7.png");
+		yoshiWalkLL[8] = loadImage("Yoshi/Left/Run/8.png");
+		
+		//STAND RIGHT
+		yoshiStandRR = loadImage("Yoshi/Right/Stand/1.png");
+		
+		//STAND LEFT 
+		yoshiStandLL = loadImage("Yoshi/Left/Stand/1.png");
+		
+		//JUMP RIGHT
+		yoshiJumpRR = loadImage("Yoshi/Right/Jump/1.png");
+		
+		//JUMP LEFT
+		yoshiJumpLL = loadImage("Yoshi/Left/Jump/1.png");
+		
+		//FALL RIGHT
+		yoshiFallRR = loadImage("Yoshi/Right/Fall/1.png");
+		
+		//FALL LEFT
+		yoshiFallLL = loadImage("Yoshi/Left/Fall/1.png");
+		
+		//ATTACK RIGHT
+		yoshiAtkRR = loadImage("Yoshi/Right/Attack/1.png");
+		
+		//ATTACK LEFT 
+		yoshiAtkLL = loadImage("Yoshi/Left/Attack/1.png");
+		
+		//DAMAGE RIGHT
+		yoshiDmgRR = loadImage("Yoshi/Right/Damage/1.png");
+		
+		//DAMAGE LEFT 
+		yoshiDmgLL = loadImage("Yoshi/Left/Damage/1.png");
+		
+		//RANGE ATTACK LEFT
+		yoshiRAtkLL[1] = loadImage("Yoshi/R Atk/YoshiThrowLL1.png");
+		yoshiRAtkLL[2] = loadImage("Yoshi/R Atk/YoshiThrowLL2.png");
+		yoshiRAtkLL[3] = loadImage("Yoshi/R Atk/YoshiThrowLL3.png");
+		yoshiRAtkLL[4] = loadImage("Yoshi/R Atk/YoshiThrowLL4.png");
+		
+		//RANGE ATTACK RIGHT
+		yoshiRAtkRR[1] = loadImage("Yoshi/R Atk/YoshiThrowRR1.png");
+		yoshiRAtkRR[2] = loadImage("Yoshi/R Atk/YoshiThrowRR2.png");
+		yoshiRAtkRR[3] = loadImage("Yoshi/R Atk/YoshiThrowRR3.png");
+		yoshiRAtkRR[4] = loadImage("Yoshi/R Atk/YoshiThrowRR4.png");
+		
+		//ITEM 
+		yoshiItemLL = loadImage("Yoshi/YoshiItemLL.png");
+		yoshiItemRR = loadImage("Yoshi/YoshiItemRR.png");
+		
+	}
+	
+	//LOADING MARIO IMAGES 
+	{
+		marioWalkRR[1] = loadImage("Mario/Run/MarioRunRR1.png");
+		marioWalkRR[2] = loadImage("Mario/Run/MarioRunRR2.png");
+		marioWalkRR[3] = loadImage("Mario/Run/MarioRunRR3.png");
+		marioWalkRR[4] = loadImage("Mario/Run/MarioRunRR4.png");
+		marioWalkRR[5] = loadImage("Mario/Run/MarioRunRR5.png");
+		marioWalkRR[6] = loadImage("Mario/Run/MarioRunRR6.png");
+		marioWalkRR[7] = loadImage("Mario/Run/MarioRunRR7.png");
+		marioWalkRR[8] = loadImage("Mario/Run/MarioRunRR8.png");
+		
+		marioWalkLL[1] = loadImage("Mario/Run/MarioRunLL1.png");
+		marioWalkLL[2] = loadImage("Mario/Run/MarioRunLL2.png");
+		marioWalkLL[3] = loadImage("Mario/Run/MarioRunLL3.png");
+		marioWalkLL[4] = loadImage("Mario/Run/MarioRunLL4.png");
+		marioWalkLL[5] = loadImage("Mario/Run/MarioRunLL5.png");
+		marioWalkLL[6] = loadImage("Mario/Run/MarioRunLL6.png");
+		marioWalkLL[7] = loadImage("Mario/Run/MarioRunLL7.png");
+		marioWalkLL[8] = loadImage("Mario/Run/MarioRunLL8.png");
+		
+		marioStandRR = loadImage("Mario/Stand/MarioStandRR.png");
+		marioStandLL = loadImage("Mario/Stand/MarioStandLL.png");
+		
+		marioJumpRR = loadImage("Mario/Jump/MarioJumpRR.png");
+		marioJumpLL = loadImage("Mario/Jump/MarioJumpLL.png");
+		
+		marioFallRR = loadImage("Mario/Fall/MarioFallRR.png");
+		marioFallLL = loadImage("Mario/Fall/MarioFallLL.png");
+		
+		marioDmgRR = loadImage("Mario/Dmg/MarioDmgRR.png");
+		marioDmgLL = loadImage("Mario/Dmg/MarioDmgLL.png");
+		
+		marioAtkRR[1] = loadImage("Mario/Atk/MarioAtkRR1.png");
+		marioAtkRR[2] = loadImage("Mario/Atk/MarioAtkRR2.png");
+		marioAtkRR[3] = loadImage("Mario/Atk/MarioAtkRR3.png");
+		marioAtkRR[4] = loadImage("Mario/Atk/MarioAtkRR4.png");
+		
+		marioAtkLL[1] = loadImage("Mario/Atk/MarioAtkLL1.png");
+		marioAtkLL[2] = loadImage("Mario/Atk/MarioAtkLL2.png");
+		marioAtkLL[3] = loadImage("Mario/Atk/MarioAtkLL3.png");
+		marioAtkLL[4] = loadImage("Mario/Atk/MarioAtkLL4.png");
+		
+		marioRAtkLL[1] = loadImage("Mario/R Atk/MarioRAtkLL1.png");
+		marioRAtkLL[2] = loadImage("Mario/R Atk/MarioRAtkLL2.png");
+		
+		marioRAtkRR[1] = loadImage("Mario/R Atk/MarioRAtkRR1.png");
+		marioRAtkRR[2] = loadImage("Mario/R Atk/MarioRAtkRR2.png");
+		
+		marioItemLL = loadImage("Mario/Item/marioRItemLL.png");
+		marioItemRR = loadImage("Mario/Item/marioRItemRR.png");
+	}
+	
+	//BACKGROUND 1 LOAD IMAGES
+	{
+		background11 = loadImage("Background1/background11.png")
+		background12 = loadImage("Background1/background12.png")
+		background13 = loadImage("Background1/background13.png")
+		background14 = loadImage("Background1/background14.png")
+		background15 = loadImage("Background1/background15.png")
+		background16 = loadImage("Background1/background16.png")
+		background17 = loadImage("Background1/background17.png")
+		background18 = loadImage("Background1/background18.png")
+	}
+	
+	//BACKGROUND 2 LOAD IMAGES 
+	{
+		bg2[1] = loadImage("Background2/1.png")
+		bg2[2] = loadImage("Background2/2b.png")
+		bg2[3] = loadImage("Background2/3b.png")
+		bg2[4] = loadImage("Background2/4b.png")
+		bg2[5] = loadImage("Background2/5b.png")
+		bg2[6] = loadImage("Background2/6b.png")
+		bg2[7] = loadImage("Background2/7b.png")
+		bg2[8] = loadImage("Background2/8b.png")
+	}
+	
+	//BACKGROUND 3 LOAD IMAGES
+	{
+	bg3[1] = loadImage("Background3/1.png");
+	bg3[2] = loadImage("Background3/2.png");
+	bg3[3] = loadImage("Background3/3.png");
+	bg3[4] = loadImage("Background3/4.png");
+	bg3[5] = loadImage("Background3/5.png");
+	bg3[6] = loadImage("Background3/6.png");
+	bg3[7] = loadImage("Background3/7.png");
+	bg3[8] = loadImage("Background3/8.png");
+	}
+	
+	//LOAD FONT
+	basictitle = loadFont("gravity");
+	bgTemplate = loadImage("Buttons/bg1.png");
+	cooper = loadFont("Cooper Black");
+
+	//ACTIVATING ANIMATIONS
+	{
+		actAniKirby1 = false;
+		actAniKirby2 = false;
+		
+		actAniMario = false;
+		actAniMario1 = false;
+		actMarioRAtk1 = false;
+		actMarioRAtk2 = false;
+	
+		actYoshiRAtk1 = false;
+		actYoshiRAtk2 = false;
+	}
+	
+	//SET ANIMATION TIME
+	{
+		timeItem1 = -1;
+		timeItem2 = -1;
+	
+		timeRAtk2 = 20;
+		timeRAtk1 = 20;
+	}
+	
+	//Sounds
+	{
+		sAtkLock1 = false;
+		sAtkLock2 = false;
+		
+		sRAtkLock1 = false;
+		sRAtkLock2 = false;
+		
+		pokePlay = true;
+		pokeLock = false;
+	}
+	volumeOn = loadImage("ETC Pics/VolumeOn.png");
+    volumeOff = loadImage("ETC Pics/VolumeOff.png");
+    changeLock = false;
+	
+	
+	
+	
+	
+	platformPic1 = loadImage("Background1/Platform1.png");
+	platformPic3 = loadImage("Background3/Platform3.png");
+	
+	//healthaid
+
+	pudding=loadImage("pudding1.png");
+	puddingactivated=0;
+
+
+	
+	puddingx= 450;
+	puddingy= 200;
+	randomTime=55;
+	heal1=0;
+	heal2=0;
+	
+	//Mewtwo Attack
+	
+	m = 1;
+	while (m <= 17)
+	{
+		Mewtwo[m] = loadImage("Mewtwo/MewtwoAppear"+m+".png");
+		m = m + 1;
+	}
+
+	sexyTime = 0;
+	
+	m = 1;
+	while (m <= 9)
+		{
+			beam[m] = loadImage("Mewtwo/beam"+m+".png");
+			m = m + 1;
+		}
+	
+	hurt1 = 0;
+	hurt2 = 0;
+
+	mewAppear = 0;
+	beamAppear = 0;
+	randomTime2 = 70;
+
+}
+
+
+void draw()
+{
+	
+	character1 = (int)sessionStorage.transferx1;
+	character2 = (int)sessionStorage.transferx2;
+	selectBackground = (int)sessionStorage.transferx3;
+	
+	soundManager.setVolume("s0",100);
+	soundManager.setVolume("s1",20);
+	soundManager.setVolume("s2",20);
+	
+	
+	
+	//BACKGROUND 1 ANIMATION
+	if(selectBackground ==1)
+	{
+		timeBackground = timeBackground + 1;
+		if (timeBackground > 0 && timeBackground <=5)
+		{
+			image(background11,-100,0,1250,600);
+		}
+		if (timeBackground > 5 && timeBackground <=10)
+		{
+			image(background12,-100,0,1250,600);
+		}
+		if (timeBackground > 10 && timeBackground <=15)
+		{
+			image(background13,-100,0,1250,600);
+		}
+		if (timeBackground > 15 && timeBackground <=20)
+		{
+			image(background14,-100,0,1250,600);
+		}
+		if (timeBackground > 20 && timeBackground <=25)
+		{
+			image(background15,-100,0,1250,600);
+		}
+		if (timeBackground > 25 && timeBackground <=30)
+		{
+			image(background16,-100,0,1250,600);
+		}
+		if (timeBackground > 30 && timeBackground <=35)
+		{
+			image(background17,-100,0,1250,600);
+		}
+		if (timeBackground > 35 && timeBackground <=40)
+		{
+			image(background18,-100,0,1250,600);
+			timeBackground = 0;
+		} 
+		
+		
+		image(platformPic1,100,400);
+		image(platformPic1,700,400);
+	}
+	
+	//BACKGROUND 2 ANIMATION
+	if(selectBackground == 2)
+	{
+		int bg2a; 
+		int bg2b;
+	
+		bg2a = 0;
+		bg2b = 1;
+		bg2T = bg2T + 1;
+	
+		while (bg2b <= 8)			
+				{
+					if(bg2T >= bg2a && bg2T <= bg2a+10)
+					{
+						image(bg2[bg2b],0,0,1000,600);	
+					}
+					bg2a = bg2a + 10;
+					bg2b = bg2b + 1;
+				}
+			
+				if(bg2T > 70 && bg2T <=80)
+				{
+					image(bg2[8],0,0,1000,600);	
+					bg2T = 0;
+				}
+				
+		fill(200,0,0);
+		rect(100,400,200,10);
+		rect(700,400,200,10);	
+	}
+	
+	//BACKGROUND 3 ANIMATION
+	if(selectBackground ==3)
+	{
+		int bg3a; 
+		int bg3b;
+	
+		bg3a = 0;
+		bg3b = 1;
+		bg3T = bg3T + 1;
+	
+		while (bg3b <= 8)			
+				{
+					if(bg3T >= bg3a && bg3T <= bg3a+10)
+					{
+						image(bg3[bg3b],0,0,1000,600);	
+					}
+					bg3a = bg3a + 10;
+					bg3b = bg3b + 1;
+				}
+			
+				if(bg3T > 70 && bg3T <=80)
+				{
+					image(bg3[8],0,0,1000,600);	
+					bg3T = 0;
+				}
+		image(platformPic3,100,400);
+		image(platformPic3,700,400);	
+		
+	}
+	
+	//BACKGROUND TEMPLATE 
+	image(bgTemplate,5,10,265,80);
+	image(bgTemplate,720,10,265,80);
+	
+	//BACKGROUND STUFF 
+	fill(255,255,255);
+
+
+	//CHARACTER 1 NAME TRANSFER
+	{
+		textFont(basictitle,16);
+		fill(0,0,0);
+		
+		if(character1 ==1)
+		{
+			text("Mudkip",75,30);
+			useMudkip = 1;
+		}
+		if(character1 ==2)
+		{
+			text("Pikachu",75,30);
+			usePikachu = 1;
+		}
+		if(character1 ==3)
+		{
+			text("Yoshi",75,30);
+		}
+		if(character1 ==4)
+		{
+			text("Mario",75,30);
+		}
+		if(character1 ==5)
+		{
+			text("Kirby",75,30);
+			useKirby = 1;
+		}
+	}
+	
+	//CHARACTER 2 NAME TRANSFER
+	{
+
+		
+		//CHARACTER 2 NAME TRANSFER
+		if(character2 ==1)
+		{
+			text("Mudkip",795,30);
+			useMudkip = 1;
+		}
+		if(character2 ==2)
+		{
+			text("Pikachu",795,30);
+			usePikachu = 1;
+		}
+		if(character2 ==3)
+		{
+			text("Yoshi",795,30);
+		}
+		if(character2 ==4)
+		{
+			text("Mario",795,30);
+		}
+		if(character2 ==5)
+		{
+			text("Kirby",795,30);
+			useKirby = 1;
+		}
+	}	
+	
+	//SHOOTING 
+	{
+		//BULLET 1
+		if(shooting1 == 0)
+		{
+			bulletX1 = x1;
+			bulletY1 = y1;
+		}
+	
+		//BULLET 2
+		if(shooting2 == 0)
+		{
+			bulletX2 = x2;
+			bulletY2 = y2;
+		}
+
+		//HP BAR AND RP BAR 
+		{
+			//HP BAR COLORS AND LENGTH 1
+			r1 = 0;
+			g1 = 255;
+			b1 = 0;
+			length1 = 200;
+			rp1 = 150;
+	
+			//HP BAR COLORS AND LENGTH 2
+			r2 = 0;
+			g2 = 255;
+			b2 = 0;
+			length2 = 200;
+			rp2 = 150;
+	
+			//HP 1
+			strokeWeight(1);
+			fill(0,0,0);
+			textFont(basictitle,16);
+			text("HP",25,53);
+			text("Player 1:",15,30);
+			text("R.P.",18,80);
+	
+			fill(r1,g1,b1);
+			stroke(0,0,0);
+			rect(50,40,length1,15,3,3,3,3);
+			rect(50,70,rp1,10,3,3,3,3);
+	
+			//HP 2
+			fill(0,0,0);
+			textSize(16);
+			text("HP",938,53);
+			text("Player 2:",730,30);
+			text("R.P.",938,80);
+			fill(r2,g2,b2);
+			rect(730,40,length2,15,3,3,3,3);
+			rect(780,70,rp2,10,3,3,3,3);
+		
+			//BLACK RECTS THAT WILL MAKE HP BAR APPEAR TO HAVE SHORTENED
+			noStroke();
+			fill(0,0,0);
+			rect(250,40,hpLoss1,15);
+			rect(730,40,hpLoss2,15);
+	
+			//BLACK RECTS THAT WILL MAKE THE RP BAR APPEAR TO HAVE SHORTENED
+			noStroke();
+			rect(200,70,rpLoss1,10);
+			rect(780,70,rpLoss2,10);
+		}
+	
+		//DEFINING DISTANCES 
+		{
+			//DISTANCE B/W TWO CHARACTERS
+			d = (int)sqrt(sq(x2-x1)+sq(y2-y1));
+
+			//DISTANCE B/W BULLET AND CHARACTER 
+			d1 = (int)sqrt(sq(bulletX1-x2)+sq(bulletY1-y2));
+			d2 = (int)sqrt(sq(bulletX2-x1)+sq(bulletY2-y1));
+		}
+	
+	}
+
+////////////////////Mewtwo Attack
+
+if(+reversedTime == randomTime2)
+	{
+		mewAppear = 1;
+	}
+
+
+if (mewAppear == 1)
+	{
+		m = 1;
+		a = 0;
+		b = 20;
+
+	
+		while(m <= 17)
+			{
+			
+			if(sexyTime >= a && sexyTime <= b)
+				{
+					image(Mewtwo[m],850,450,126,104);
+				}
+			
+			m = m + 1;
+			a = a + 20;
+			b = b + 20;
+			
+			if(sexyTime > 320)
+				{
+					image(Mewtwo[17],850,450,126,104);
+				}
+	
+		}
+	
+		
+		m = 1;
+		a = 320;
+		b = 340;
+	
+		while(m <= 3)
+			{
+				if(sexyTime >= a && sexyTime <= b)
+					{
+						image(beam[m],-700,400,1584,176);
+					}
+				m = m + 1;
+				a = a + 20;
+				b = b + 20;
+			}
+			
+		if(sexyTime == 360)
+			{
+				beamAppear = 1;
+			}
+			
+		if(beamAppear == 1)
+	
+			{
+	
+				if(x1 > 0 && x1 < 884 && y1 > 424 && y1 < 600)
+					{
+						hurt1 = 1;
+			
+						if(hurt1 = 1)
+							{
+								hpLoss1 = hpLoss1 - 90;	
+							}
+					}
+		
+				if(x2 > 0 && x2 < 884 && y2 > 424 && y2 < 600)
+					{
+						hurt2 = 1;
+			
+						if(hurt2 = 1)
+							{
+								hpLoss2 = hpLoss2 + 90;	
+							}
+					}
+					
+				
+			}
+		
+		if(sexyTime == 360)
+			{
+				beamAppear = 0;
+			}
+			
+		fill(0,0,0);
+		text(sexyTime,250,100);
+		sexyTime = sexyTime + 3;
+	}
+
+	
+
+	
+	
+
+
+
+
+///////////////////////////////////////////////////////////////CHARACTER 2
+	
+	//MUDKIP - perfect 
+	if(character2 ==1)
+	{
+		//MOVEMENT
+		if (timeDmg2 == -1 && timeAtk2 == 20)
+		{
+			//STANDING LEFT
+			if (air2 == false && htravel2 == 0 && faceX2 == true)
+			{
+				image(mudIdleLL,x2,y2,38*2,37*2);
+				timeAnimate2 = 0;
+			}
+			
+			//STANDING RIGHT
+			if (air2 == false && htravel2 == 0 && faceX2 == false)
+			{
+				image(mudIdleRR,x2,y2,38*2,37*2);
+				timeAnimate2 = 0;
+			}	
+	
+			//MOVING LEFT 
+			if (air2 == false && htravel2 < 0)
+			{
+				timeAnimate2 = timeAnimate2 + 1;	
+				if (0 < timeAnimate2 && timeAnimate2 <= 5)
+				{
+					image(mudWalk1LL,x2,y2,38*2,37*2);
+				}
+				if (5 < timeAnimate2 && timeAnimate2 <= 10)
+				{
+					image(mudWalk2LL,x2,y2,38*2,37*2);
+				}
+				if (10 < timeAnimate2 && timeAnimate2 <= 15)
+				{
+					image(mudWalk3LL,x2,y2,38*2,37*2);
+				}		
+				if (15 < timeAnimate2 && timeAnimate2 <= 20)
+				{
+					image(mudWalk4LL,x2,y2,38*2,37*2);
+					timeAnimate2 = 0;
+				}		
+			}
+	
+			//MOVINT RIGHT
+			if (air2 == false && htravel2 > 0)
+			{
+				timeAnimate2 = timeAnimate2 + 1;	
+				if (0 < timeAnimate2 && timeAnimate2 <= 5)
+				{
+					image(mudWalk1RR,x2,y2,38*2,37*2);
+				}
+				if (5 < timeAnimate2 && timeAnimate2 <= 10)
+				{
+					image(mudWalk2RR,x2,y2,38*2,37*2);
+				}
+				if (10 < timeAnimate2 && timeAnimate2 <= 15)
+				{
+					image(mudWalk3RR,x2,y2,38*2,37*2);
+				}		
+				if (15 < timeAnimate2 && timeAnimate2 <= 20)
+				{
+					image(mudWalk4RR,x2,y2,38*2,37*2);
+					timeAnimate2 = 0;
+				}		
+			}	
+
+			//FALLING LEFT
+			if (air2 == true && vtravel2 >= 0 && faceX2 == true)
+			{
+				image(mudFallLL,x2,y2,38*2,37*2);
+			}
+			
+			//FALLING RIGHT
+			if (air2 == true && vtravel2 >= 0 && faceX2 == false)
+			{
+				image(mudFallRR,x2,y2,38*2,37*2);
+			}
+	
+			//JUMPING LEFT
+			if (air2 == true && vtravel2 < 0 && faceX2 == true)
+			{
+				image(mudWalk1LL,x2,y2,38*2,37*2);
+			}
+			//JUMPING RIGHT
+			if (air2 == true && vtravel2 < 0 && faceX2 == false)
+			{
+				image(mudWalk1RR,x2,y2,38*2,37*2);
+			}
+		}
+		
+		//DAMAGE
+		if (timeDmg2 >= 0 && timeDmg2 <= 15)
+		{
+			timeDmg2 = timeDmg2 + 1;
+			if (faceX2 == true)
+			{
+				image(mudDmgLL,x2,y2,38*2,37*2);		
+			}
+			if (faceX2 == false)
+			{
+				image(mudDmgRR,x2,y2,38*2,37*2);
+			}
+
+			if (timeDmg2 > 15)
+			{
+				timeDmg2 = -1;
+			}
+		}
+		
+		//ATTACK
+		if (timeAtk2 >= 0 && timeAtk2 <= 5 && timeDmg2 == -1)
+		{
+			timeAtk2 = timeAtk2 + 1;
+			if (faceX2 == true)
+			{
+				image(mudAtkLL,x2-6,y2+1,38*2,37*2);		
+			}
+			if (faceX2 == false)
+			{
+				image(mudAtkRR,x2+6,y2+1,38*2,37*2);
+			}
+			if (timeAtk2 > 5)
+			{
+				timeAtk2 = 20;
+			}
+		}
+		
+		//RANGE ATTACK CHARACTER ANIMATION
+		if (timeRAtk2 >= 0 && timeRAtk2 <= 5 && timeDmg2 == -1)
+		{
+			timeRAtk2 = timeRAtk2 + 1;
+			
+			if (faceX2 == true)
+			{
+				image(mudRAtkLL,x2,y2,38*2,37*2);
+			}
+			if (faceX2 == false)
+			{
+				image(mudRAtkRR,x2,y2,38*2,37*2);
+			}
+			if (timeRAtk2 > 5)
+			{
+				timeRAtk2 = -1;
+			}
+		}
+			
+		//RANGE ATTACK ITEM ANIMATION
+		if (timeItem2 >= 0 && timeItem2 <= 100 && lockBDirection2 ==0)
+		{
+			timeItem2 = timeItem2 + 1;
+			lockBDirection2 = 1;
+		}
+		//LEFT
+		if (bulletDirection2 == 2 && timeItem2 > -1)
+		{
+			image(mudItemLL,bulletX2+40,bulletY2+30,60,40);
+		}
+		//RIGHT
+		if (bulletDirection2 ==1 && timeItem2 > -1)
+		{
+			image(mudItemRR,bulletX2+40,bulletY2+30,60,40);
+		}		
+	}		
+
+	//PIKACHU - perfect
+	if(character2 == 2)
+	{
+		//MOVEMENT
+		if (timeDmg2 == -1 && timeAtk2 == 20 && timeRAtk2 == 20)
+		{
+			//STANDING LEFT
+			if (air2 == false && htravel2 == 0 && faceX2 == true)
+			{
+				image(pikaStandLL,x2,y2+7,35*2,37*2);
+				timeAnimate2 = 0;
+			}
+			
+			//STANDING RIGHT
+			if (air2 == false && htravel2 == 0 && faceX2 == false)
+			{
+				image(pikaStandRR,x2,y2+7,35*2,37*2);
+				timeAnimate2 = 0;
+			}	
+	
+			//MOVING LEFT 
+			if (air2 == false && htravel2 < 0)
+			{
+				pikaMoveLT2 = pikaMoveLT2 + 1;
+				int pikaMoveLa;
+				int pikaMoveLb; 
+				
+				pikaMoveLa = 0;
+				pikaMoveLb = 1;
+				
+				while (pikaMoveLb <= 6)			
+				{
+					if(pikaMoveLT2 >= pikaMoveLa && pikaMoveLT2 <= pikaMoveLa +5)
+					{
+						image(pikaWalkLL[pikaMoveLb], x2,y2+7,70,70);	
+					}
+					pikaMoveLa = pikaMoveLa  + 5;
+					pikaMoveLb = pikaMoveLb + 1;
+				}
+
+				if(pikaMoveLT2 > 25 && pikaMoveLT2 <=30)
+				{
+					image(pikaWalkLL[6], x2,y2+7,70,70);	
+					pikaMoveLT2 = 0;
+				}
+			}
+	
+			//MOVINT RIGHT
+			if (air2 == false && htravel2 > 0)
+			{
+				pikaMoveRT2 = pikaMoveRT2 + 1;
+				int pikaMoveRa;
+				int pikaMoveRb; 
+				
+				pikaMoveRa = 0;
+				pikaMoveRb = 1;
+				
+				while (pikaMoveRb <= 6)			
+				{
+					if(pikaMoveRT2 >= pikaMoveRa && pikaMoveRT2 <= pikaMoveRa +5)
+					{
+						image(pikaWalkRR[pikaMoveRb], x2,y2+7,70,70);	
+					}
+					pikaMoveRa = pikaMoveRa  + 5;
+					pikaMoveRb = pikaMoveRb + 1;
+				}
+
+				if(pikaMoveRT2 > 25 && pikaMoveRT2 <=30)
+				{
+					image(pikaWalkRR[6], x2,y2+7,70,70);	
+					pikaMoveRT2 = 0;
+				}		
+			}	
+
+			//FALLING LEFT
+			if (air2 == true && vtravel2 >= 0 && faceX2 == true)
+			{
+				image(pikaFallLL,x2,y2,38*2,37*2);
+			}
+			
+			//FALLING RIGHT
+			if (air2 == true && vtravel2 >= 0 && faceX2 == false)
+			{
+				image(pikaFallRR,x2,y2,38*2,37*2);
+			}
+	
+			//JUMPING LEFT
+			if (air2 == true && vtravel2 < 0 && faceX2 == true)
+			{
+				image(pikaJumpLL,x2,y2,38*2,37*2);
+			}
+			//JUMPING RIGHT
+			if (air2 == true && vtravel2 < 0 && faceX2 == false)
+			{
+				image(pikaJumpRR,x2,y2,38*2,37*2);
+			}
+		}
+		
+		//DAMAGE
+		if (timeDmg2 >= 0 && timeDmg2 <= 15 && timeRAtk2 == 20)
+		{
+			timeDmg2 = timeDmg2 + 1;
+			if (faceX2 == true)
+			{
+				image(pikaDmgLL,x2,y2,38*2,37*2);		
+			}
+			if (faceX2 == false)
+			{
+				image(pikaDmgRR,x2,y2,38*2,37*2);
+			}
+
+			if (timeDmg2 > 15)
+			{
+				timeDmg2 = -1;
+			}
+		}
+		
+		//ATTACK
+		if (timeAtk2 >= 0 && timeAtk2 <= 5 && timeDmg2 == -1 && timeRAtk2 == 20)
+		{
+			timeAtk2 = timeAtk2 + 1;
+			if (faceX2 == true)
+			{
+				image(pikaAtkLL,x2-6,y2+1,40*2,37*2);		
+			}
+			if (faceX2 == false)
+			{
+				image(pikaAtkRR,x2+6,y2+1,40*2,37*2);
+			}
+			if (timeAtk2 > 5)
+			{
+				timeAtk2 = 20;
+			}
+		}
+
+		//RANGE ATTACK CHARACTER ANIMATION
+		if (timeRAtk2 >= 0 && timeRAtk2 <= 15 && timeDmg2 == -1)
+		{
+			timeRAtk2 = timeRAtk2 + 1;
+			
+			if (faceX2 == true)
+			{
+				image(pikaRAtkLL,x2,y2,39*2,37*2);
+			}
+			if (faceX2 == false)
+			{
+				image(pikaRAtkRR,x2,y2,39*2,37*2);
+			}
+			if (timeRAtk2 > 15)
+			{
+				timeRAtk2 = 20;
+			}
+		}
+			
+		//RANGE ATTACK ITEM ANIMATION
+		if (timeItem2 >= 0 && timeItem2 <= 100 && lockBDirection2 ==0)
+		{
+			timeItem2 = timeItem2 + 1;
+			lockBDirection2 = 1;
+		}
+		//LEFT
+		if (bulletDirection2 == 2 && timeItem2 > -1)
+		{
+			image(pikaItem,bulletX2+40,bulletY2,70,70);
+		}
+		//RIGHT
+		if (bulletDirection2 ==1 && timeItem2 > -1)
+		{
+			image(pikaItem,bulletX2+40,bulletY2,70,70);
+		}
+	}
+	
+	//YOSHI - perfect 
+	if(character2 == 3)
+	{
+		//MOVEMENT
+		if (timeDmg2 == -1 && timeAtk2 == 20)
+		{
+			//STANDING LEFT
+			if (air2 == false && htravel2 == 0 && faceX2 == true && timeRAtk2 == 20)
+			{
+				image(yoshiStandLL,x2,y2+7,30*2,36*2);
+				timeAnimate2 = 0;
+			}
+			
+			//STANDING RIGHT
+			if (air2 == false && htravel2 == 0 && faceX2 == false && timeRAtk2 == 20)
+			{
+				image(yoshiStandRR,x2,y2+7,30*2,36*2);
+				timeAnimate2 = 0;
+			}	
+	
+			//MOVING LEFT 
+			if (air2 == false && htravel2 < 0 && timeRAtk2 == 20)
+			{
+				yoshiMoveLT2 = yoshiMoveLT2 + 1;
+				int yoshiMoveLa;
+				int yoshiMoveLb; 
+				
+				yoshiMoveLa = 0;
+				yoshiMoveLb = 1;
+				
+				while (yoshiMoveLb <= 8)			
+				{
+					if(yoshiMoveLT2 >= yoshiMoveLa && yoshiMoveLT2 <= yoshiMoveLa +5)
+					{
+						image(yoshiWalkLL[yoshiMoveLb], x2,y2+11,60,65);	
+					}
+					yoshiMoveLa = yoshiMoveLa  + 5;
+					yoshiMoveLb = yoshiMoveLb + 1;
+				}
+
+				if(yoshiMoveLT2 > 35 && yoshiMoveLT2 <=50)
+				{
+					image(yoshiWalkLL[8], x2,y2+11,60,65);	
+					yoshiMoveLT2 = 0;
+				}
+			}
+	
+			//MOVINT RIGHT
+			if (air2 == false && htravel2 > 0 && timeRAtk2 == 20)
+			{
+				yoshiMoveRT2 = yoshiMoveRT2 + 1;
+				int yoshiMoveRa;
+				int yoshiMoveRb; 
+				
+				yoshiMoveRa = 0;
+				yoshiMoveRb = 1;
+				
+				while (yoshiMoveRb <= 8)			
+				{
+					if(yoshiMoveRT2 >= yoshiMoveRa && yoshiMoveRT2 <= yoshiMoveRa +5)
+					{
+						image(yoshiWalkRR[yoshiMoveRb], x2,y2+11,60,65);	
+					}
+					yoshiMoveRa = yoshiMoveRa  + 5;
+					yoshiMoveRb = yoshiMoveRb + 1;
+				}
+
+				if(yoshiMoveRT2 > 35 && yoshiMoveRT2 <=40)
+				{
+					image(yoshiWalkRR[8], x2,y2+11,60,65);	
+					yoshiMoveRT2 = 0;
+				}		
+			}	
+
+			//FALLING LEFT
+			if (air2 == true && vtravel2 >= 0 && faceX2 == true && timeRAtk2 == 20)
+			{
+				image(yoshiFallLL,x2,y2,30*2,36*2);
+			}
+			
+			//FALLING RIGHT
+			if (air2 == true && vtravel2 >= 0 && faceX2 == false && timeRAtk2 == 20)
+			{
+				image(yoshiFallRR,x2,y2,30*2,36*2);
+			}
+	
+			//JUMPING LEFT
+			if (air2 == true && vtravel2 < 0 && faceX2 == true && timeRAtk2 == 20)
+			{
+				image(yoshiJumpLL,x2,y2,34*2,38*2);
+			}
+			//JUMPING RIGHT
+			if (air2 == true && vtravel2 < 0 && faceX2 == false && timeRAtk2 == 20)
+			{
+				image(yoshiJumpRR,x2,y2,34*2,38*2);
+			}
+		}
+		
+		//DMG
+		if (timeDmg2 >= 0 && timeDmg2 <= 15)
+		{
+			timeDmg2 = timeDmg2 + 1;
+			if (faceX2 == true)
+			{
+				image(yoshiDmgLL,x2,y2,38*2,37*2);		
+			}
+			if (faceX2 == false)
+			{
+				image(yoshiDmgRR,x2,y2,38*2,37*2);
+			}
+
+			if (timeDmg2 > 15)
+			{
+				timeDmg2 = -1;
+			}
+		}
+		
+		//ATTACK
+		if (timeAtk2 >= 0 && timeAtk2 <= 5 && timeDmg2 == -1)
+		{
+			timeAtk2 = timeAtk2 + 1;
+			if (faceX2 == true)
+			{
+				image(yoshiAtkLL,x2-6,y2-10,38*2,37*2);		
+			}
+			if (faceX2 == false)
+			{
+				image(yoshiAtkRR,x2+6,y2-10,38*2,37*2);
+			}
+			if (timeAtk2 > 5)
+			{
+				timeAtk2 = 20;
+			}
+		}
+		
+		//RANGE ATTACK CHARACTER ANIMATION
+		if (actYoshiRAtk2 == true && timeRAtk2 < 20)
+		{	
+			timeRAtk2 = timeRAtk2 +1;
+	
+			if(faceX2 == false)
+			{
+				yoshiRangeRa = 0;
+				yoshiRangeRb = 1;
+
+				while (yoshiRangeRb <= 4)			
+				{
+					if(timeRAtk2 >= yoshiRangeRa && timeRAtk2 <= yoshiRangeRa+5)
+					{
+						image(yoshiRAtkRR[yoshiRangeRb],x2-29,y2-9,35*2,40*2);	
+					}
+					yoshiRangeRa = yoshiRangeRa + 5;
+					yoshiRangeRb = yoshiRangeRb + 1;
+				}
+			}
+
+			if(faceX2 == true)
+			{
+				yoshiRangeLa = 0;
+				yoshiRangeLb = 1;
+	
+				while (yoshiRangeLb <= 4)			
+				{
+					if(timeRAtk2 >= yoshiRangeLa && timeRAtk2 <= yoshiRangeLa+5)
+					{
+						image(yoshiRAtkLL[yoshiRangeLb],x2-29,y2-9,35*2,40*2);	
+					}
+					yoshiRangeLa = yoshiRangeLa + 5;
+					yoshiRangeLb = yoshiRangeLb + 1;
+		
+				}
+			}
+	
+		}
+		
+		//RANGE ATTACK ITEM ANIMATION
+		if (timeItem2 >= 0 && timeItem2 <= 100 && lockBDirection2 ==0)
+		{
+			timeItem2 = timeItem2 + 1;
+			lockBDirection2 = 1;
+		}
+		//LEFT
+		if (bulletDirection2 == 2 && timeItem2 > -1)
+		{
+			image(yoshiItemLL,bulletX2+40,bulletY2+10,40,30);
+		}
+		//RIGHT
+		if (bulletDirection2 ==1 && timeItem2 > -1)
+		{
+			image(yoshiItemRR,bulletX2+40,bulletY2+10,40,30);
+		}
+	}	
+
+	//MARIO - range attack animation is weird
+	if(character2 == 4)
+	{
+		//MOVEMENT
+		if (timeDmg2 == -1 && timeAtk2 == 20 && timeRAtk2 == 20)
+		{
+			//STANDING LEFT
+			if (air2 == false && htravel2 == 0 && faceX2 == true)
+			{
+				image(marioStandLL,x2,y2+15,20*2,30*2);
+				timeAnimate2 = 0;
+			}
+			
+			//STANDING RIGHT
+			if (air2 == false && htravel2 == 0 && faceX2 == false)
+			{
+				image(marioStandRR,x2,y2+15,20*2,30*2);
+				timeAnimate2 = 0;
+			}	
+	
+			//MOVING LEFT 
+			if (air2 == false && htravel2 < 0)
+			{
+				marioWalkLT = marioWalkLT + 1;
+				int marioMoveLa;
+				int marioMoveLb; 
+				
+				marioMoveLa = 0;
+				marioMoveLb = 1;
+				
+				while (marioMoveLb <= 8)			
+				{
+					if(marioWalkLT >= marioMoveLa && marioWalkLT <= marioMoveLa +5)
+					{
+						image(marioWalkLL[marioMoveLb], x2,y2+15,40,60);	
+					}
+					marioMoveLa = marioMoveLa  + 5;
+					marioMoveLb = marioMoveLb + 1;
+				}
+
+				if(marioWalkLT > 35 && marioWalkLT <=40)
+				{
+					image(marioWalkLL[8], x2,y2+15,40,60);	
+					marioWalkLT = 0;
+				}
+			}
+	
+			//MOVINT RIGHT
+			if (air2 == false && htravel2 > 0)
+			{
+				marioWalkRT = marioWalkRT + 1;
+				int marioMoveRa;
+				int marioMoveRb; 
+				
+				marioMoveRa = 0;
+				marioMoveRb = 1;
+				
+				while (marioMoveRb <= 8)			
+				{
+					if(marioWalkRT >= marioMoveRa && marioWalkRT <= marioMoveRa +5)
+					{
+						image(marioWalkRR[marioMoveRb], x2,y2+15,40,60);	
+					}
+					marioMoveRa = marioMoveRa  + 5;
+					marioMoveRb = marioMoveRb + 1;
+				}
+
+				if(marioWalkRT > 35 && marioWalkRT <=40)
+				{
+					image(marioWalkRR[8], x2,y2+15,40,60);	
+					marioWalkRT = 0;
+				}		
+			}	
+
+			//FALLING LEFT
+			if (air2 == true && vtravel2 >= 0 && faceX2 == true)
+			{
+				image(marioFallLL,x2,y2,23*2,30*2);
+			}
+			
+			//FALLING RIGHT
+			if (air2 == true && vtravel2 >= 0 && faceX2 == false)
+			{
+				image(marioFallRR,x2,y2,20*2,30*2);
+			}
+	
+			//JUMPING LEFT
+			if (air2 == true && vtravel2 < 0 && faceX2 == true)
+			{
+				image(marioJumpLL,x2,y2,20*2,30*2);
+			}
+			//JUMPING RIGHT
+			if (air2 == true && vtravel2 < 0 && faceX2 == false)
+			{
+				image(marioJumpRR,x2,y2,20*2,30*2);
+			}
+		}
+		
+		//DAMAGE
+		if (timeDmg2 >= 0 && timeDmg2 <= 15 && timeRAtk2 == 20)
+		{
+			timeDmg2 = timeDmg2 + 1;
+			if (faceX2 == true)
+			{
+				image(marioDmgLL,x2,y2,20*2,30*2);		
+			}
+			if (faceX2 == false)
+			{
+				image(marioDmgRR,x2,y2,20*2,30*2);
+			}
+
+			if (timeDmg2 > 15)
+			{
+				timeDmg2 = -1;
+			}
+		}
+		
+		//ATTACK 
+		if (actAniMario == true && timeAtk2 < 20 && timeRAtk2 == 20)
+			{
+				timeAtk2 = timeAtk2 +1;
+		
+				if(faceX2 == false)
+				{
+					marioAtkRa = 0;
+					marioAtkRb = 1;
+
+					while (marioAtkRb <= 4)			
+					{
+						if(timeAtk2 >= marioAtkRa && timeAtk2 <= marioAtkRa+5)
+						{
+							image(marioAtkRR[marioAtkRb],x2-29,y2-20,48*2,50*2);	
+						}
+						marioAtkRa = marioAtkRa + 5;
+						marioAtkRb = marioAtkRb + 1;
+			
+					}
+				}
+	
+				if(faceX2 == true)
+				{
+					marioAtkLa = 0;
+					marioAtkLb = 1;
+		
+					while (marioAtkLb <= 4)			
+					{
+						if(timeAtk2 >= marioAtkLa && timeAtk2 <= marioAtkLa+5)
+						{
+							image(marioAtkLL[marioAtkLb],x2-29,y2-20,48*2,50*2);	
+						}
+						marioAtkLa = marioAtkLa + 5;
+						marioAtkLb = marioAtkLb + 1;
+			
+					}
+				}
+		
+			}
+			
+		//RANGE ATTACK CHARACTER ANIMATION
+		if (actMarioRAtk2 == true && timeRAtk2 < 20)
+		{	
+			timeRAtk2 = timeRAtk2 +1;
+	
+			if(faceX2 == false)
+			{
+				marioRangeRa1 = 0;
+				marioRangeRb1 = 1;
+
+				while (marioRangeRb1 <= 2)			
+				{
+					if(timeRAtk2 >= marioRangeRa1 && timeRAtk2 <= marioRangeRa1+5)
+					{
+						image(marioRAtkRR[marioRangeRb1],x2-13,y2-20,40*2,45*2);	
+					}
+					marioRangeRa1 = marioRangeRa1 + 5;
+					marioRangeRb1 = marioRangeRb1 + 1;
+				}
+			}
+
+			if(faceX2 == true)
+			{
+				marioRangeLa1 = 0;
+				marioRangeLb1 = 1;
+	
+				while (marioRangeLb1 <= 2)			
+				{
+					if(timeRAtk2 >= marioRangeLa1 && timeRAtk2 <= marioRangeLa1 +5)
+					{
+						image(marioRAtkLL[marioRangeLb1],x2-13,y2-20,40*2,45*2);	
+					}
+					marioRangeLa1 = marioRangeLa1 + 5;
+					marioRangeLb1 = marioRangeLb1 + 1;
+		
+				}
+			}
+		}
+		
+		//RANGE ATTACK ITEM ANIMATION
+		if (timeItem2 >= 0 && timeItem2 <= 100 && lockBDirection2 ==0)
+		{
+			timeItem2 = timeItem2 + 1;
+			lockBDirection2 = 1;
+		}
+		//LEFT
+		if (bulletDirection2 == 2 && timeItem2 > -1)
+		{
+			image(marioItemLL,bulletX2+40,bulletY2+30,50,20);
+		}
+		//RIGHT
+		if (bulletDirection2 ==1 && timeItem2 > -1)
+		{
+			image(marioItemRR,bulletX2+40,bulletY2+30,50,20);
+		}
+	}	
+	
+	//KIRBY - perfect 
+	if(character2 == 5)
+	{
+		//MOVEMENT
+		if (timeDmg2 == -1 && timeAtk2 == 20 && timeRAtk2 == 20)
+		{
+			//STANDING LEFT
+			if (air2 == false && htravel2 == 0 && faceX2 == true)
+			{
+				image(standL1,x2,y2+6,25*2,35*2);
+				timeAnimate2 = 0;
+			}
+			
+			//STANDING RIGHT
+			if (air2 == false && htravel2 == 0 && faceX2 == false)
+			{
+				image(standR1,x2,y2+6,25*2,35*2);
+				timeAnimate2 = 0;
+			}	
+	
+			//MOVING LEFT 
+			if (air2 == false && htravel2 < 0)
+			{
+				moveLT1 = moveLT1 + 1;
+				int kirbyMoveLa;
+				int kirbyMoveLb; 
+				
+				kirbyMoveLa = 0;
+				kirbyMoveLb = 1;
+				
+				while (kirbyMoveLb <= 8)			
+				{
+					if(moveLT1 >= kirbyMoveLa && moveLT1 <= kirbyMoveLa +5)
+					{
+						image(moveL1[kirbyMoveLb], x2,y2+6,60,70);	
+					}
+					kirbyMoveLa = kirbyMoveLa  + 5;
+					kirbyMoveLb = kirbyMoveLb + 1;
+				}
+
+				if(moveLT1 > 35 && moveLT1 <=40)
+				{
+					image(moveL1[8], x2,y2,60,70);	
+					moveLT1 = 0;
+				}
+			}
+	
+			//MOVINT RIGHT
+			if (air2 == false && htravel2 > 0)
+			{
+				moveRT1 = moveRT1 + 1;
+				int kirbyMoveRa;
+				int kirbyMoveRb; 
+				
+				kirbyMoveRa = 0;
+				kirbyMoveRb = 1;
+				
+				while (kirbyMoveRb <= 8)			
+				{
+					if(moveRT1 >= kirbyMoveRa && moveRT1 <= kirbyMoveRa +5)
+					{
+						image(moveR1[kirbyMoveRb], x2,y2+6,60,70);	
+					}
+					kirbyMoveRa = kirbyMoveRa  + 5;
+					kirbyMoveRb = kirbyMoveRb + 1;
+				}
+
+				if(moveRT1 > 35 && moveRT1 <=40)
+				{
+					image(moveR1[8],x2,y2,60,70);	
+					moveRT1 = 0;
+				}		
+			}	
+
+			//FALLING LEFT
+			if (air2 == true && vtravel2 >= 0 && faceX2 == true)
+			{
+				image(fallL1,x2,y2,28*2,37*2);
+			}
+			
+			//FALLING RIGHT
+			if (air2 == true && vtravel2 >= 0 && faceX2 == false)
+			{
+				image(fallR1,x2,y2,28*2,37*2);
+			}
+	
+			//JUMPING LEFT
+			if (air2 == true && vtravel2 < 0 && faceX2 == true)
+			{
+				image(jumpL1,x2,y2,33*2,38*2);
+			}
+			//JUMPING RIGHT
+			if (air2 == true && vtravel2 < 0 && faceX2 == false)
+			{
+				image(jumpR1,x2,y2,33*2,38*2);
+			}
+		}
+		
+		//DMG
+		if (timeDmg2 >= 0 && timeDmg2 <= 15 && timeRAtk2 == 20)
+		{
+			timeDmg2 = timeDmg2 + 1;
+			if (faceX2 == true)
+			{
+				image(damageL1,x2,y2,38*2,37*2);		
+			}
+			if (faceX2 == false)
+			{
+				image(damageR1,x2,y2,38*2,37*2);
+			}
+
+			if (timeDmg2 > 15)
+			{
+				timeDmg2 = -1;
+			}
+		}
+			
+		//ATTACK RIGHT AND LEFT
+		if (actAniKirby2 == true && timeAtk2 < 20  && timeRAtk2 == 20)
+			{
+				timeAtk2 = timeAtk2 +1;
+		
+				if(faceX2 == false)
+				{
+					kirbyAtkRa = 0;
+					kirbyAtkRb = 1;
+
+					while (kirbyAtkRb <= 4)			
+					{
+						if(timeAtk2 >= kirbyAtkRa && timeAtk2 <= kirbyAtkRa+5)
+						{
+							image(attackR1[kirbyAtkRb],x2,y2+11,61*2,41*2);	
+						}
+						kirbyAtkRa = kirbyAtkRa + 5;
+						kirbyAtkRb = kirbyAtkRb + 1;
+			
+					}
+				}
+	
+				if(faceX2 == true)
+				{
+					kirbyAtkLa = 0;
+					kirbyAtkLb = 1;
+		
+					while (kirbyAtkLb <= 4)			
+					{
+						if(timeAtk2 >= kirbyAtkLa && timeAtk2 <= kirbyAtkLa+5)
+						{
+							image(attackL1[kirbyAtkLb],x2-67,y2+11,61*2,41*2);	
+						}
+						kirbyAtkLa = kirbyAtkLa + 5;
+						kirbyAtkLb = kirbyAtkLb + 1;
+			
+					}
+				}
+		
+			}
+	
+		//RANGE ATTACK CHARACTER ANIMATION
+		if (timeRAtk2 >= 0 && timeRAtk2 <= 15 && timeDmg2 == -1)
+		{
+			timeRAtk2 = timeRAtk2 + 1;
+			
+			if (faceX2 == true)
+			{
+				image(kirbyRAtkLL,x2-40,y2,48*2,37*2);
+			}
+			if (faceX2 == false)
+			{
+				image(kirbyRAtkRR,x2,y2,48*2,37*2);
+			}
+			if (timeRAtk2 > 15)
+			{
+				timeRAtk2 = 20;
+			}
+		}
+			
+		//RANGE ATTACK ITEM ANIMATION
+		if (timeItem2 >= 0 && timeItem2 <= 100 && lockBDirection2 ==0)
+		{
+			timeItem2 = timeItem2 + 1;
+			lockBDirection2 = 1;
+		}
+		//LEFT
+		if (bulletDirection2 == 2 && timeItem2 > -1)
+		{
+			image(kirbyItemLL,bulletX2+40,bulletY2+50,50,20);
+		}
+		//RIGHT
+		if (bulletDirection2 ==1 && timeItem2 > -1)
+		{
+			image(kirbyItemRR,bulletX2+40,bulletY2+50,50,20);
+		}
+				
+			
+	}	
+	
+	//////////////////TIME LIMIT////////////////////////
+	
+	if (second() == 0)
+    {
+        if (q == 0)
+        {
+            minuteMultiplier = minuteMultiplier + 1;
+            q = 5;
+        }
+    }
+    else
+    {
+    	q = 0;
+    }
+
+
+    if (recordTime == false)
+    {
+        recordTime = true;
+        initialTime = second();
+    }
+    //                                 25..59   - 25
+    newSecond = minuteMultiplier*60 + second() - initialTime;
+    reversedTime = 99 - newSecond;
+    
+   	textFont(basictitle,60);
+    fill(255,255,255);
+    text(+reversedTime,450,55);
+    
+    
+    totalHpLoss1= lengthStart1 +hpLoss1;
+	totalHpLoss2= lengthStart2 -hpLoss2;
+	
+	
+	   if (+reversedTime ==0)
+    {
+		if (totalHpLoss1 > totalHpLoss2)
+			{
+			winner1 = 1;
+			}
+			
+		if (totalHpLoss2 > totalHpLoss1)
+			{
+			winner2 = 1;
+			}
+		
+		if(totalHpLoss2 == totalHpLoss1)
+			{winner1 = 1;
+			winner2=1
+			}
+
+	}
+
+	//GRAVITY EQUATION 
+	vtravel2 = (time2^2)/2;
+	
+	//PURE MOTION (2)
+	{
+	//////////////////////////////PLATFORMING/////////////////////////////	
+	
+	if (x2 > 45 && x2 < 280 && y2 > 315 && y2 < 330 && up2 == false)	
+		{
+			platform2 = true; 
+		}
+		if (x2 > 640 && x2 < 880 && y2 > 315 && y2 < 330 && up2 == false)
+		{
+			platform2 = true;
+		}
+	
+		if (platform2 == true)
+		{
+			if (y2 > 325)
+			{
+				y2 = 325;
+				air2 = false;
+				up2 = false;
+				airlock2 = false;
+			}
+		}
+		
+		if (x2 < 45 && platform2 == true)
+		{
+			platform2 = false;
+			air2 = true;
+		}
+		
+		if (x2 > 280 && x2 < 640 && platform2 == true)
+		{
+			platform2 = false;
+			air2 = true;
+		}
+	
+		if (x2 > 880 && platform2 == true)
+		{
+			platform2 = false;
+			air2 = true;
+		}	
+		
+	//////////////////////MOTION CONTROL////////////////////////////////	
+		
+		if (up2 == true)
+		{
+			y2 = y2 + vtravel2;
+		}
+		if (time2 > 0 && up2 == false)
+		{
+			y2 = y2 + vtravel2;
+		}
+		if (air2 == true)
+		{
+			time2 = time2 + 1;
+		}
+		if (air2 == false)
+		{
+			time2 = 0;
+		}
+	
+		if (y2 > 490)
+		{
+			y2 = 490;
+			air2 = false;
+			airlock2 = false;
+		}
+		if (time2 > -10 && time2 < -1)
+		{
+			up2 = false;
+		}
+
+		if (airlock2 == false)
+		{
+			if(left2 == true )
+			{
+				htravel2 = -7;
+			}
+			if(right2 == true)
+			{
+				htravel2 = 7;
+			}	
+			if(left2 == false && right2 == false)
+			{
+				htravel2 = 0;
+			}
+		}	
+	
+		//INERTIA THINGY
+		if (airlock2 == true)
+		{
+			if(keyPressed == true && key == 'j')
+			{	
+				htravel2 = -3;
+			}
+
+			if(keyPressed == true && key == 'l')
+			{
+				htravel2 =  3;
+			}	
+		}
+	
+		x2 = x2 + htravel2; 
+
+	
+//////////////////////////////// MELEE  ///////////////////////
+		if(attack2 == 1 && sAtkLock2 == false)
+		{
+			soundManager.play("s0");
+			sAtkLock2 = true;		
+		}
+		if(attack2 == 1 && d < 55)
+			{
+				damage2 = 1;
+			}
+		if(damage2 == 1 && lockAttack2 ==0)
+			{
+				hpLoss1 = hpLoss1 - 20;	
+				lockAttack2 = 1;
+				timeDmg1 = 0;
+				soundManager.play("s1");
+			}
+		if(lockAttack2 ==1)
+			{
+				damage2 = 0;
+			}
+	
+	
+		//TURNS YELLOW WHEN DAMAGE > 100
+		if(hpLoss1 <= -100)
+			{
+				r1 = 255;
+				g1 = 255;
+				b1 = 0;
+				fill(r1,g1,b1);
+				stroke(0,0,0);
+				strokeWeight(1);
+				rect(50,40,length1,15,3,3,3,3);
+			
+				noStroke();
+				fill(0,0,0);
+				rect(250,40,hpLoss1,15);
+			}
+	
+		//TURNS RED WHEN DAMAGE > 150
+		if(hpLoss1 <= -150)
+			{
+				r1 = 255;
+				g1 = 0;
+				b1 = 0;
+				fill(r1,g1,b1);
+				stroke(0,0,0);
+				strokeWeight(1);
+				rect(50,40,length1,15,3,3,3,3);
+			
+				noStroke();
+				fill(0,0,0);
+				rect(250,40,hpLoss1,15);
+			}
+		
+		if(hpLoss1 < -200)
+		{
+			hpLoss1 = -200;
+		}
+		
+		if(hpLoss1 >0)
+		{
+			hpLoss1 = 0;
+		}
+		
+		//WINNER
+		if(hpLoss1 == -200)
+			{
+				winner2 = 1;
+			}
+			
+/////////////////////// RANGE ATTACK /////////////////////
+
+		if(shooting2 ==1 && sRAtkLock2 == false)
+		{
+			soundManager.play("s2");
+			sRAtkLock2 = true;
+		}
+		
+		//RANGE ATTACK RIGHT
+		if(shooting2 == 1 && faceX2 ==false && lockDirection2 == 0)
+		{
+			bulletDirection2 = 1;	
+			rpLoss2 = 150;
+			lockDirection2 = 1;
+		}
+		if(bulletDirection2 ==1)
+		{
+			bulletX2 = bulletX2 + 20;
+		}
+	
+		if(bulletX2 > 1000)
+		{
+			shooting2 = 0;
+			lockDirection2 = 0;
+			timeItem2 = -1;
+		}
+	
+	
+		//RANGE ATTACK LEFT
+		if(shooting2 == 1 && faceX2 == true && lockDirection2 == 0)
+		{
+			bulletDirection2 = 2;	
+			rpLoss2 = 150;
+			lockDirection2 = 1;
+		}
+		if(bulletDirection2 ==2)
+		{
+			bulletX2 = bulletX2 - 20;
+		}
+	
+		if(bulletX2 < -80)
+		{
+			shooting2 = 0;
+			lockDirection2 = 0;
+			timeItem2 = -1;
+		}
+		
+		//DAMAGE CAUSED BY BULLET
+		if(d2 <= 70 && rangeDamage2 == 1 && shooting2 == 1)
+			{
+				hpLoss1 = hpLoss1 - 30;
+				rangeDamage2 = 0;
+				timeDmg1 = 0;
+				soundManager.play("s1");
+			}
+
+///////////////////THE REFRACTORY PERIOD///////////////////////
+		if(rpRepair2 ==1 )
+		{
+			rpLoss2 = rpLoss2 - 0.5;
+			shootAct2 = 0;
+		
+		}
+		if(rpLoss2 == 0)
+		{
+			rpRepair2 = 0;
+			shootAct2 = 1;
+			rangeDamage2 = 1;
+		
+		}
+	
+		if(rpLoss2 >= 150)
+		{
+			rpRepair2 = 1;
+			shootAct2 = 0;
+			sRAtkLock2 = false;
+		}
+
+	}
+	
+////////////////////////////////////////////////////////////CHARACTER 1 
+	
+	//MUDKIP - perfect 
+	if(character1 ==1)
+	{
+		if (timeDmg1 == -1 && timeAtk1 == 20)
+		{
+			//STANDING LEFT
+			if (air1 == false && htravel1 == 0 && faceX1 == true)
+			{
+				image(mudIdleLL,x1,y1,38*2,37*2);
+				timeAnimate1 = 0;
+			}
+			
+			//STANDING RIGHT
+			if (air1 == false && htravel1 == 0 && faceX1 == false)
+			{
+				image(mudIdleRR,x1,y1,38*2,37*2);
+				timeAnimate1 = 0;
+			}	
+	
+			//MOVING LEFT 
+			if (air1 == false && htravel1 < 0)
+			{
+				timeAnimate1 = timeAnimate1 + 1;	
+				if (0 < timeAnimate1 && timeAnimate1 <= 5)
+				{
+					image(mudWalk1LL,x1,y1,38*2,37*2);
+				}
+				if (5 < timeAnimate1 && timeAnimate1 <= 10)
+				{
+					image(mudWalk2LL,x1,y1,38*2,37*2);
+				}
+				if (10 < timeAnimate1 && timeAnimate1 <= 15)
+				{
+					image(mudWalk3LL,x1,y1,38*2,37*2);
+				}		
+				if (15 < timeAnimate1 && timeAnimate1 <= 20)
+				{
+					image(mudWalk4LL,x1,y1,38*2,37*2);
+					timeAnimate1 = 0;
+				}		
+			}
+	
+			//MOVINT RIGHT
+			if (air1 == false && htravel1 > 0)
+			{
+				timeAnimate1 = timeAnimate1 + 1;	
+				if (0 < timeAnimate1 && timeAnimate1 <= 5)
+				{
+					image(mudWalk1RR,x1,y1,38*2,37*2);
+				}
+				if (5 < timeAnimate1 && timeAnimate1 <= 10)
+				{
+					image(mudWalk2RR,x1,y1,38*2,37*2);
+				}
+				if (10 < timeAnimate1 && timeAnimate1 <= 15)
+				{
+					image(mudWalk3RR,x1,y1,38*2,37*2);
+				}		
+				if (15 < timeAnimate1 && timeAnimate1 <= 20)
+				{
+					image(mudWalk4RR,x1,y1,38*2,37*2);
+					timeAnimate1 = 0;
+				}		
+			}	
+
+			//FALLING LEFT
+			if (air1 == true && vtravel1 >= 0 && faceX1 == true)
+			{
+				image(mudFallLL,x1,y1,38*2,37*2);
+			}
+			
+			//FALLING RIGHT
+			if (air1 == true && vtravel1 >= 0 && faceX1 == false)
+			{
+				image(mudFallRR,x1,y1,38*2,37*2);
+			}
+	
+			//JUMPING LEFT
+			if (air1 == true && vtravel1 < 0 && faceX1 == true)
+			{
+				image(mudWalk1LL,x1,y1,38*2,37*2);
+			}
+			
+			//JUMPING RIGHT
+			if (air1 == true && vtravel1 < 0 && faceX1 == false)
+			{
+				image(mudWalk1RR,x1,y1,38*2,37*2);
+			}
+		}
+		
+		//DMG
+		if (timeDmg1 >= 0 && timeDmg1 <= 15)
+		{
+			timeDmg1 = timeDmg1 + 1;
+			if (faceX1 == true)
+			{
+				image(mudDmgLL,x1,y1,38*2,37*2);		
+			}
+			if (faceX1 == false)
+			{
+				image(mudDmgRR,x1,y1,38*2,37*2);
+			}
+
+			if (timeDmg1 > 15)
+			{
+				timeDmg1 = -1;
+			}
+		}
+		
+		//ATTACK
+		if (timeAtk1 >= 0 && timeAtk1 <= 5 && timeDmg1 == -1)
+		{
+			timeAtk1 = timeAtk1 + 1;
+			if (faceX1 == true)
+			{
+				image(mudAtkLL,x1-6,y1+1,38*2,37*2);		
+			}
+			if (faceX1 == false)
+			{
+				image(mudAtkRR,x1+6,y1+1,38*2,37*2);
+			}
+			if (timeAtk1 > 5)
+			{
+				timeAtk1 = 20;
+			}
+		}
+		
+		//RANGE ATTACK CHARACTER ANIMATION
+		if (timeRAtk1 >= 0 && timeRAtk1 <= 5 && timeDmg1 == -1)
+		{
+			timeRAtk1 = timeRAtk1 + 1;
+			
+			if (faceX1 == true)
+			{
+				image(mudRAtkLL,x1,y1,38*2,37*2);
+			}
+			if (faceX1 == false)
+			{
+				image(mudRAtkRR,x1,y1,38*2,37*2);
+			}
+			if (timeRAtk1 > 5)
+			{
+				timeRAtk1 = -1;
+			}
+		}
+		
+		//RANGE ATTACK ITEM ANIMATION
+		if (timeItem1 >= 0 && timeItem1 <= 100 && lockBDirection1 ==0)
+		{
+			timeItem1 = timeItem1 + 1;
+			lockBDirection1 = 1;
+		}
+		//LEFT
+		if (bulletDirection1 == 2 && timeItem1 > -1)
+		{
+			image(mudItemLL,bulletX1+40,bulletY1+30,60,40);
+		}
+		//RIGHT
+		if (bulletDirection1 ==1 && timeItem1 > -1)
+		{
+			image(mudItemRR,bulletX1+40,bulletY1+30,60,40);
+		}
+
+	}	
+	
+	//PIKACHU - perfect
+	if(character1 == 2)
+	{
+		//STANDING LEFT 
+		if (air1 == false && htravel1 == 0 && faceX1 == true && timeAtk1 == 20 && timeDmg1 == -1 && timeRAtk1 == 20)
+		{
+			image(pikaStandLL,x1,y1+7,35*2,37*2);
+		}
+		
+		//STANDING RIGHT
+		if (air1 == false && htravel1 == 0 && faceX1 == false && timeAtk1 == 20 && timeDmg1 == -1 && timeRAtk1 == 20)
+		{
+			image(pikaStandRR,x1,y1+7,35*2,37*2);
+		}	
+	
+		//MOVING LEFT 
+		if (air1 == false && htravel1 < 0 && timeRAtk1 == 20)
+		{
+			pikaMoveLT1 = pikaMoveLT1 +1;
+			pikMoveLa1 = 0;
+			pikMoveLb1 = 1;
+			
+			while (pikMoveLb1 <= 6)			
+			{
+				if(pikaMoveLT1 >= pikMoveLa1 && pikaMoveLT1 <= pikMoveLa1+5)
+				{
+					image(pikaWalkLL[pikMoveLb1],x1,y1+7,70,70);	
+				}
+				pikMoveLa1 = pikMoveLa1 + 5;
+				pikMoveLb1 = pikMoveLb1 + 1;
+			}
+			
+			if(pikaMoveLT1 > 25 && pikaMoveLT1 <=30)
+			{
+				image(pikaWalkLL[6], x1,y1+7,70,70);	
+				pikaMoveLT1 = 0;
+			}		
+		}
+	
+		//MOVINT RIGHT
+		if (air1 == false && htravel1 > 0 && timeRAtk1 == 20)
+		{
+			pikMoveRa1 = 0;
+			pikMoveRb1 = 1;
+			pikaMoveRT1 = pikaMoveRT1 + 1; 
+			
+			while (pikMoveRb1 <= 8)			
+			{
+				if(pikaMoveRT1 >= pikMoveRa1 && pikaMoveRT1 <= pikMoveRa1 +5)
+				{
+					image(pikaWalkRR[pikMoveRb1], x1,y1+7,70,70);	
+				}
+				pikMoveRa1 = pikMoveRa1  + 5;
+				pikMoveRb1 = pikMoveRb1 + 1;
+			}
+			if(pikaMoveRT1 > 25 && pikaMoveRT1 <=30)
+			{
+				image(pikaWalkRR[6],x1,y1+7,70,70);	
+				pikaMoveRT1 = 0;
+			}
+		}	
+
+		//FALLING LEFT
+		if (air1 == true && vtravel1 >= 0 && faceX1 == true && timeAtk1 ==20 && timeRAtk1 == 20)
+		{
+			image(pikaFallLL,x1,y1,38*2,37*2);
+		}
+		
+		//FALLING RIGHT
+		if (air1 == true && vtravel1 >= 0 && faceX1 == false && timeAtk1 ==20 && timeRAtk1 == 20)
+		{
+			image(pikaFallRR,x1,y1,38*2,37*2);
+		}
+	
+		//JUMPING LEFT 
+		if (air1 == true && vtravel1 < 0 && faceX1 == true && timeAtk1 ==20 && timeRAtk1 == 20)
+		{
+			image(pikaJumpLL,x1,y1,38*2,37*2);
+
+		}
+		//JUMPING RIGHT
+		if (air1 == true && vtravel1 < 0 && faceX1 == false && timeAtk1 ==20 && timeRAtk1 == 20)
+		{
+			image(pikaJumpRR,x1,y1,38*2,37*2);
+		}
+		
+		//DAMAGE RIGHT AND LEFT
+		if (timeDmg1 >= 0 && timeDmg1 <= 15)
+			{
+				timeDmg1 = timeDmg1 + 1;
+				if (faceX1 == true)
+				{
+					image(pikaDmgLL,x1,y1,38*2,37*2);		
+				}
+				if (faceX1 == false)
+				{
+					image(pikaDmgRR,x1,y1,38*2,37*2);
+				}
+
+				if (timeDmg1 > 15)
+				{
+					timeDmg1 = -1;
+				}
+			}
+		
+		//ATTACK
+		if (timeAtk1 >= 0 && timeAtk1 <= 5 && timeDmg1 == -1 && timeRAtk1 == 20)
+		{
+			timeAtk1 = timeAtk1 + 1;
+			if (faceX1 == true)
+			{
+				image(pikaAtkLL,x1-6,y1+1,40*2,37*2);		
+			}
+			if (faceX1 == false)
+			{
+				image(pikaAtkRR,x1+6,y1+1,40*2,37*2);
+			}
+			if (timeAtk1 > 5)
+			{
+				timeAtk1 = 20;
+			}
+		}
+		//RANGE ATTACK CHARACTER ANIMATION
+		if (timeRAtk1 >= 0 && timeRAtk1 <= 15 && timeDmg1 == -1)
+		{
+			timeRAtk1 = timeRAtk1 + 1;
+			
+			if (faceX1 == true)
+			{
+				image(pikaRAtkLL,x1,y1,39*2,37*2);
+			}
+			if (faceX1 == false)
+			{
+				image(pikaRAtkRR,x1,y1,39*2,37*2);
+			}
+			if (timeRAtk1 > 15)
+			{
+				timeRAtk1 = 20;
+			}
+		}
+			
+		//RANGE ATTACK ITEM ANIMATION
+		if (timeItem1 >= 0 && timeItem1 <= 100 && lockBDirection1 ==0)
+		{
+			timeItem1 = timeItem1 + 1;
+			lockBDirection1 = 1;
+		}
+		//LEFT
+		if (bulletDirection1 == 2 && timeItem1 > -1)
+		{
+			image(pikaItem,bulletX1+40,bulletY1,70,70);
+		}
+		//RIGHT
+		if (bulletDirection1 ==1 && timeItem1 > -1)
+		{
+			image(pikaItem,bulletX1+40,bulletY1,70,70);
+		}
+				
+			
+	}
+	
+	//YOSHI - perfect 
+	if(character1 == 3)
+	{
+		//STANDING LEFT 
+		if (air1 == false && htravel1 == 0 && faceX1 == true && timeAtk1 == 20 && timeDmg1 == -1 && timeRAtk1 == 20)
+		{
+			image(yoshiStandLL,x1,y1+7,30*2,36*2);
+		}
+		
+		//STANDING RIGHT
+		if (air1 == false && htravel1 == 0 && faceX1 == false && timeAtk1 == 20 && timeDmg1 == -1 && timeRAtk1 == 20)
+		{
+			image(yoshiStandRR,x1,y1+7,30*2,36*2);
+		}	
+	
+		//MOVING LEFT 
+		if (air1 == false && htravel1 < 0 && timeRAtk1 == 20)
+		{
+			yoshiMoveLT2 = yoshiMoveLT2 +1;
+			yoshMoveLa = 0;
+			yoshMoveLb = 1;
+			
+			while (yoshMoveLb <= 6)			
+			{
+				if(yoshiMoveLT2 >= yoshMoveLa && yoshiMoveLT2 <= yoshMoveLa+5)
+				{
+					image(yoshiWalkLL[yoshMoveLb],x1,y1+11,60,65);	
+				}
+				yoshMoveLa = yoshMoveLa + 5;
+				yoshMoveLb = yoshMoveLb + 1;
+			}
+			
+			if(yoshiMoveLT2 > 25 && yoshiMoveLT2 <=30)
+			{
+				image(yoshiWalkLL[6], x1,y1+11,60,65);	
+				yoshiMoveLT2 = 0;
+			}		
+		}
+	
+		//MOVINT RIGHT
+		if (air1 == false && htravel1 > 0 && timeRAtk1 == 20)
+		{
+			yoshMoveRa = 0;
+			yoshMoveRb = 1;
+			yoshiMoveRT2 = yoshiMoveRT2 + 1; 
+			
+			while (yoshMoveRb <= 8)			
+			{
+				if(yoshiMoveRT2 >= yoshMoveRa && yoshiMoveRT2 <= yoshMoveRa +5)
+				{
+					image(yoshiWalkRR[yoshMoveRb], x1,y1+11,70,70);	
+				}
+				yoshMoveRa = yoshMoveRa  + 5;
+				yoshMoveRb = yoshMoveRb + 1;
+			}
+			if(yoshiMoveRT2 > 25 && yoshiMoveRT2 <=30)
+			{
+				image(yoshiWalkRR[6],x1,y1+11,70,70);	
+				yoshiMoveRT2 = 0;
+			}
+		}	
+
+		//FALLING LEFT
+		if (air1 == true && vtravel1 >= 0 && faceX1 == true && timeAtk1 ==20 && timeRAtk1 == 20)
+		{
+			image(yoshiFallLL,x1,y1,30*2,36*2);
+		}
+		
+		//FALLING RIGHT
+		if (air1 == true && vtravel1 >= 0 && faceX1 == false && timeAtk1 ==20 && timeRAtk1 == 20)
+		{
+			image(yoshiFallRR,x1,y1,30*2,36*2);
+		}
+	
+		//JUMPING LEFT 
+		if (air1 == true && vtravel1 < 0 && faceX1 == true && timeAtk1 ==20 && timeRAtk1 == 20)
+		{
+			image(yoshiJumpLL,x1,y1,30*2,36*2);
+
+		}
+		
+		//JUMPING RIGHT
+		if (air1 == true && vtravel1 < 0 && faceX1 == false && timeAtk1 ==20 && timeRAtk1 == 20) 
+		{
+			image(yoshiJumpRR,x1,y1,38*2,37*2);
+		}
+	
+		//DAMAGE RIGHT AND LEFT
+		if (timeDmg1 >= 0 && timeDmg1 <= 15)
+		{
+			timeDmg1 = timeDmg1 + 1;
+			if (faceX1 == true)
+			{
+				image(yoshiDmgLL,x1,y1,38*2,37*2);		
+			}
+			if (faceX1 == false)
+			{
+				image(yoshiDmgRR,x1,y1,38*2,37*2);
+			}
+
+			if (timeDmg1 > 15)
+			{
+				timeDmg1 = -1;
+			}
+		}
+		
+		//ATTACK
+		if (timeAtk1 >= 0 && timeAtk1 <= 5 && timeDmg1 == -1)
+		{
+			timeAtk1 = timeAtk1 + 1;
+			if (faceX1 == true)
+			{
+				image(yoshiAtkLL,x1-6,y1-10,38*2,37*2);		
+			}
+			if (faceX1 == false)
+			{
+				image(yoshiAtkRR,x1+6,y1-10,38*2,37*2);
+			}
+			if (timeAtk1 > 5)
+			{
+				timeAtk1 = 20;
+			}
+		}
+		
+		//RANGE ATTACK CHARACTER ANIMATION
+		if (actYoshiRAtk1 == true && timeRAtk1 < 20)
+		{	
+			timeRAtk1 = timeRAtk1 +1;
+	
+			if(faceX1 == false)
+			{
+				yoshiRangeRa1 = 0;
+				yoshiRangeRb1 = 1;
+
+				while (yoshiRangeRb1 <= 4)			
+				{
+					if(timeRAtk1 >= yoshiRangeRa1 && timeRAtk1 <= yoshiRangeRa1+5)
+					{
+						image(yoshiRAtkRR[yoshiRangeRb1],x1-29,y1-9,35*2,40*2);	
+					}
+					yoshiRangeRa1 = yoshiRangeRa1 + 5;
+					yoshiRangeRb1 = yoshiRangeRb1 + 1;
+				}
+			}
+
+			if(faceX1 == true)
+			{
+				yoshiRangeLa1 = 0;
+				yoshiRangeLb1 = 1;
+	
+				while (yoshiRangeLb1 <= 4)			
+				{
+					if(timeRAtk1 >= yoshiRangeLa1 && timeRAtk1 <= yoshiRangeLa1 +5)
+					{
+						image(yoshiRAtkLL[yoshiRangeLb1],x1-29,y1-9,35*2,40*2);	
+					}
+					yoshiRangeLa1 = yoshiRangeLa1 + 5;
+					yoshiRangeLb1 = yoshiRangeLb1 + 1;
+		
+				}
+			}
+	
+		}
+		
+		//RANGE ATTACK ITEM ANIMATION
+		if (timeItem1 >= 0 && timeItem1 <= 100 && lockBDirection1 ==0)
+		{
+			timeItem1 = timeItem1 + 1;
+			lockBDirection2 = 1;
+		}
+		//LEFT
+		if (bulletDirection1 == 2 && timeItem1 > -1)
+		{
+			image(yoshiItemLL,bulletX1+40,bulletY1+10,40,30);
+		}
+		//RIGHT
+		if (bulletDirection1 ==1 && timeItem1 > -1)
+		{
+			image(yoshiItemRR,bulletX1+40,bulletY1+10,40,30);
+		}
+			
+	}
+
+	//KIRBY - perfect
+	if(character1 == 5)
+	{
+		//STANDING LEFT 
+		if (air1 == false && htravel1 == 0 && faceX1 == true && timeAtk1 == 20 && timeDmg1 == -1 && timeRAtk1 == 20)
+		{
+			image(standL1,x1,y1+6,25*2,35*2);
+		}
+		//STANDING RIGHT
+		if (air1 == false && htravel1 == 0 && faceX1 == false && timeAtk1 == 20 && timeDmg1 == -1 && timeRAtk1 == 20)
+		{
+			image(standR1,x1,y1+6,25*2,35*2);
+		}	
+	
+		//MOVING LEFT 
+		if (air1 == false && htravel1 < 0 && timeRAtk1 == 20)
+		{
+			moveLT1 = moveLT1 +1;
+			moveLa1 = 0;
+			moveLb1 = 1;
+			
+			while (moveLb1 <= 8)			
+			{
+				if(moveLT1 >= moveLa1 && moveLT1 <= moveLa1+5)
+				{
+					image(moveL1[moveLb1],x1,y1+6,60,70);	
+				}
+				moveLa1 = moveLa1 + 5;
+				moveLb1 = moveLb1 + 1;
+			}
+			
+			if(moveLT1 > 35 && moveLT1 <=40)
+			{
+				image(moveL1[8], x1,y1,60,70);	
+				moveLT1 = 0;
+			}		
+		}
+		//MOVINT RIGHT
+		if (air1 == false && htravel1 > 0 && timeRAtk1 == 20)
+		{
+			moveRa1 = 0;
+			moveRb1 = 1;
+			moveRT1 = moveRT1 + 1; 
+			
+			while (moveRb1 <= 8)			
+			{
+				if(moveRT1 >= moveRa1 && moveRT1 <= moveRa1 +5)
+				{
+					image(moveR1[moveRb1], x1,y1+6,60,70);	
+				}
+				moveRa1 = moveRa1  + 5;
+				moveRb1 = moveRb1 + 1;
+			}
+			if(moveRT1 > 35 && moveRT1 <=40)
+			{
+				image(moveR1[8],x1,y1,60,70);	
+				moveRT1 = 0;
+			}
+		}	
+
+		//FALLING LEFT
+		if (air1 == true && vtravel1 >= 0 && faceX1 == true && timeAtk1 ==20 && timeRAtk1 == 20)
+		{
+			image(fallL1,x1,y1,28*2,37*2);
+		}
+		//FALLING RIGHT
+		if (air1 == true && vtravel1 >= 0 && faceX1 == false && timeAtk1 ==20 && timeRAtk1 == 20)
+		{
+			image(fallR1,x1,y1,28*2,37*2);
+		}
+	
+		//JUMPING LEFT 
+		if (air1 == true && vtravel1 < 0 && faceX1 == true && timeAtk1 ==20 && timeRAtk1 == 20)
+		{
+			image(jumpL1,x1,y1,33*2,38*2);
+
+		}
+		//JUMPING RIGHT
+		if (air1 == true && vtravel1 < 0 && faceX1 == false && timeAtk1 ==20 && timeRAtk1 == 20)
+		{
+			image(jumpR1,x1,y1,33*2,38*2);
+		}
+		
+		//DAMAGE RIGHT AND LEFT
+		if (timeDmg1 >= 0 && timeDmg1 <= 15)
+			{
+				timeDmg1 = timeDmg1 + 1;
+				if (faceX1 == true)
+				{
+					image(damageL1,x1,y1,38*2,37*2);		
+				}
+				if (faceX1 == false)
+				{
+					image(damageR1,x1,y1,38*2,37*2);
+				}
+
+				if (timeDmg1 > 15)
+				{
+					timeDmg1 = -1;
+				}
+			}
+		
+		//ATTACK RIGHT AND LEFT
+		if (actAniKirby1 == true && timeAtk1 < 20)
+			{
+				timeAtk1 = timeAtk1 +1;
+					
+				if(faceX1 == false)
+				{
+					atkRa1 = 0;
+					atkRb1 = 1;
+					
+
+					while (atkRb1 <= 4)			
+					{
+						if(timeAtk1 >= atkRa1 && timeAtk1 <= atkRa1+5)
+						{
+							image(attackR1[atkRb1],x1,y1+11,61*2,41*2);	
+						}
+						atkRa1 = atkRa1 + 5;
+						atkRb1 = atkRb1 + 1;
+						
+					}
+				}
+				
+				if(faceX1 == true)
+				{
+					atkLa1 = 0;
+					atkLb1 = 1;
+					
+					while (atkLb1 <= 4)			
+					{
+						if(timeAtk1 >= atkLa1 && timeAtk1 <= atkLa1+5)
+						{
+							image(attackL1[atkLb1],x1-100,y1+11,61*2,41*2);	
+						}
+						atkLa1 = atkLa1 + 5;
+						atkLb1 = atkLb1 + 1;
+						
+					}
+				}
+		
+			}
+			
+		//RANGE ATTACK CHARACTER ANIMATION
+		if (timeRAtk1 >= 0 && timeRAtk1 <= 15 && timeDmg1 == -1)
+		{
+			timeRAtk1 = timeRAtk1 + 1;
+			
+			if (faceX1 == true)
+			{
+				image(kirbyRAtkLL,x1-40,y1,48*2,37*2);
+			}
+			if (faceX1 == false)
+			{
+				image(kirbyRAtkRR,x1,y1,48*2,37*2);
+			}
+			if (timeRAtk1 > 15)
+			{
+				timeRAtk1 = 20;
+			}
+		}
+			
+		//RANGE ATTACK ITEM ANIMATION
+		if (timeItem1 >= 0 && timeItem1 <= 100 && lockBDirection1 ==0)
+		{
+			timeItem1 = timeItem1 + 1;
+			lockBDirection2 = 1;
+		}
+		//LEFT
+		if (bulletDirection1 == 2 && timeItem1 > -1)
+		{
+			image(kirbyItemLL,bulletX1+40,bulletY1+50,50,20);
+		}
+		//RIGHT
+		if (bulletDirection1 ==1 && timeItem1 > -1)
+		{
+			image(kirbyItemRR,bulletX1+40,bulletY1+50,50,20);
+		}
+				
+			
+	}
+
+	//MARIO - range attack animation is weird
+	if(character1 == 4)
+	{
+		//STANDING LEFT 
+		if (air1 == false && htravel1 == 0 && faceX1 == true && timeAtk1 == 20 && timeDmg1 == -1 && timeRAtk1 == 20)
+		{
+			image(marioStandLL,x1,y1+15,20*2,30*2);
+		}
+		
+		//STANDING RIGHT
+		if (air1 == false && htravel1 == 0 && faceX1 == false && timeAtk1 == 20 && timeDmg1 == -1  && timeRAtk1 == 20)
+		{
+			image(marioStandRR,x1,y1+15,20*2,30*2);
+		}	
+	
+		//MOVING LEFT 
+		if (air1 == false && htravel1 < 0  && timeRAtk1 == 20)
+		{
+			marioMoveLT1 = marioMoveLT1 +1;
+			mariMoveLa1 = 0;
+			mariMoveLb1 = 1;
+			
+			while (mariMoveLb1 <= 8)			
+			{
+				if(marioMoveLT1 >= mariMoveLa1 && marioMoveLT1 <= mariMoveLa1+5)
+				{
+					image(marioWalkLL[mariMoveLb1],x1,y1+15,40,60);	
+				}
+				mariMoveLa1 = mariMoveLa1 + 5;
+				mariMoveLb1 = mariMoveLb1 + 1;
+			}
+			
+			if(marioMoveLT1 > 35 && marioMoveLT1 <=40)
+			{
+				image(marioWalkLL[8], x1,y1+15,40,60);	
+				marioMoveLT1 = 0;
+			}		
+		}
+	
+		//MOVINT RIGHT
+		if (air1 == false && htravel1 > 0  && timeRAtk1 == 20)
+		{
+			marioMoveRa1 = 0;
+			marioMoveRb1 = 1;
+			marioMoveRT1 = marioMoveRT1 + 1; 
+			
+			while (marioMoveRb1 <= 8)			
+			{
+				if(marioMoveRT1 >= marioMoveRa1 && marioMoveRT1 <= marioMoveRa1 +5)
+				{
+					image(marioWalkRR[marioMoveRb1], x1,y1+15,40,60);	
+				}
+				marioMoveRa1 = marioMoveRa1  + 5;
+				marioMoveRb1 = marioMoveRb1 + 1;
+			}
+			if(marioMoveRT1 > 35 && marioMoveRT1 <=40)
+			{
+				image(marioWalkRR[8],x1,y1+15,40,60);	
+				marioMoveRT1 = 0;
+			}
+		}	
+
+		//FALLING LEFT
+		if (air1 == true && vtravel1 >= 0 && faceX1 == true && timeAtk1 ==20  && timeRAtk1 == 20)
+		{
+			image(marioFallLL,x1,y1,23*2,30*2);
+		}
+		
+		//FALLING RIGHT
+		if (air1 == true && vtravel1 >= 0 && faceX1 == false && timeAtk1 ==20  && timeRAtk1 == 20)
+		{
+			image(marioFallRR,x1,y1,23*2,30*2);
+		}
+	
+		//JUMPING LEFT 
+		if (air1 == true && vtravel1 < 0 && faceX1 == true && timeAtk1 ==20  && timeRAtk1 == 20)
+		{
+			image(marioJumpLL,x1,y1,20*2,30*2);
+
+		}
+		
+		//JUMPING RIGHT
+		if (air1 == true && vtravel1 < 0 && faceX1 == false && timeAtk1 ==20  && timeRAtk1 == 20)
+		{
+			image(marioJumpRR,x1,y1,20*2,30*2);
+		}
+	
+		//DAMAGE RIGHT AND LEFT
+		if (timeDmg1 >= 0 && timeDmg1 <= 15  && timeRAtk1 == 20)
+			{
+				timeDmg1 = timeDmg1 + 1;
+				if (faceX1 == true)
+				{
+					image(marioDmgLL,x1,y1+5,20*2,30*2);		
+				}
+				if (faceX1 == false)
+				{
+					image(marioDmgRR,x1,y1+5,20*2,30*2);
+				}
+
+				if (timeDmg1 > 15)
+				{
+					timeDmg1 = -1;
+				}
+			}
+		
+		//ATTACK RIGHT AND LEFT
+		if (actAniMario1 == true && timeAtk1 < 20  && timeRAtk1 == 20)
+			{
+				timeAtk1 = timeAtk1 +1;
+					
+				if(faceX1 == false)
+				{
+					marioAtkRa1 = 0;
+					marioAtkRb1 = 1;
+					
+
+					while (marioAtkRb1 <= 4)			
+					{
+						if(timeAtk1 >= marioAtkRa1 && timeAtk1 <= marioAtkRa1+5)
+						{
+							image(marioAtkRR[marioAtkRb1],x1-29,y1-20,48*2,50*2);	
+						}
+						marioAtkRa1 = marioAtkRa1 + 5;
+						marioAtkRb1 = marioAtkRb1 + 1;
+						
+					}
+				}
+				
+				if(faceX1 == true)
+				{
+					atkLa1 = 0;
+					atkLb1 = 1;
+					
+					while (atkLb1 <= 4)			
+					{
+						if(timeAtk1 >= atkLa1 && timeAtk1 <= atkLa1+5)
+						{
+							image(marioAtkLL[atkLb1],x1-29,y1-20,48*2,50*2);	
+						}
+						atkLa1 = atkLa1 + 5;
+						atkLb1 = atkLb1 + 1;
+						
+					}
+				}
+		
+			}
+		
+		//RANGE ATTACK CHARACTER ANIMATION
+		if (actMarioRAtk1 == true && timeRAtk1 < 20)
+		{	
+			timeRAtk1 = timeRAtk1 +1;
+	
+			if(faceX1 == false)
+			{
+				marioRangeRa = 0;
+				marioRangeRb = 1;
+
+				while (marioRangeRb <= 2)			
+				{
+					if(timeRAtk1 >= marioRangeRa && timeRAtk1 <= marioRangeRa+5)
+					{
+						image(marioRAtkRR[marioRangeRb],x1-13,y1-20,40*2,45*2);	
+					}
+					marioRangeRa = marioRangeRa + 5;
+					marioRangeRb = marioRangeRb + 1;
+				}
+			}
+
+			if(faceX1 == true)
+			{
+				marioRangeLa = 0;
+				marioRangeLb = 1;
+	
+				while (marioRangeLb <= 2)			
+				{
+					if(timeRAtk1 >= marioRangeLa && timeRAtk1 <= marioRangeLa +5)
+					{
+						image(marioRAtkLL[marioRangeLb],x1-13,y1-20,40*2,45*2);	
+					}
+					marioRangeLa = marioRangeLa + 5;
+					marioRangeLb = marioRangeLb + 1;
+		
+				}
+			}
+	
+		}
+			
+		//RANGE ATTACK ITEM ANIMATION
+		if (timeItem1 >= 0 && timeItem1 <= 100 && lockBDirection1 ==0)
+		{
+			timeItem1 = timeItem1 + 1;
+			lockBDirection2 = 1;
+		}
+		//LEFT
+		if (bulletDirection1 == 2 && timeItem1 > -1)
+		{
+			image(marioItemLL,bulletX1+40,bulletY1+30,50,20);
+		}
+		//RIGHT
+		if (bulletDirection1 ==1 && timeItem1 > -1)
+		{
+			image(marioItemRR,bulletX1+40,bulletY1+30,50,20);
+		}
+				
+		}
+
+	//GRAVITY EQUATION 
+	vtravel1 = (time1^2)/2;
+	
+	//PURE MOTION (1)
+	{
+	//////////////////////////////PLATFORMING/////////////////////////////	
+	
+		if (x1 > 45 && x1 < 280 && y1 > 315 && y1 < 330 && up1 == false)	
+		{
+			platform1 = true; 
+		}
+		if (x1 > 640 && x1 < 880 && y1 > 315 && y1 < 330 && up1 == false)
+		{
+			platform1 = true;
+		}
+	
+		if (platform1 == true)
+		{
+			if (y1 > 325)
+			{
+				y1 = 325;
+				air1 = false;
+				up1 = false;
+				airlock1 = false;
+			}
+		}
+		
+		if (x1 < 45 && platform1 == true)
+		{
+			platform1 = false;
+			air1 = true;
+		}
+		if (x1 > 280 && x1 < 640 && platform1 == true)
+		{
+			platform1 = false;
+			air1 = true;
+		}
+	
+		if (x1 > 880 && platform1 == true)
+		{
+			platform1 = false;
+			air1 = true;
+		}	
+		
+	//////////////////////MOTION CONTROL////////////////////////////////	
+		if (up1 == true)
+		{
+			y1 = y1 + vtravel1;
+		}
+		if (time1 > 0 && up1 == false)
+		{
+			y1 = y1 + vtravel1;
+		}
+		if (air1 == true)
+		{
+			time1 = time1 + 1;
+		}
+		if (air1 == false)
+		{
+			time1 = 0;
+		}
+	
+		if (y1 > 490)
+		{
+			y1 = 490;
+			air1 = false;
+			airlock1 = false;
+		}
+		if (time1 > -10 && time1 < -1)
+		{
+			up1 = false;
+		}
+
+		if (airlock1 == false)
+		{
+			if(left1 == true)
+			{
+				htravel1 = -7;
+			}
+			if(right1 == true)
+			{
+				htravel1 = 7;
+			}	
+			if(left1 == false && right1 == false)
+			{
+				htravel1 = 0;
+			}
+
+		}	
+	
+		//INERTIA THINGY
+		if (airlock1 == true)
+		{
+			if(keyPressed == true && key == 'a')
+			{	
+				htravel1 = -3;
+			}
+		
+			if(keyPressed == true && key == 'd')
+			{
+				htravel1 =  3;
+			}	
+		}
+	
+		x1 = x1 + htravel1; 
+
+	
+//////////////////////////////// MELEE  ///////////////////////
+		if(attack1 == 1 && sAtkLock1 == false)
+		{
+			soundManager.play("s0");
+			sAtkLock1 = true;
+		}
+		if(attack1 == 1 && d < 55)
+			{
+				damage1 = 1;
+			}
+		if(damage1 == 1 && lockAttack1 ==0)
+			{
+				hpLoss2 = hpLoss2 + 20;	
+				lockAttack1 = 1;
+				timeDmg2 = 0;
+				soundManager.play("s1");
+			}
+		if(lockAttack1 == 1)
+			{
+				damage1 = 0;
+			}
+	
+	
+		//TURNS YELLOW WHEN DAMAGE > 100
+		if(hpLoss2 >= 100)
+			{
+				r2 = 255;
+				g2 = 255;
+				b2 = 0;
+				fill(r2,g2,b2);
+				stroke(0,0,0);
+				strokeWeight(1);
+				rect(730,40,length2,15,3,3,3,3);
+			
+				noStroke();
+				fill(0,0,0);
+				rect(730,40,hpLoss2,15);
+			}
+	
+		//TURNS RED WHEN DAMAGE > 150
+		if(hpLoss2 >= 150)
+			{
+				r2 = 255;
+				g2 = 0;
+				b2 = 0;
+				fill(r2,g2,b2);
+				stroke(0,0,0);
+				strokeWeight(1);
+				rect(730,40,length2,15,3,3,3,3);
+			
+				noStroke();
+				fill(0,0,0);
+				rect(730,40,hpLoss2,15);
+			}
+		
+		if(hpLoss2 > 200)
+		{
+			hpLoss2 = 200;
+		}
+		
+		if(hpLoss2 <0)
+		{
+			hpLoss2 =0;
+		}
+		
+		
+		
+		//WINNER
+		if(hpLoss2 == 200)
+			{
+				winner1 = 1;
+			}
+			
+/////////////////////// RANGE ATTACK /////////////////////
+
+
+		if(shooting1 == 1 && sRAtkLock1 == false)
+		{
+			soundManager.play("s2");
+			sRAtkLock1 = true;
+		}
+		
+		//RANGE ATTACK RIGHT
+		if(shooting1 == 1 && faceX1 ==false && lockDirection1 == 0)
+		{
+			bulletDirection1 = 1;	
+			rpLoss1 = -150;
+			lockDirection1 = 1;
+		}
+		
+		if(bulletDirection1 ==1)
+		{
+			bulletX1 = bulletX1 + 20;
+		}
+	
+		if(bulletX1 > 1000)
+		{
+			shooting1 = 0;
+			lockDirection1 = 0;
+			timeItem1 = -1;
+		}
+
+		//RANGE ATTACK LEFT
+		if(shooting1 == 1 && faceX1 == true && lockDirection1 == 0)
+		{
+			bulletDirection1 = 2;	
+			rpLoss1 = -150;
+			lockDirection1 = 1;
+		}
+		
+		if(bulletDirection1 ==2)
+		{
+			bulletX1 = bulletX1 - 20;
+		}
+	
+		if(bulletX1 < -80)
+		{
+			shooting1 = 0;
+			lockDirection1 = 0;
+			timeItem1 = -1;
+		}
+		
+		
+		//DAMAGE CAUSED BY BULLET
+		if(d1 <= 70 && rangeDamage1 == 1 && shooting1 == 1)
+			{
+				hpLoss2 = hpLoss2 + 30;
+				rangeDamage1 = 0;
+				timeDmg2 = 0;
+				soundManager.play("s1");
+			}
+
+///////////////////THE REFRACTORY PERIOD///////////////////////
+		
+		if(rpRepair1 ==1 )
+		{
+			rpLoss1 = rpLoss1 + 0.5;
+			shootAct1 = 0;
+		}
+		
+		if(rpLoss1 >= -150)
+		{
+			rpRepair1 = 1;
+			shootAct1 = 0;
+		}
+		
+		
+		if(rpLoss1 == 0)
+		{
+			rpRepair1 = 0;
+			shootAct1 = 1;
+			rangeDamage1 = 1;
+			sRAtkLock1 = false;
+		}
+	}
+
+//////////////////////////////////////////////////////////////OTHERS 
+
+    //SECRET BACK BUTTON
+    if ( 0 < mouseX && mouseX < 100
+	&& 0 < mouseY && mouseY < 100
+	&& mousePressed == true && mouseButton == LEFT)
+	{	
+		link("character2.html");
+	}
+
+	//WINNER PAGE
+
+	
+	if(winner1 ==1 || winner2 == 1)
+	{
+		link("winner.html");
+		sessionStorage.transferx1 = winner1;
+		sessionStorage.transferx2 = winner2;
+		sessionStorage.transferx3 = character1;
+		sessionStorage.transferx4 = character2;
+		sessionStorage.transferx5 = selectBackground;
+	}	
+	
+
+
+//////////////////////////////BACKGROUND MUSIC///////////////////////////////
+  	{
+   
+    if (pokePlay == true && pokeLock == false)
+    {
+    	soundManager.setVolume("s4",20);
+    	soundManager.play("s4",{loops:2});
+    	pokeLock = true;
+	}
+	if (pokePlay == false && pokeLock == true)
+	{
+		soundManager.stop("s4");
+		pokeLock = false;
+	}
+	
+	
+//mute (MOUSE PRESS)	
+	if (mouseX > 460 && mouseX < 512 && mouseY > 60 && mouseY < 100)
+	{
+		fill(100,100,100);
+		rect(460,65,52,35);
+	} 
+	
+	if (mousePressed == true && mouseX > 470 && mouseX < 502
+	 && mouseY > 60 && mouseY < 100 && pokePlay == false && changeLock == false)
+	{	
+		pokePlay = true;
+		soundManager.setVolume("s6",25);
+		soundManager.play("s6");
+		changeLock = true;
+	} 
+	
+	if (mousePressed == true && mouseX > 470 && mouseX < 502
+	 && mouseY > 60 && mouseY < 100 && pokePlay == true && changeLock == false)
+	{
+		pokePlay = false;
+		soundManager.setVolume("s6",25);
+		soundManager.play("s6");
+		changeLock = true;
+	}
+
+	if (mousePressed == false && mouseX > 470 && mouseX < 502
+	 && mouseY > 60 && mouseY < 100)
+	{	
+		changeLock = false;
+	} 
+
+
+
+
+	
+	if (pokePlay == true)
+	{
+		image(volumeOn,470,67,32,32);
+	}	
+	if (pokePlay == false)
+	{
+		image(volumeOff,470,67,32,32);
+	}
+
+}
+
+
+
+//////Last minute////
+	if (x1 <= 0)
+	{
+		x1 = 0;
+	}
+	if (x2 <= 0)
+	{
+		x2 = 0;
+	}
+	if (x1 >= 925)
+	{
+		x1 = 925;
+	}
+	if (x2 >= 925)
+	{
+		x2 = 925;
+	}
+	
+//healthaid
+
+	pudding1d = (int)sqrt(sq(x1-puddingx)+sq(y1-puddingy));
+	pudding2d = (int)sqrt(sq(x2-puddingx)+sq(y2-puddingy));
+	
+	
+	
+	
+if(+reversedTime ==randomTime)
+	{
+	puddingactivated=1;
+
+	}
+	
+if(puddingactivated==1)
+	{
+	image(pudding,puddingx,puddingy,100,80);
+	fill(255,208,0);
+	textFont(cooper,45);
+	text("HEALTH AID IS UP!!",275,200);
+	}
+	
+	
+	
+	
+			
+if (pudding1d < 65 && puddingactivated ==1)
+   		{
+    	puddingactivated=0;
+    	heal1=1;
+    
+    	}
+    
+if (pudding2d < 65 && puddingactivated==1)
+   		{
+    	puddingactivated=0;
+    	heal2=1;
+    	
+   		 }
+
+if (heal1==1)
+	{
+	hpLoss1=hpLoss1+100;
+	heal1=0;
+	}
+	
+if (heal2==1)
+	{
+	hpLoss2=hpLoss2 -100;
+	heal2=0;
+	}
+
+	
+
+	
+}
+
+
+
+
+void keyPressed()
+{
+	//CHARACTER 2
+	if(key == 'j')
+	{
+		left2 = true;
+		faceX2 = true;
+	}
+	
+	if(key == 'l')
+	{
+		right2 = true;
+		faceX2 = false;
+	}
+
+	if(key == 'i' && up2 == false && air2 == false)
+	{
+		time2 = -32;
+		air2 = true;
+		up2 = true;
+		airlock2 = true;
+	}
+
+	//CHARACTER 2 ATTACK
+	if(key == 'u')
+	{
+		attack2 = 1;
+		timeAtk2 = 0;
+		actAniMario = true;
+		actAniKirby2 = true;
+	}
+	if(key == 'o'&& shootAct2 ==1)
+	{
+		shooting2 = 1;
+		lockDirection2 = 0;
+		timeRAtk2 = 0;
+		timeItem2 = 0;
+		actYoshiRAtk2 = true;
+		actMarioRAtk2 = true
+	}
+	
+	//CHARACTER 1
+	if(key == 'a')
+	{
+		left1 = true;
+		faceX1 = true;
+	}
+	if(key == 'd')
+	{
+		right1 = true;
+		faceX1 = false;
+	}
+
+	if(key == 'w' && up1 == false && air1 == false)
+	{
+		time1 = -32;
+		air1 = true;
+		up1 = true;
+		airlock1 = true;
+	}
+
+	//CHARACTER 1 ATTACK
+	if(key == 'e')
+	{
+		attack1 = 1;
+		actAniKirby1 = true;
+		timeAtk1 = 0;
+		actAniMario1 = true;
+	}
+
+	if(key == 'q' && shootAct1 ==1)
+	{
+		shooting1 = 1;
+		lockDirection1 = 0;
+		timeRAtk1 = 0;
+		timeItem1 = 0;
+		actYoshiRAtk1 = true;
+		actMarioRAtk1 = true
+	}
+}
+
+void keyReleased()
+{
+	//CHARACTER 2
+	if(key == 'j')
+	{
+		left2 = false;
+	}
+	if(key == 'l')
+	{
+		right2 = false;
+	}
+	if(key == 'u')
+	{
+		attack2 = 0;
+		sAtkLock2 = false;
+		lockAttack2 = 0;
+	}
+	if(key == 'o')
+	{
+		shooting2 == 0;
+	}
+	
+	//CHARACTER 1
+	if(key == 'a')
+	{
+		left1 = false;
+	}
+	if(key == 'd')
+	{
+		right1 = false;
+	}
+	if(key == 'e')
+	{
+		attack1 = 0;
+		sAtkLock1 = false;
+		lockAttack1 = 0;	
+	}
+	if(key == 'q')
+	{
+		shooting1 == 0;
+	}
+
+
+}
+
+</script>
+<canvas id="mycanvas"></canvas>
+</head>
+
+<body>
+
+</body>
+</html>
